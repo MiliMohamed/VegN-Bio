@@ -36,11 +36,18 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/api/v1/restaurants", "/api/v1/allergens").permitAll()
                 .requestMatchers("/api/v1/menus/restaurant/**", "/api/v1/menu-items/menu/**", "/api/v1/menu-items/search").permitAll()
+                .requestMatchers("/api/v1/events", "/api/v1/bookings").permitAll()
+                .requestMatchers("/api/v1/bookings/event/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .headers(headers -> headers.frameOptions().disable())
+            .httpBasic(httpBasic -> httpBasic.disable())
+            .formLogin(formLogin -> formLogin.disable())
+            .logout(logout -> logout.disable())
+            .requestCache(requestCache -> requestCache.disable()); // Désactiver le cache de requêtes
         
         return http.build();
     }
