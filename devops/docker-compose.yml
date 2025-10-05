@@ -1,0 +1,48 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:15
+    container_name: vegn_db
+    environment:
+      POSTGRES_DB: vegnbiodb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ../backend
+    container_name: vegn_api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/vegnbiodb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      JWT_SECRET: a1f4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4
+    ports:
+      - "8080:8080"
+
+  web:
+    build: ../web
+    container_name: vegn_web
+    environment:
+      - API_BASE_URL=http://localhost:8080/api/v1
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+
+volumes:
+  db_data:
+
+
+
