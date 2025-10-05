@@ -1,0 +1,91 @@
+package com.vegnbio.api.modules.menu.service;
+
+import com.vegnbio.api.modules.menu.dto.CreateMenuRequest;
+import com.vegnbio.api.modules.menu.dto.MenuDto;
+import com.vegnbio.api.modules.menu.entity.Menu;
+import com.vegnbio.api.modules.menu.repo.MenuRepository;
+import com.vegnbio.api.modules.restaurant.entity.Restaurant;
+import com.vegnbio.api.modules.restaurant.repo.RestaurantRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class MenuService {
+    
+    private final MenuRepository menuRepository;
+    private final RestaurantRepository restaurantRepository;
+    
+    public MenuDto createMenu(CreateMenuRequest request) {
+        Restaurant restaurant = restaurantRepository.findById(request.restaurantId())
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+        
+        Menu menu = Menu.builder()
+                .restaurant(restaurant)
+                .title(request.title())
+                .activeFrom(request.activeFrom())
+                .activeTo(request.activeTo())
+                .build();
+        
+        Menu savedMenu = menuRepository.save(menu);
+        return mapToDto(savedMenu);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<MenuDto> getMenusByRestaurant(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+        
+        return menuRepository.findByRestaurant(restaurant)
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<MenuDto> getMenusByRestaurantAndDate(Long restaurantId, LocalDate date) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+        
+        return menuRepository.findByRestaurantAndDate(restaurant, date)
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+    
+    private MenuDto mapToDto(Menu menu) {
+        return new MenuDto(
+                menu.getId(),
+                menu.getTitle(),
+                menu.getActiveFrom(),
+                menu.getActiveTo(),
+                menu.getMenuItems() != null ? 
+                    menu.getMenuItems().stream()
+                        .map(this::mapMenuItemToDto)
+                        .toList() : List.of()
+        );
+    }
+    
+    private com.vegnbio.api.modules.menu.dto.MenuItemDto mapMenuItemToDto(com.vegnbio.api.modules.menu.entity.MenuItem menuItem) {
+        return new com.vegnbio.api.modules.menu.dto.MenuItemDto(
+                menuItem.getId(),
+                menuItem.getName(),
+                menuItem.getDescription(),
+                menuItem.getPriceCents(),
+                menuItem.getIsVegan(),
+                menuItem.getAllergens() != null ?
+                    menuItem.getAllergens().stream()
+                        .map(allergen -> new com.vegnbio.api.modules.allergen.dto.AllergenDto(
+                                allergen.getId(),
+                                allergen.getCode(),
+                                allergen.getLabel()
+                        ))
+                        .toList() : List.of()
+        );
+    }
+}
