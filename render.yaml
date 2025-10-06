@@ -2,13 +2,13 @@ services:
   # PostgreSQL Database
   - type: pserv
     name: vegn-bio-database
-    env: postgresql
+    runtime: postgresql
     plan: free
 
   # Backend Spring Boot API
   - type: web
     name: vegn-bio-backend
-    env: java
+    runtime: java
     plan: free
     buildCommand: mvn clean package -DskipTests
     startCommand: java -jar target/api-0.0.1-SNAPSHOT.jar
