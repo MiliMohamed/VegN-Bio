@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './contexts/AuthContext';
 import SimpleLandingPage from './components/SimpleLandingPage';
 import SimpleLogin from './components/SimpleLogin';
+import SimpleRegister from './components/SimpleRegister';
 import Login from './components/Login';
 import ModernDashboard from './components/ModernDashboard';
 import ModernRestaurants from './components/ModernRestaurants';
@@ -34,6 +35,7 @@ function App() {
           <Routes>
             <Route path="/" element={<SimpleLandingPage />} />
             <Route path="/login" element={<SimpleLogin />} />
+            <Route path="/register" element={<SimpleRegister />} />
             <Route path="/old-login" element={<Login />} />
             <Route path="/app/*" element={
               <ProtectedRoute>

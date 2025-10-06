@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -71,6 +71,15 @@ const Login: React.FC = () => {
             {loading ? 'Connexion...' : 'Se connecter'}
           </button>
         </form>
+        
+        <div className="login-footer">
+          <p>
+            Pas encore de compte ?{' '}
+            <Link to="/register" className="register-link">
+              Créer un compte
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
