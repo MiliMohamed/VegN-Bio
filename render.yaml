@@ -4,8 +4,6 @@ services:
     name: vegn-bio-database
     env: postgresql
     plan: free
-    databaseName: vegnbiodb
-    databaseUser: vegnbio_user
 
   # Backend Spring Boot API
   - type: web
