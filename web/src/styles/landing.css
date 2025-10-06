@@ -36,7 +36,10 @@ body {
   overflow-x: hidden;
 }
 
-/* Landing Page Styles */
+/* Landing Page Styles - Enhanced Responsive Design */
+/* Import the unified responsive system */
+@import './unified-responsive.css';
+
 .landing-page {
   min-height: 100vh;
 }

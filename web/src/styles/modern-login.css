@@ -1,9 +1,15 @@
-/* Modern Login Styles */
+/* Modern Login & Register Styles - Enhanced Responsive Design */
+/* Import the unified responsive system */
+@import './unified-responsive.css';
 .login-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
 }
 
 .login-page::before {
@@ -31,7 +37,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
+  padding: var(--spacing-xl);
 }
 
 .branding-content {
@@ -155,7 +161,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 2rem;
+  padding: var(--spacing-lg);
 }
 
 .login-form-wrapper {

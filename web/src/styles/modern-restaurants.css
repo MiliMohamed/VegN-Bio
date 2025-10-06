@@ -1,7 +1,9 @@
-/* Modern Restaurants Styles */
+/* Modern Restaurants Styles - Enhanced Responsive Design */
+/* Import the unified responsive system */
+@import './unified-responsive.css';
 .modern-restaurants {
-  padding: 2rem;
-  background: #f8f9fa;
+  padding: var(--spacing-xl);
+  background: var(--light-color);
   min-height: 100vh;
 }
 

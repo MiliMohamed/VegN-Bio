@@ -1,7 +1,11 @@
-/* Modern Dashboard Styles */
+/* Modern Dashboard Styles - Enhanced Responsive Design */
+/* Import the unified responsive system */
+@import './unified-responsive.css';
+
+/* Dashboard Container */
 .modern-dashboard {
-  padding: 2rem;
-  background: #f8f9fa;
+  padding: var(--spacing-xl);
+  background: var(--light-color);
   min-height: 100vh;
 }
 
@@ -506,31 +510,31 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .modern-dashboard {
-    padding: 1rem;
+    padding: var(--spacing-md);
   }
   
   .dashboard-header {
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--spacing-md);
     text-align: center;
   }
   
   .stats-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: var(--spacing-md);
   }
   
   .stat-card {
-    padding: 1rem;
+    padding: var(--spacing-md);
   }
   
   .stat-value {
-    font-size: 2rem;
+    font-size: var(--font-size-2xl);
   }
   
   .content-card-header {
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--spacing-md);
     align-items: flex-start;
   }
   
@@ -539,43 +543,43 @@
   }
   
   .mini-stat-card {
-    padding: 1rem;
+    padding: var(--spacing-md);
   }
   
   .activity-item {
-    padding: 0.75rem;
+    padding: var(--spacing-sm);
   }
   
   .quick-action-btn {
-    padding: 0.75rem;
+    padding: var(--spacing-sm);
   }
 }
 
 @media (max-width: 576px) {
   .dashboard-header {
-    padding: 1rem;
+    padding: var(--spacing-md);
   }
   
   .welcome-section h1.dashboard-title {
-    font-size: 1.5rem;
+    font-size: var(--font-size-2xl);
   }
   
   .stat-card {
-    padding: 0.75rem;
+    padding: var(--spacing-sm);
   }
   
   .stat-value {
-    font-size: 1.75rem;
+    font-size: var(--font-size-xl);
   }
   
   .content-card-body {
-    padding: 1rem;
+    padding: var(--spacing-md);
   }
   
   .mini-stat-card {
     flex-direction: column;
     text-align: center;
-    gap: 0.75rem;
+    gap: var(--spacing-sm);
   }
   
   .chart-placeholder {
