@@ -1,4 +1,12 @@
 services:
+  # PostgreSQL Database
+  - type: pserv
+    name: vegn-bio-database
+    env: postgresql
+    plan: free
+    databaseName: vegnbiodb
+    databaseUser: vegnbio_user
+
   # Backend Spring Boot API
   - type: web
     name: vegn-bio-backend
@@ -24,11 +32,3 @@ services:
         fromDatabase:
           name: vegn-bio-database
           property: password
-
-  # PostgreSQL Database
-  - type: pserv
-    name: vegn-bio-database
-    env: postgresql
-    plan: free
-    databaseName: vegnbiodb
-    databaseUser: vegnbio_user
