@@ -69,4 +69,18 @@ public class OfferController {
         OfferDto offer = offerService.updateOfferStatus(offerId, request);
         return ResponseEntity.ok(offer);
     }
+    
+    @PutMapping("/{offerId}")
+    @PreAuthorize("hasRole('FOURNISSEUR') or hasRole('ADMIN')")
+    public ResponseEntity<OfferDto> updateOffer(@PathVariable Long offerId, @Valid @RequestBody CreateOfferRequest request) {
+        OfferDto offer = offerService.updateOffer(offerId, request);
+        return ResponseEntity.ok(offer);
+    }
+    
+    @DeleteMapping("/{offerId}")
+    @PreAuthorize("hasRole('FOURNISSEUR') or hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteOffer(@PathVariable Long offerId) {
+        offerService.deleteOffer(offerId);
+        return ResponseEntity.noContent().build();
+    }
 }

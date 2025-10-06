@@ -60,4 +60,18 @@ public class SupplierController {
         SupplierDto supplier = supplierService.updateSupplierStatus(supplierId, status);
         return ResponseEntity.ok(supplier);
     }
+    
+    @PutMapping("/{supplierId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SupplierDto> updateSupplier(@PathVariable Long supplierId, @Valid @RequestBody CreateSupplierRequest request) {
+        SupplierDto supplier = supplierService.updateSupplier(supplierId, request);
+        return ResponseEntity.ok(supplier);
+    }
+    
+    @DeleteMapping("/{supplierId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteSupplier(@PathVariable Long supplierId) {
+        supplierService.deleteSupplier(supplierId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -36,4 +36,24 @@ public class MenuItemController {
         List<MenuItemDto> menuItems = menuItemService.searchMenuItems(name);
         return ResponseEntity.ok(menuItems);
     }
+    
+    @GetMapping("/{menuItemId}")
+    public ResponseEntity<MenuItemDto> getMenuItem(@PathVariable Long menuItemId) {
+        MenuItemDto menuItem = menuItemService.getMenuItemById(menuItemId);
+        return ResponseEntity.ok(menuItem);
+    }
+    
+    @PutMapping("/{menuItemId}")
+    @PreAuthorize("hasRole('RESTAURATEUR') or hasRole('ADMIN')")
+    public ResponseEntity<MenuItemDto> updateMenuItem(@PathVariable Long menuItemId, @Valid @RequestBody CreateMenuItemRequest request) {
+        MenuItemDto menuItem = menuItemService.updateMenuItem(menuItemId, request);
+        return ResponseEntity.ok(menuItem);
+    }
+    
+    @DeleteMapping("/{menuItemId}")
+    @PreAuthorize("hasRole('RESTAURATEUR') or hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteMenuItem(@PathVariable Long menuItemId) {
+        menuItemService.deleteMenuItem(menuItemId);
+        return ResponseEntity.noContent().build();
+    }
 }

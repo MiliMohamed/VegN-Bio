@@ -7,6 +7,7 @@ import com.vegnbio.api.modules.events.entity.EventStatus;
 import com.vegnbio.api.modules.events.repo.EventRepository;
 import com.vegnbio.api.modules.events.repo.BookingRepository;
 import com.vegnbio.api.modules.restaurant.repo.RestaurantRepository;
+import com.vegnbio.api.modules.restaurant.entity.Restaurant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,7 +83,35 @@ public class EventService {
         eventRepository.save(event);
         return toDto(event);
     }
-
+    
+    @Transactional
+    public EventDto updateEvent(Long eventId, CreateEventRequest request) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+        
+        Restaurant restaurant = restaurantRepository.findById(request.restaurantId())
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+        
+        event.setTitle(request.title());
+        event.setDescription(request.description());
+        event.setDateStart(request.dateStart());
+        event.setDateEnd(request.dateEnd());
+        event.setCapacity(request.capacity());
+        event.setType(request.type());
+        event.setRestaurant(restaurant);
+        
+        Event savedEvent = eventRepository.save(event);
+        return toDto(savedEvent);
+    }
+    
+    @Transactional
+    public void deleteEvent(Long eventId) {
+        if (!eventRepository.existsById(eventId)) {
+            throw new RuntimeException("Event not found");
+        }
+        eventRepository.deleteById(eventId);
+    }
+    
     private EventDto toDto(Event event) {
         Integer availableSpots = null;
         if (event.getCapacity() != null) {

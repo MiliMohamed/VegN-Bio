@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api/v1';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/v1';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -30,6 +30,8 @@ api.interceptors.response.use(
       // Token expired or invalid
       localStorage.removeItem('token');
       localStorage.removeItem('userRole');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userName');
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -53,12 +55,20 @@ export const restaurantService = {
 };
 
 export const menuService = {
-  getByRestaurant: (restaurantId: number) => api.get(`/menus/restaurant/${restaurantId}`),
-  getActiveByRestaurant: (restaurantId: number, date?: string) => {
+  getMenusByRestaurant: (restaurantId: number) => api.get(`/menus/restaurant/${restaurantId}`),
+  getActiveMenusByRestaurant: (restaurantId: number, date?: string) => {
     const params = date ? `?date=${date}` : '';
     return api.get(`/menus/restaurant/${restaurantId}/active${params}`);
   },
   create: (menuData: any) => api.post('/menus', menuData),
+  update: (id: number, menuData: any) => api.put(`/menus/${id}`, menuData),
+  delete: (id: number) => api.delete(`/menus/${id}`),
+  
+  // Menu Items
+  createMenuItem: (itemData: any) => api.post('/menu-items', itemData),
+  getMenuItemsByMenu: (menuId: number) => api.get(`/menu-items/menu/${menuId}`),
+  updateMenuItem: (id: number, itemData: any) => api.put(`/menu-items/${id}`, itemData),
+  deleteMenuItem: (id: number) => api.delete(`/menu-items/${id}`),
 };
 
 export const eventService = {
@@ -67,19 +77,29 @@ export const eventService = {
   create: (eventData: any) => api.post('/events', eventData),
   update: (id: number, eventData: any) => api.put(`/events/${id}`, eventData),
   delete: (id: number) => api.delete(`/events/${id}`),
+  cancel: (id: number) => api.patch(`/events/${id}/cancel`),
 };
 
 export const marketplaceService = {
+  // Offers
   getOffers: (search?: string) => {
     const params = search ? `?search=${encodeURIComponent(search)}` : '';
     return api.get(`/offers${params}`);
   },
   getOffersBySupplier: (supplierId: number) => api.get(`/offers/supplier/${supplierId}`),
+  createOffer: (offerData: any) => api.post('/offers', offerData),
+  updateOffer: (id: number, offerData: any) => api.put(`/offers/${id}`, offerData),
+  deleteOffer: (id: number) => api.delete(`/offers/${id}`),
+  
+  // Suppliers
   getSuppliers: (search?: string) => {
     const params = search ? `?search=${encodeURIComponent(search)}` : '';
     return api.get(`/suppliers${params}`);
   },
   getAllSuppliers: () => api.get('/suppliers/all'),
+  createSupplier: (supplierData: any) => api.post('/suppliers', supplierData),
+  updateSupplier: (id: number, supplierData: any) => api.put(`/suppliers/${id}`, supplierData),
+  deleteSupplier: (id: number) => api.delete(`/suppliers/${id}`),
 };
 
 export const feedbackService = {

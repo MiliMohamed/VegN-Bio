@@ -13,6 +13,7 @@ public class Restaurant {
   private String address;
   private String city;
   private String phone;
+  private String email;
 }
 
 

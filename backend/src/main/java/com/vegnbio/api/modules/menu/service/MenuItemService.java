@@ -61,6 +61,45 @@ public class MenuItemService {
                 .toList();
     }
     
+    @Transactional(readOnly = true)
+    public MenuItemDto getMenuItemById(Long menuItemId) {
+        MenuItem menuItem = menuItemRepository.findById(menuItemId)
+                .orElseThrow(() -> new RuntimeException("MenuItem not found"));
+        return mapToDto(menuItem);
+    }
+    
+    @Transactional
+    public MenuItemDto updateMenuItem(Long menuItemId, CreateMenuItemRequest request) {
+        MenuItem menuItem = menuItemRepository.findById(menuItemId)
+                .orElseThrow(() -> new RuntimeException("MenuItem not found"));
+        
+        Menu menu = menuRepository.findById(request.menuId())
+                .orElseThrow(() -> new RuntimeException("Menu not found"));
+        
+        menuItem.setName(request.name());
+        menuItem.setDescription(request.description());
+        menuItem.setPriceCents(request.priceCents());
+        menuItem.setIsVegan(request.isVegan());
+        menuItem.setMenu(menu);
+        
+        // Gérer les allergènes si nécessaire
+        if (request.allergenIds() != null && !request.allergenIds().isEmpty()) {
+            List<Allergen> allergens = allergenRepository.findAllById(request.allergenIds());
+            menuItem.setAllergens(allergens);
+        }
+        
+        MenuItem savedMenuItem = menuItemRepository.save(menuItem);
+        return mapToDto(savedMenuItem);
+    }
+    
+    @Transactional
+    public void deleteMenuItem(Long menuItemId) {
+        if (!menuItemRepository.existsById(menuItemId)) {
+            throw new RuntimeException("MenuItem not found");
+        }
+        menuItemRepository.deleteById(menuItemId);
+    }
+    
     private MenuItemDto mapToDto(MenuItem menuItem) {
         return new MenuItemDto(
                 menuItem.getId(),

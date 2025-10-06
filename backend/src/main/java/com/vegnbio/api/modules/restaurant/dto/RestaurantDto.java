@@ -1,6 +1,6 @@
 package com.vegnbio.api.modules.restaurant.dto;
 
-public record RestaurantDto(Long id, String name, String code, String city) {}
+public record RestaurantDto(Long id, String name, String code, String address, String city, String phone, String email) {}
 
 
 

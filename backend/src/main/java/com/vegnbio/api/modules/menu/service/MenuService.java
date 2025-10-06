@@ -58,6 +58,38 @@ public class MenuService {
                 .toList();
     }
     
+    @Transactional(readOnly = true)
+    public MenuDto getMenuById(Long menuId) {
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new RuntimeException("Menu not found"));
+        return mapToDto(menu);
+    }
+    
+    @Transactional
+    public MenuDto updateMenu(Long menuId, CreateMenuRequest request) {
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new RuntimeException("Menu not found"));
+        
+        Restaurant restaurant = restaurantRepository.findById(request.restaurantId())
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+        
+        menu.setTitle(request.title());
+        menu.setActiveFrom(request.activeFrom());
+        menu.setActiveTo(request.activeTo());
+        menu.setRestaurant(restaurant);
+        
+        Menu savedMenu = menuRepository.save(menu);
+        return mapToDto(savedMenu);
+    }
+    
+    @Transactional
+    public void deleteMenu(Long menuId) {
+        if (!menuRepository.existsById(menuId)) {
+            throw new RuntimeException("Menu not found");
+        }
+        menuRepository.deleteById(menuId);
+    }
+    
     private MenuDto mapToDto(Menu menu) {
         return new MenuDto(
                 menu.getId(),

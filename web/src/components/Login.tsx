@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -8,6 +9,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,9 +18,15 @@ const Login: React.FC = () => {
 
     try {
       const response = await authService.login(email, password);
-      localStorage.setItem('token', response.data.accessToken);
-      localStorage.setItem('userRole', response.data.role);
-      navigate('/dashboard');
+      
+      const userData = {
+        email: email,
+        role: response.data.role,
+        name: response.data.fullName || email
+      };
+      
+      login(response.data.accessToken, userData);
+      navigate('/app/dashboard');
     } catch (err: any) {
       setError('Email ou mot de passe incorrect');
     } finally {

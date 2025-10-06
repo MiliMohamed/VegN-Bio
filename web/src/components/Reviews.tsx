@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { feedbackService } from '../services/api';
+import { useRestaurants } from '../hooks/useRestaurants';
 
 interface Review {
   id: number;
@@ -31,7 +32,10 @@ const Reviews: React.FC = () => {
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<'reviews' | 'reports'>('reviews');
   const [deletingReview, setDeletingReview] = useState<number | null>(null);
-  
+
+  // Hook pour récupérer les restaurants
+  const { getRestaurantName } = useRestaurants();
+
   // Vérifier si l'utilisateur est admin
   const userRole = localStorage.getItem('userRole');
   const isAdmin = userRole === 'ADMIN';
@@ -66,6 +70,23 @@ const Reviews: React.FC = () => {
       alert('Erreur lors de la suppression de l\'avis');
     } finally {
       setDeletingReview(null);
+    }
+  };
+
+  // Fonction pour approuver/rejeter un avis (Admin seulement)
+  const handleReviewStatusChange = async (reviewId: number, newStatus: 'APPROVED' | 'REJECTED') => {
+    try {
+      await feedbackService.updateReviewStatus(reviewId, { status: newStatus });
+      
+      // Mettre à jour l'avis dans la liste
+      setReviews(reviews.map(review => 
+        review.id === reviewId ? { ...review, status: newStatus } : review
+      ));
+      
+      alert(`Avis ${newStatus === 'APPROVED' ? 'approuvé' : 'rejeté'} avec succès`);
+    } catch (err) {
+      console.error('Erreur lors de la mise à jour du statut:', err);
+      alert('Erreur lors de la mise à jour du statut de l\'avis');
     }
   };
 
@@ -138,7 +159,7 @@ const Reviews: React.FC = () => {
               reviews.map((review) => (
                 <div key={review.id} className={`review-card ${canModifyReview(review) ? 'own-review' : ''}`}>
                   <div className="review-header">
-                    <h4>Restaurant #{review.restaurantId}</h4>
+                    <h4>{getRestaurantName(review.restaurantId)}</h4>
                     <div className="rating">
                       {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
                     </div>
@@ -153,18 +174,37 @@ const Reviews: React.FC = () => {
                       {review.status}
                     </span>
                   </div>
-                  {canModifyReview(review) && (
-                    <div className="card-actions">
-                      <button className="btn-secondary">Modifier</button>
-                      <button 
-                        className="btn-danger"
-                        onClick={() => handleDeleteReview(review.id)}
-                        disabled={deletingReview === review.id}
-                      >
-                        {deletingReview === review.id ? 'Suppression...' : 'Supprimer'}
-                      </button>
-                    </div>
-                  )}
+                  <div className="card-actions">
+                    {isAdmin && review.status === 'PENDING' && (
+                      <>
+                        <button 
+                          className="btn-success"
+                          onClick={() => handleReviewStatusChange(review.id, 'APPROVED')}
+                        >
+                          Approuver
+                        </button>
+                        <button 
+                          className="btn-warning"
+                          onClick={() => handleReviewStatusChange(review.id, 'REJECTED')}
+                        >
+                          Rejeter
+                        </button>
+                      </>
+                    )}
+                    
+                    {canModifyReview(review) && (
+                      <>
+                        <button className="btn-secondary">Modifier</button>
+                        <button 
+                          className="btn-danger"
+                          onClick={() => handleDeleteReview(review.id)}
+                          disabled={deletingReview === review.id}
+                        >
+                          {deletingReview === review.id ? 'Suppression...' : 'Supprimer'}
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               ))
             )}

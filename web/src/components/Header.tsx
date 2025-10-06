@@ -1,9 +1,11 @@
 import React from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Header: React.FC = () => {
+  const { logout } = useAuth();
+  
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userRole');
+    logout();
     window.location.href = '/login';
   };
 

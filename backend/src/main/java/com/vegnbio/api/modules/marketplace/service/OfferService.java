@@ -92,7 +92,33 @@ public class OfferService {
         offerRepository.save(offer);
         return toDto(offer);
     }
-
+    
+    @Transactional
+    public OfferDto updateOffer(Long offerId, CreateOfferRequest request) {
+        Offer offer = offerRepository.findById(offerId)
+                .orElseThrow(() -> new RuntimeException("Offer not found"));
+        
+        Supplier supplier = supplierRepository.findById(request.supplierId())
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+        
+        offer.setTitle(request.title());
+        offer.setDescription(request.description());
+        offer.setUnitPriceCents(request.unitPriceCents());
+        offer.setUnit(request.unit());
+        offer.setSupplier(supplier);
+        
+        Offer savedOffer = offerRepository.save(offer);
+        return toDto(savedOffer);
+    }
+    
+    @Transactional
+    public void deleteOffer(Long offerId) {
+        if (!offerRepository.existsById(offerId)) {
+            throw new RuntimeException("Offer not found");
+        }
+        offerRepository.deleteById(offerId);
+    }
+    
     private OfferDto toDto(Offer offer) {
         return new OfferDto(
                 offer.getId(),

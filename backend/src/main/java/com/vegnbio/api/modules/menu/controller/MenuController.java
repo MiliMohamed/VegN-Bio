@@ -39,4 +39,24 @@ public class MenuController {
         List<MenuDto> menus = menuService.getMenusByRestaurantAndDate(restaurantId, date);
         return ResponseEntity.ok(menus);
     }
+    
+    @GetMapping("/{menuId}")
+    public ResponseEntity<MenuDto> getMenu(@PathVariable Long menuId) {
+        MenuDto menu = menuService.getMenuById(menuId);
+        return ResponseEntity.ok(menu);
+    }
+    
+    @PutMapping("/{menuId}")
+    @PreAuthorize("hasRole('RESTAURATEUR') or hasRole('ADMIN')")
+    public ResponseEntity<MenuDto> updateMenu(@PathVariable Long menuId, @Valid @RequestBody CreateMenuRequest request) {
+        MenuDto menu = menuService.updateMenu(menuId, request);
+        return ResponseEntity.ok(menu);
+    }
+    
+    @DeleteMapping("/{menuId}")
+    @PreAuthorize("hasRole('RESTAURATEUR') or hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteMenu(@PathVariable Long menuId) {
+        menuService.deleteMenu(menuId);
+        return ResponseEntity.noContent().build();
+    }
 }

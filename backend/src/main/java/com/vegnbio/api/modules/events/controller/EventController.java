@@ -21,7 +21,7 @@ public class EventController {
     private final EventService eventService;
 
     @PostMapping
-    @PreAuthorize("hasRole('RESTAURATEUR')")
+    @PreAuthorize("hasRole('RESTAURATEUR') or hasRole('ADMIN')")
     public ResponseEntity<EventDto> createEvent(@Valid @RequestBody CreateEventRequest request) {
         EventDto event = eventService.createEvent(request);
         return ResponseEntity.ok(event);
@@ -49,9 +49,23 @@ public class EventController {
     }
 
     @PatchMapping("/{eventId}/cancel")
-    @PreAuthorize("hasRole('RESTAURATEUR')")
+    @PreAuthorize("hasRole('RESTAURATEUR') or hasRole('ADMIN')")
     public ResponseEntity<EventDto> cancelEvent(@PathVariable Long eventId) {
         EventDto event = eventService.cancelEvent(eventId);
         return ResponseEntity.ok(event);
+    }
+    
+    @PutMapping("/{eventId}")
+    @PreAuthorize("hasRole('RESTAURATEUR') or hasRole('ADMIN')")
+    public ResponseEntity<EventDto> updateEvent(@PathVariable Long eventId, @Valid @RequestBody CreateEventRequest request) {
+        EventDto event = eventService.updateEvent(eventId, request);
+        return ResponseEntity.ok(event);
+    }
+    
+    @DeleteMapping("/{eventId}")
+    @PreAuthorize("hasRole('RESTAURATEUR') or hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long eventId) {
+        eventService.deleteEvent(eventId);
+        return ResponseEntity.noContent().build();
     }
 }

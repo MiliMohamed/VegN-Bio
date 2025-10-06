@@ -79,7 +79,27 @@ public class SupplierService {
         supplierRepository.save(supplier);
         return toDto(supplier);
     }
-
+    
+    @Transactional
+    public SupplierDto updateSupplier(Long supplierId, CreateSupplierRequest request) {
+        Supplier supplier = supplierRepository.findById(supplierId)
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+        
+        supplier.setCompanyName(request.companyName());
+        supplier.setContactEmail(request.contactEmail());
+        
+        Supplier savedSupplier = supplierRepository.save(supplier);
+        return toDto(savedSupplier);
+    }
+    
+    @Transactional
+    public void deleteSupplier(Long supplierId) {
+        if (!supplierRepository.existsById(supplierId)) {
+            throw new RuntimeException("Supplier not found");
+        }
+        supplierRepository.deleteById(supplierId);
+    }
+    
     private SupplierDto toDto(Supplier supplier) {
         return new SupplierDto(
                 supplier.getId(),
