@@ -13,9 +13,9 @@ class Allergen {
 
   factory Allergen.fromJson(Map<String, dynamic> json) {
     return Allergen(
-      code: json['code'],
-      name: json['name'],
-      description: json['description'],
+      code: json['code'] ?? '',
+      name: json['label'] ?? '',
+      description: json['label'] ?? '',
       icon: json['icon'],
     );
   }
