@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Database, Loader, CheckCircle, AlertCircle } from 'lucide-react';
-import { populateDatabase } from '../utils/testData';
+import { populateCompleteDatabase } from '../utils/completeTestData';
 import { useNotificationHelpers } from './NotificationProvider';
 
 const DatabasePopulator: React.FC = () => {
@@ -15,7 +15,7 @@ const DatabasePopulator: React.FC = () => {
     setIsCompleted(false);
 
     try {
-      await populateDatabase();
+      await populateCompleteDatabase();
       setIsCompleted(true);
       success('Base de données remplie avec succès !', 'Toutes les données de test ont été ajoutées.');
     } catch (err: any) {
@@ -39,14 +39,16 @@ const DatabasePopulator: React.FC = () => {
       <div className="modern-card-content">
         <div className="mb-4">
           <p className="text-gray-600 mb-2">
-            Ce bouton va remplir la base de données avec des données de test réalistes :
+            Ce bouton va remplir la base de données avec des données complètes et réalistes :
           </p>
           <ul className="list-disc list-inside text-sm text-gray-600 space-y-1 ml-4">
             <li>5 restaurants avec leurs informations complètes</li>
-            <li>2 menus avec plusieurs plats végétariens</li>
-            <li>3 événements (ateliers, dégustations, conférences)</li>
-            <li>3 fournisseurs de produits bio</li>
-            <li>3 offres sur le marketplace</li>
+            <li>3 menus avec plusieurs plats végétariens détaillés</li>
+            <li>5 événements variés (ateliers, dégustations, conférences, brunch)</li>
+            <li>5 fournisseurs de produits bio spécialisés</li>
+            <li>5 offres complètes sur le marketplace</li>
+            <li>8 avis et reviews authentiques</li>
+            <li>3 rapports/signalisations pour tester la modération</li>
           </ul>
         </div>
 

@@ -20,6 +20,7 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import DatabasePopulator from './DatabasePopulator';
 import BackendTester from './BackendTester';
+import ReviewsTester from './ReviewsTester';
 
 interface DashboardStats {
   restaurants: number;
@@ -389,11 +390,14 @@ const ModernDashboard: React.FC = () => {
         {/* Admin Tools - Admin Only */}
         {user?.role === 'ADMIN' && (
           <div className="row g-4 mt-4">
-            <div className="col-md-6">
+            <div className="col-md-4">
               <DatabasePopulator />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-4">
               <BackendTester />
+            </div>
+            <div className="col-md-4">
+              <ReviewsTester />
             </div>
           </div>
         )}
