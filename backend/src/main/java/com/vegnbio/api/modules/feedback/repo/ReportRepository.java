@@ -20,3 +20,4 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     @Query("SELECT r FROM Report r WHERE r.restaurant.id = :restaurantId AND r.status IN ('OPEN', 'IN_PROGRESS')")
     List<Report> findActiveReportsByRestaurant(@Param("restaurantId") Long restaurantId);
 }
+

@@ -13,3 +13,4 @@ public record CreateReviewRequest(
         @Min(1) @Max(5) @NotNull Integer rating,
         String comment
 ) {}
+

@@ -15,3 +15,4 @@ public record ReportDto(
         LocalDateTime createdAt,
         LocalDateTime resolvedAt
 ) {}
+

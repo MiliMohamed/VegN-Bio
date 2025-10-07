@@ -1,0 +1,11 @@
+# Images de démonstration
+
+Ce dossier contiendrait les images des plats du menu :
+- quinoa_salad.jpg
+- veggie_burger.jpg
+- green_smoothie.jpg
+- vegetable_tart.jpg
+- vegetable_curry.jpg
+- poke_bowl.jpg
+
+Pour une vraie application, vous devriez remplacer ces fichiers par de vraies images.

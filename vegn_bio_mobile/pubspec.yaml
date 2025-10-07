@@ -1,0 +1,57 @@
+name: vegn_bio_mobile
+description: "Application mobile VegN-Bio pour la consultation des menus et le chatbot vétérinaire"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # HTTP et réseau
+  http: ^1.5.0
+  dio: ^5.9.0
+  
+  # Gestion d'état
+  provider: ^6.1.5+1
+  
+  # Stockage local
+  shared_preferences: ^2.5.3
+  
+  # Configuration
+  flutter_dotenv: ^6.0.0
+  
+  # Chat
+  flutter_chat_ui: ^2.9.0
+  flutter_chat_types: ^3.6.2
+  uuid: ^4.5.1
+  
+  # Utilitaires
+  intl: ^0.20.2
+  logger: ^2.6.2
+  path_provider: ^2.1.5
+  
+  # Informations système
+  device_info_plus: ^12.1.0
+  package_info_plus: ^9.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/.env
+  
+  # fonts:
+  #   - family: Roboto
+  #     fonts:
+  #       - asset: fonts/Roboto-Regular.ttf
+  #       - asset: fonts/Roboto-Bold.ttf
+  #         weight: 700

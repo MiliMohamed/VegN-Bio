@@ -6,3 +6,4 @@ import jakarta.validation.constraints.NotNull;
 public record UpdateReviewStatusRequest(
         @NotNull ReviewStatus status
 ) {}
+

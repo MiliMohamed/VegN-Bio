@@ -11,3 +11,4 @@ public record CreateReportRequest(
         @NotBlank String reportType,
         @NotBlank String description
 ) {}
+

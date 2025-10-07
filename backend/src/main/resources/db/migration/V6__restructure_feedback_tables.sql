@@ -29,3 +29,4 @@ CREATE TABLE reports (
   created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   resolved_at   TIMESTAMPTZ
 );
+
