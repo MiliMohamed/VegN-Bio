@@ -14,6 +14,7 @@ import Reviews from './components/Reviews';
 import SimpleHeader from './components/SimpleHeader';
 import SimpleSidebar from './components/SimpleSidebar';
 import ProtectedRoute from './components/ProtectedRoute';
+import './styles/app-reset.css';
 import './styles/landing.css';
 import './styles/modern-login.css';
 import './styles/modern-app.css';
