@@ -2,7 +2,7 @@
 const API_BASE_URL = 'https://vegn-bio-backend.onrender.com/api/v1';
 
 // Fonction utilitaire pour faire des requêtes
-const makeRequest = async (url, options = {}) => {
+const makeRequest = async (url: string, options: any = {}) => {
   try {
     const token = localStorage.getItem('token');
     const response = await fetch(url, {
@@ -23,7 +23,7 @@ const makeRequest = async (url, options = {}) => {
       data,
       url
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       success: false,
       error: error.message,
@@ -404,7 +404,7 @@ export const testBasicConnectivity = async () => {
       console.log(`❌ Backend accessible mais erreur: ${response.status}`);
       return false;
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log(`❌ Backend inaccessible: ${error.message}`);
     return false;
   }
@@ -433,7 +433,7 @@ export const runBackendTests = async () => {
 
 // Export pour utilisation dans la console du navigateur
 if (typeof window !== 'undefined') {
-  window.testBackend = {
+  (window as any).testBackend = {
     runAllTests: runBackendTests,
     testAuth: testAuthEndpoints,
     testRestaurants: testRestaurantEndpoints,
