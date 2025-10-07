@@ -6,6 +6,20 @@ export interface Restaurant {
   name: string;
   code: string;
   city: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  wifiAvailable?: boolean;
+  meetingRoomsCount?: number;
+  restaurantCapacity?: number;
+  printerAvailable?: boolean;
+  memberTrays?: boolean;
+  deliveryAvailable?: boolean;
+  specialEvents?: string;
+  mondayThursdayHours?: string;
+  fridayHours?: string;
+  saturdayHours?: string;
+  sundayHours?: string;
 }
 
 export const useRestaurants = () => {

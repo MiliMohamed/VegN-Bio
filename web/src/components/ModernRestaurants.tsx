@@ -15,7 +15,13 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-  MoreVertical
+  MoreVertical,
+  Wifi,
+  Printer,
+  Truck,
+  Coffee,
+  Calendar,
+  Monitor
 } from 'lucide-react';
 import { restaurantService } from '../services/api';
 
@@ -27,6 +33,17 @@ interface Restaurant {
   address?: string;
   phone?: string;
   email?: string;
+  wifiAvailable?: boolean;
+  meetingRoomsCount?: number;
+  restaurantCapacity?: number;
+  printerAvailable?: boolean;
+  memberTrays?: boolean;
+  deliveryAvailable?: boolean;
+  specialEvents?: string;
+  mondayThursdayHours?: string;
+  fridayHours?: string;
+  saturdayHours?: string;
+  sundayHours?: string;
 }
 
 interface CreateRestaurantData {
@@ -36,6 +53,17 @@ interface CreateRestaurantData {
   address: string;
   phone: string;
   email: string;
+  wifiAvailable: boolean;
+  meetingRoomsCount: number;
+  restaurantCapacity: number;
+  printerAvailable: boolean;
+  memberTrays: boolean;
+  deliveryAvailable: boolean;
+  specialEvents: string;
+  mondayThursdayHours: string;
+  fridayHours: string;
+  saturdayHours: string;
+  sundayHours: string;
 }
 
 const ModernRestaurants: React.FC = () => {
@@ -52,7 +80,18 @@ const ModernRestaurants: React.FC = () => {
     city: '',
     address: '',
     phone: '',
-    email: ''
+    email: '',
+    wifiAvailable: false,
+    meetingRoomsCount: 0,
+    restaurantCapacity: 0,
+    printerAvailable: false,
+    memberTrays: false,
+    deliveryAvailable: false,
+    specialEvents: '',
+    mondayThursdayHours: '',
+    fridayHours: '',
+    saturdayHours: '',
+    sundayHours: ''
   });
 
   // Vérifier si l'utilisateur peut gérer les restaurants (ADMIN seulement)
@@ -88,7 +127,18 @@ const ModernRestaurants: React.FC = () => {
         city: '',
         address: '',
         phone: '',
-        email: ''
+        email: '',
+        wifiAvailable: false,
+        meetingRoomsCount: 0,
+        restaurantCapacity: 0,
+        printerAvailable: false,
+        memberTrays: false,
+        deliveryAvailable: false,
+        specialEvents: '',
+        mondayThursdayHours: '',
+        fridayHours: '',
+        saturdayHours: '',
+        sundayHours: ''
       });
       setShowCreateForm(false);
       alert('Restaurant créé avec succès');
@@ -143,7 +193,18 @@ const ModernRestaurants: React.FC = () => {
       city: '',
       address: '',
       phone: '',
-      email: ''
+      email: '',
+      wifiAvailable: false,
+      meetingRoomsCount: 0,
+      restaurantCapacity: 0,
+      printerAvailable: false,
+      memberTrays: false,
+      deliveryAvailable: false,
+      specialEvents: '',
+      mondayThursdayHours: '',
+      fridayHours: '',
+      saturdayHours: '',
+      sundayHours: ''
     });
   };
 
@@ -359,6 +420,203 @@ const ModernRestaurants: React.FC = () => {
                       />
                     </div>
                   </div>
+                  
+                  {/* Nouvelles informations détaillées */}
+                  <div className="col-12">
+                    <h4 className="form-section-title">Informations détaillées</h4>
+                  </div>
+                  
+                  <div className="col-md-3">
+                    <div className="form-group">
+                      <label className="form-label">Capacité restaurant</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={editingRestaurant ? editingRestaurant.restaurantCapacity || 0 : newRestaurant.restaurantCapacity}
+                        onChange={(e) => editingRestaurant 
+                          ? setEditingRestaurant({...editingRestaurant, restaurantCapacity: parseInt(e.target.value) || 0})
+                          : setNewRestaurant({...newRestaurant, restaurantCapacity: parseInt(e.target.value) || 0})
+                        }
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="col-md-3">
+                    <div className="form-group">
+                      <label className="form-label">Salles de réunion</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={editingRestaurant ? editingRestaurant.meetingRoomsCount || 0 : newRestaurant.meetingRoomsCount}
+                        onChange={(e) => editingRestaurant 
+                          ? setEditingRestaurant({...editingRestaurant, meetingRoomsCount: parseInt(e.target.value) || 0})
+                          : setNewRestaurant({...newRestaurant, meetingRoomsCount: parseInt(e.target.value) || 0})
+                        }
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="form-label">Événements spéciaux</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={editingRestaurant ? editingRestaurant.specialEvents || '' : newRestaurant.specialEvents}
+                        onChange={(e) => editingRestaurant 
+                          ? setEditingRestaurant({...editingRestaurant, specialEvents: e.target.value})
+                          : setNewRestaurant({...newRestaurant, specialEvents: e.target.value})
+                        }
+                        placeholder="Ex: Conférences tous les mardi après-midi"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Services disponibles */}
+                  <div className="col-12">
+                    <h4 className="form-section-title">Services disponibles</h4>
+                  </div>
+                  
+                  <div className="col-md-4">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        checked={editingRestaurant ? editingRestaurant.wifiAvailable || false : newRestaurant.wifiAvailable}
+                        onChange={(e) => editingRestaurant 
+                          ? setEditingRestaurant({...editingRestaurant, wifiAvailable: e.target.checked})
+                          : setNewRestaurant({...newRestaurant, wifiAvailable: e.target.checked})
+                        }
+                      />
+                      <label className="form-check-label">
+                        <Wifi className="form-check-icon" />
+                        Wi-Fi disponible
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div className="col-md-4">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        checked={editingRestaurant ? editingRestaurant.printerAvailable || false : newRestaurant.printerAvailable}
+                        onChange={(e) => editingRestaurant 
+                          ? setEditingRestaurant({...editingRestaurant, printerAvailable: e.target.checked})
+                          : setNewRestaurant({...newRestaurant, printerAvailable: e.target.checked})
+                        }
+                      />
+                      <label className="form-check-label">
+                        <Printer className="form-check-icon" />
+                        Imprimante disponible
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div className="col-md-4">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        checked={editingRestaurant ? editingRestaurant.memberTrays || false : newRestaurant.memberTrays}
+                        onChange={(e) => editingRestaurant 
+                          ? setEditingRestaurant({...editingRestaurant, memberTrays: e.target.checked})
+                          : setNewRestaurant({...newRestaurant, memberTrays: e.target.checked})
+                        }
+                      />
+                      <label className="form-check-label">
+                        <Coffee className="form-check-icon" />
+                        Plateaux membres
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div className="col-md-4">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        checked={editingRestaurant ? editingRestaurant.deliveryAvailable || false : newRestaurant.deliveryAvailable}
+                        onChange={(e) => editingRestaurant 
+                          ? setEditingRestaurant({...editingRestaurant, deliveryAvailable: e.target.checked})
+                          : setNewRestaurant({...newRestaurant, deliveryAvailable: e.target.checked})
+                        }
+                      />
+                      <label className="form-check-label">
+                        <Truck className="form-check-icon" />
+                        Livraison disponible
+                      </label>
+                    </div>
+                  </div>
+                  
+                  {/* Horaires */}
+                  <div className="col-12">
+                    <h4 className="form-section-title">Horaires d'ouverture</h4>
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="form-label">Lundi à Jeudi</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={editingRestaurant ? editingRestaurant.mondayThursdayHours || '' : newRestaurant.mondayThursdayHours}
+                        onChange={(e) => editingRestaurant 
+                          ? setEditingRestaurant({...editingRestaurant, mondayThursdayHours: e.target.value})
+                          : setNewRestaurant({...newRestaurant, mondayThursdayHours: e.target.value})
+                        }
+                        placeholder="Ex: 9h à 24h"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="form-label">Vendredi</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={editingRestaurant ? editingRestaurant.fridayHours || '' : newRestaurant.fridayHours}
+                        onChange={(e) => editingRestaurant 
+                          ? setEditingRestaurant({...editingRestaurant, fridayHours: e.target.value})
+                          : setNewRestaurant({...newRestaurant, fridayHours: e.target.value})
+                        }
+                        placeholder="Ex: 9h à 1h du matin"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="form-label">Samedi</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={editingRestaurant ? editingRestaurant.saturdayHours || '' : newRestaurant.saturdayHours}
+                        onChange={(e) => editingRestaurant 
+                          ? setEditingRestaurant({...editingRestaurant, saturdayHours: e.target.value})
+                          : setNewRestaurant({...newRestaurant, saturdayHours: e.target.value})
+                        }
+                        placeholder="Ex: 9h à 5h du matin"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="form-label">Dimanche</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={editingRestaurant ? editingRestaurant.sundayHours || '' : newRestaurant.sundayHours}
+                        onChange={(e) => editingRestaurant 
+                          ? setEditingRestaurant({...editingRestaurant, sundayHours: e.target.value})
+                          : setNewRestaurant({...newRestaurant, sundayHours: e.target.value})
+                        }
+                        placeholder="Ex: 11h à 24h"
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="form-actions">
                   <button type="submit" className="btn btn-primary">
@@ -450,6 +708,102 @@ const ModernRestaurants: React.FC = () => {
                         </div>
                       </div>
                     )}
+                    
+                    {/* Nouvelles informations */}
+                    {restaurant.restaurantCapacity && (
+                      <div className="detail-item">
+                        <Users className="detail-icon" />
+                        <div className="detail-content">
+                          <div className="detail-label">Capacité</div>
+                          <div className="detail-value">{restaurant.restaurantCapacity} places</div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {restaurant.meetingRoomsCount && restaurant.meetingRoomsCount > 0 && (
+                      <div className="detail-item">
+                        <Monitor className="detail-icon" />
+                        <div className="detail-content">
+                          <div className="detail-label">Salles de réunion</div>
+                          <div className="detail-value">{restaurant.meetingRoomsCount}</div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {restaurant.specialEvents && (
+                      <div className="detail-item">
+                        <Calendar className="detail-icon" />
+                        <div className="detail-content">
+                          <div className="detail-label">Événements spéciaux</div>
+                          <div className="detail-value">{restaurant.specialEvents}</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Services disponibles */}
+                  <div className="restaurant-services">
+                    <div className="services-title">Services disponibles</div>
+                    <div className="services-list">
+                      {restaurant.wifiAvailable && (
+                        <div className="service-badge">
+                          <Wifi className="service-icon" />
+                          <span>Wi-Fi</span>
+                        </div>
+                      )}
+                      {restaurant.printerAvailable && (
+                        <div className="service-badge">
+                          <Printer className="service-icon" />
+                          <span>Imprimante</span>
+                        </div>
+                      )}
+                      {restaurant.memberTrays && (
+                        <div className="service-badge">
+                          <Coffee className="service-icon" />
+                          <span>Plateaux membres</span>
+                        </div>
+                      )}
+                      {restaurant.deliveryAvailable && (
+                        <div className="service-badge">
+                          <Truck className="service-icon" />
+                          <span>Livraison</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Horaires */}
+                  <div className="restaurant-hours">
+                    <div className="hours-title">
+                      <Clock className="hours-icon" />
+                      Horaires d'ouverture
+                    </div>
+                    <div className="hours-list">
+                      {restaurant.mondayThursdayHours && (
+                        <div className="hours-item">
+                          <span className="hours-day">Lun-Jeu:</span>
+                          <span className="hours-time">{restaurant.mondayThursdayHours}</span>
+                        </div>
+                      )}
+                      {restaurant.fridayHours && (
+                        <div className="hours-item">
+                          <span className="hours-day">Vendredi:</span>
+                          <span className="hours-time">{restaurant.fridayHours}</span>
+                        </div>
+                      )}
+                      {restaurant.saturdayHours && (
+                        <div className="hours-item">
+                          <span className="hours-day">Samedi:</span>
+                          <span className="hours-time">{restaurant.saturdayHours}</span>
+                        </div>
+                      )}
+                      {restaurant.sundayHours && (
+                        <div className="hours-item">
+                          <span className="hours-day">Dimanche:</span>
+                          <span className="hours-time">{restaurant.sundayHours}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   
                   <div className="restaurant-stats">

@@ -598,3 +598,138 @@
     padding: 2rem 1rem;
   }
 }
+
+/* Nouvelles sections pour les informations détaillées */
+.form-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: 1.5rem 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-check-input {
+  margin: 0;
+}
+
+.form-check-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+}
+
+.form-check-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--primary-color);
+}
+
+.restaurant-services {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: var(--border-radius);
+}
+
+.services-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+}
+
+.services-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.service-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #495057;
+}
+
+.service-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--success-color);
+}
+
+.restaurant-hours {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: var(--border-radius);
+}
+
+.hours-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+}
+
+.hours-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.hours-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hours-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.hours-day {
+  font-weight: 500;
+  color: #495057;
+}
+
+.hours-time {
+  color: #6c757d;
+}
+
+/* Responsive pour les nouvelles sections */
+@media (max-width: 768px) {
+  .services-list {
+    flex-direction: column;
+  }
+  
+  .service-badge {
+    justify-content: flex-start;
+  }
+  
+  .hours-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
