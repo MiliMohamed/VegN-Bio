@@ -123,7 +123,7 @@ const Events: React.FC = () => {
           <h3>Créer un nouvel événement</h3>
           <form onSubmit={handleCreateEvent}>
             <div className="form-row">
-              <div className="form-group">
+              <div className="form-group"> 
                 <label>Restaurant *</label>
                 <select
                   value={newEvent.restaurantId}
