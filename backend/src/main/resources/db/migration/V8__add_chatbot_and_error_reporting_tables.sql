@@ -7,7 +7,7 @@ CREATE TABLE veterinary_consultations (
     animal_breed VARCHAR(100) NOT NULL,
     diagnosis TEXT,
     recommendation TEXT,
-    confidence DECIMAL(3,2) NOT NULL DEFAULT 0.80,
+    confidence DOUBLE PRECISION NOT NULL DEFAULT 0.80,
     user_id VARCHAR(100),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
