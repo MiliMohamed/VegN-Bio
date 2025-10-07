@@ -18,6 +18,7 @@ import {
   Eye
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import DatabasePopulator from './DatabasePopulator';
 
 interface DashboardStats {
   restaurants: number;
@@ -383,6 +384,15 @@ const ModernDashboard: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Database Populator - Admin Only */}
+        {user?.role === 'ADMIN' && (
+          <div className="row g-4 mt-4">
+            <div className="col-12">
+              <DatabasePopulator />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
