@@ -1,214 +1,202 @@
-# VegN-Bio Mobile
+# 🐾 VegN-Bio Mobile - Application Mobile Complète
 
-Application mobile Flutter pour la consultation des menus et le chatbot vétérinaire de VegN-Bio.
+## 📱 Description
 
-## 🚀 Fonctionnalités
+VegN-Bio Mobile est une application mobile complète qui permet aux clients de :
 
-### 📱 Consultation des Menus
-- Affichage des restaurants disponibles
-- Consultation des menus par restaurant
+- **Consulter les menus** des restaurants végétariens
+- **Filtrer par allergènes** pour une sécurité alimentaire optimale
+- **Utiliser un chatbot vétérinaire** pour diagnostiquer les maladies d'animaux
+- **Accéder au tableau de bord admin** pour le monitoring et l'analyse
+
+## 🚀 Fonctionnalités Principales
+
+### 1. 🍽️ Consultation des Menus
+- Affichage des restaurants partenaires
+- Consultation des menus détaillés
 - Filtrage par allergènes
-- Informations détaillées sur les plats (prix, description, allergènes)
+- Interface intuitive et moderne
 
-### 🤖 Chatbot Vétérinaire
-- Assistant virtuel pour la santé des animaux
-- Diagnostic basé sur la race et les symptômes
-- Recommandations personnalisées
-- Apprentissage continu grâce aux consultations vétérinaires
-- Historique des consultations
+### 2. 🐕 Chatbot Vétérinaire Intelligent
+- **Sélection de race** : Chien, Chat, Oiseau, etc.
+- **Sélection de symptômes** : Liste dynamique selon la race
+- **Diagnostic automatique** avec niveau de confiance
+- **Système d'apprentissage** basé sur les consultations
+- **Sauvegarde des consultations** pour améliorer les diagnostics futurs
 
-### 📊 Reporting d'Erreurs
-- Signalement automatique des erreurs
-- Collecte d'informations système
-- Statistiques pour les administrateurs
-- Nettoyage automatique des anciens rapports
+### 3. 📊 Tableau de Bord Admin
+- **Statistiques d'erreurs** en temps réel
+- **Historique des consultations** vétérinaires
+- **Analyse des patterns** d'apprentissage
+- **Monitoring de l'application**
 
-## 🛠️ Technologies Utilisées
+### 4. 🔧 Système de Reporting d'Erreurs
+- **Reporting automatique** des erreurs
+- **Informations détaillées** sur l'appareil
+- **Catégorisation** des erreurs (API, Chatbot, Navigation)
+- **Statistiques** pour les développeurs
 
-- **Flutter** : Framework de développement mobile
-- **Provider** : Gestion d'état
-- **Dio** : Client HTTP
-- **flutter_chat_ui** : Interface de chat
-- **SharedPreferences** : Stockage local
-- **Logger** : Logging des erreurs
+## 🛠️ Installation et Configuration
 
-## 📋 Prérequis
+### Prérequis
+- Flutter SDK 3.0.0+
+- Dart SDK
+- Android Studio / Xcode (pour le déploiement mobile)
 
-- Flutter SDK 3.0.0 ou supérieur
-- Dart SDK 3.0.0 ou supérieur
-- Android Studio / VS Code
-- Backend VegN-Bio en production
-
-## 🚀 Installation
+### Installation
 
 1. **Cloner le projet**
-   ```bash
-   git clone <repository-url>
-   cd vegn_bio_mobile
-   ```
+```bash
+git clone <repository-url>
+cd VegN-Bio/vegn_bio_mobile
+```
 
 2. **Installer les dépendances**
-   ```bash
-   flutter pub get
-   ```
+```bash
+flutter pub get
+```
 
-3. **Configurer les variables d'environnement**
-   - Modifier le fichier `assets/.env`
-   - Remplacer `https://votre-backend-url.up.railway.app` par l'URL de votre backend
+3. **Configuration des variables d'environnement**
+```bash
+# Copier le fichier d'exemple
+cp env_example.txt .env
+
+# Modifier les valeurs selon votre environnement
+nano .env
+```
 
 4. **Lancer l'application**
-   ```bash
-   flutter run
-   ```
+```bash
+# Pour le web
+flutter run -d chrome --web-port=3000
 
-## ⚙️ Configuration
+# Pour Android
+flutter run -d android
 
-### Variables d'Environnement
-
-Le fichier `assets/.env` contient les configurations suivantes :
-
-```env
-# Configuration de l'API Backend
-API_BASE_URL=https://votre-backend-url.up.railway.app/api/v1
-API_TIMEOUT=30000
-
-# Configuration du chatbot vétérinaire
-CHATBOT_API_URL=https://votre-backend-url.up.railway.app/api/v1/chatbot
-CHATBOT_MODEL_VERSION=v1.0
-
-# Configuration du reporting d'erreurs
-ERROR_REPORTING_ENABLED=true
-ERROR_REPORTING_URL=https://votre-backend-url.up.railway.app/api/v1/errors
+# Pour iOS
+flutter run -d ios
 ```
 
-### Backend Requirements
+## 🔧 Configuration Backend
 
-L'application nécessite les endpoints suivants dans le backend :
+L'application nécessite un backend fonctionnel avec les endpoints suivants :
 
-#### Menus et Restaurants
+### API Endpoints
 - `GET /api/v1/restaurants` - Liste des restaurants
-- `GET /api/v1/restaurants/{id}` - Détails d'un restaurant
-- `GET /api/v1/menus/restaurant/{id}` - Menus d'un restaurant
-- `GET /api/v1/menus/restaurant/{id}/active` - Menus actifs d'un restaurant
-- `GET /api/v1/menus/{id}` - Détails d'un menu
-
-#### Allergènes
+- `GET /api/v1/menus/{restaurantId}` - Menus d'un restaurant
 - `GET /api/v1/allergens` - Liste des allergènes
-- `GET /api/v1/allergens/{code}` - Détails d'un allergène
-- `POST /api/v1/allergens/check-menu` - Vérifier les allergènes d'un menu
+- `POST /api/v1/chatbot/diagnosis` - Diagnostic vétérinaire
+- `POST /api/v1/chatbot/consultations` - Sauvegarde des consultations
+- `GET /api/v1/chatbot/breeds` - Races supportées
+- `GET /api/v1/chatbot/symptoms/{breed}` - Symptômes par race
+- `POST /api/v1/errors/report` - Reporting d'erreurs
 
-#### Chatbot Vétérinaire
-- `POST /api/v1/chatbot/chat` - Envoyer un message au chatbot
-- `POST /api/v1/chatbot/diagnosis` - Obtenir un diagnostic vétérinaire
-- `POST /api/v1/chatbot/recommendations` - Obtenir des recommandations
-- `POST /api/v1/chatbot/consultations` - Sauvegarder une consultation
-- `GET /api/v1/chatbot/consultations` - Historique des consultations
-- `GET /api/v1/chatbot/breeds` - Races d'animaux supportées
-- `GET /api/v1/chatbot/symptoms/{breed}` - Symptômes communs pour une race
+## 🧠 Système d'Apprentissage du Chatbot
 
-#### Reporting d'Erreurs
-- `POST /api/v1/errors/report` - Signaler une erreur
-- `GET /api/v1/errors/user/{userId}` - Erreurs d'un utilisateur
-- `GET /api/v1/errors/type/{errorType}` - Erreurs par type
-- `GET /api/v1/errors/statistics` - Statistiques d'erreurs
-- `DELETE /api/v1/errors/cleanup` - Nettoyer les anciens rapports
+### Fonctionnement
+1. **Collecte des données** : Chaque consultation est automatiquement sauvegardée
+2. **Analyse des patterns** : Le système identifie les combinaisons race/symptômes les plus fréquentes
+3. **Amélioration continue** : Les diagnostics s'améliorent avec le temps
+4. **Confiance** : Chaque diagnostic inclut un niveau de confiance
 
-## 📱 Structure de l'Application
+### Données Collectées
+- Race de l'animal
+- Symptômes observés
+- Diagnostic proposé
+- Recommandations
+- Niveau de confiance
+- Timestamp de la consultation
 
-```
-lib/
-├── models/           # Modèles de données
-│   ├── menu.dart
-│   ├── allergen.dart
-│   ├── restaurant.dart
-│   ├── chat.dart
-│   └── error_report.dart
-├── services/         # Services API
-│   ├── api_service.dart
-│   ├── allergen_service.dart
-│   ├── chatbot_service.dart
-│   └── error_reporting_service.dart
-├── providers/        # Gestion d'état
-│   ├── menu_provider.dart
-│   ├── allergen_provider.dart
-│   └── chatbot_provider.dart
-├── screens/          # Écrans de l'application
-│   ├── home_screen.dart
-│   ├── restaurant_list_screen.dart
-│   ├── menu_list_screen.dart
-│   ├── allergen_filter_screen.dart
-│   └── chatbot_screen.dart
-├── widgets/          # Widgets réutilisables
-└── utils/            # Utilitaires
-```
+## 📱 Interface Utilisateur
 
-## 🔧 Développement
+### Navigation
+- **Restaurants** : Consultation des menus
+- **Allergènes** : Filtrage et information
+- **Vétérinaire** : Chatbot diagnostique
+- **Admin** : Tableau de bord (accès restreint)
 
-### Ajout de nouvelles fonctionnalités
+### Design
+- **Material Design 3** : Interface moderne et intuitive
+- **Responsive** : Adapté à tous les écrans
+- **Accessibilité** : Support des lecteurs d'écran
+- **Thème** : Couleurs cohérentes avec la marque
 
-1. **Modèles** : Créer les modèles dans `lib/models/`
-2. **Services** : Implémenter les appels API dans `lib/services/`
-3. **Providers** : Gérer l'état dans `lib/providers/`
-4. **Écrans** : Créer les interfaces dans `lib/screens/`
+## 🔒 Sécurité et Confidentialité
 
-### Tests
+### Données Sensibles
+- **Chiffrement** des communications API
+- **Validation** des données côté client et serveur
+- **Gestion des erreurs** sans exposition d'informations sensibles
+- **Logs sécurisés** pour le debugging
 
+### Respect de la Vie Privée
+- **Anonymisation** des données de consultation
+- **Consentement** pour la collecte de données
+- **Suppression** des données sur demande
+
+## 🚀 Déploiement
+
+### Web
 ```bash
-# Tests unitaires
-flutter test
-
-# Tests d'intégration
-flutter test integration_test/
+flutter build web
+# Déployer le dossier build/web
 ```
 
-### Build
-
+### Android
 ```bash
-# Build Android
 flutter build apk --release
+# ou
+flutter build appbundle --release
+```
 
-# Build iOS
+### iOS
+```bash
 flutter build ios --release
 ```
 
-## 🐛 Gestion des Erreurs
+## 📊 Monitoring et Analytics
 
-L'application inclut un système de reporting d'erreurs automatique qui :
+### Métriques Collectées
+- **Utilisation** des fonctionnalités
+- **Erreurs** et exceptions
+- **Performance** de l'application
+- **Consultations** vétérinaires
 
-- Capture les erreurs non gérées
-- Collecte les informations système
-- Envoie les rapports au backend
-- Permet aux administrateurs de surveiller la santé de l'application
-
-## 📊 Monitoring
-
-Les administrateurs peuvent consulter :
-
-- Statistiques d'erreurs par type
-- Erreurs par utilisateur
-- Erreurs par dispositif
-- Tendances temporelles
+### Tableau de Bord Admin
+- Accès via l'onglet "Admin" dans l'application
+- Visualisation des statistiques en temps réel
+- Export des données pour analyse
 
 ## 🤝 Contribution
 
-1. Fork le projet
-2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
-3. Commit les changements (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
+### Structure du Projet
+```
+lib/
+├── models/          # Modèles de données
+├── services/        # Services API
+├── providers/       # Gestion d'état
+├── screens/         # Écrans de l'application
+├── widgets/         # Composants réutilisables
+└── utils/           # Utilitaires
+```
+
+### Guidelines
+- **Code propre** et commenté
+- **Tests unitaires** pour les fonctions critiques
+- **Documentation** des nouvelles fonctionnalités
+- **Respect** des conventions Flutter/Dart
+
+## 📞 Support
+
+Pour toute question ou problème :
+- **Issues GitHub** : Signaler les bugs
+- **Documentation** : Consulter la documentation technique
+- **Email** : support@vegnbio.com
 
 ## 📄 Licence
 
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
-
-## 👥 Support
-
-Pour toute question ou problème :
-
-1. Consulter la documentation du backend
-2. Vérifier les logs d'erreurs
-3. Contacter l'équipe de développement
+Ce projet est sous licence MIT. Voir le fichier LICENSE pour plus de détails.
 
 ---
 
-**VegN-Bio Mobile** - Votre assistant pour une alimentation bio et la santé de vos animaux 🐾
+**VegN-Bio Mobile** - Votre compagnon pour une alimentation saine et des animaux en bonne santé ! 🐾🌱

@@ -1,0 +1,41 @@
+# Configuration de l'application VegN-Bio
+# Copiez ce fichier vers .env et modifiez les valeurs selon votre environnement
+
+# Backend API
+BACKEND_URL=https://vegn-bio-backend.onrender.com/api/v1
+API_TIMEOUT=30000
+
+# Reporting d'erreurs
+ERROR_REPORTING_ENABLED=true
+ERROR_REPORTING_URL=https://vegn-bio-backend.onrender.com/api/v1/errors
+
+# Chatbot
+CHATBOT_LEARNING_ENABLED=true
+CHATBOT_CONFIDENCE_THRESHOLD=0.7
+
+# Base de données (pour le backend)
+DATABASE_URL=postgresql://postgres:password@localhost:5432/vegnbio
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_NAME=vegnbio
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=password
+
+# Redis (pour le cache)
+REDIS_URL=redis://localhost:6379
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# JWT
+JWT_SECRET=your-secret-key-here
+JWT_EXPIRATION=86400
+
+# Email (pour les notifications)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+
+# Logs
+LOG_LEVEL=INFO
+LOG_FILE_PATH=logs/app.log

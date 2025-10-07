@@ -6,6 +6,7 @@ import '../providers/chatbot_provider.dart';
 import 'restaurant_list_screen.dart';
 import 'chatbot_screen.dart';
 import 'allergen_filter_screen.dart';
+import 'admin_dashboard_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const RestaurantListScreen(),
     const AllergenFilterScreen(),
     const ChatbotScreen(),
+    const AdminDashboardScreen(),
   ];
 
   @override
@@ -70,6 +72,10 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.pets),
             label: 'Vétérinaire',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.admin_panel_settings),
+            label: 'Admin',
           ),
         ],
       ),

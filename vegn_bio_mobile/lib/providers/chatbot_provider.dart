@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/chat.dart';
 import '../services/chatbot_service.dart';
+import '../services/learning_service.dart';
 
 class ChatbotProvider extends ChangeNotifier {
   final ChatbotService _chatbotService = ChatbotService();
@@ -103,10 +104,20 @@ class ChatbotProvider extends ChangeNotifier {
         symptoms: _selectedSymptoms,
       );
 
+      // Sauvegarder la consultation pour l'apprentissage
+      await LearningService.saveConsultation(
+        animalBreed: _selectedBreed!,
+        symptoms: _selectedSymptoms,
+        diagnosis: diagnosis.diagnosis ?? 'Diagnostic générique',
+        recommendation: diagnosis.recommendation ?? 'Consultez un vétérinaire',
+        confidence: diagnosis.confidence,
+        userId: 'mobile_user', // Vous pouvez utiliser un ID utilisateur réel
+      );
+
       // Ajouter le diagnostic comme message
       final diagnosisMessage = ChatMessage(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        text: 'Diagnostic: ${diagnosis.diagnosis ?? 'Aucun diagnostic spécifique'}\n\nRecommandations: ${diagnosis.recommendation ?? 'Consultez un vétérinaire'}',
+        text: 'Diagnostic: ${diagnosis.diagnosis ?? 'Aucun diagnostic spécifique'}\n\nRecommandations: ${diagnosis.recommendation ?? 'Consultez un vétérinaire'}\n\nConfiance: ${(diagnosis.confidence * 100).toStringAsFixed(1)}%',
         createdAt: DateTime.now(),
         type: MessageType.diagnosis,
         metadata: {

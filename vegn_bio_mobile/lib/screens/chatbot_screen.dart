@@ -214,29 +214,86 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Race: ${chatbotProvider.selectedBreed}',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Symptômes: ${chatbotProvider.selectedSymptoms.join(', ')}',
-            style: const TextStyle(fontSize: 14),
+          Row(
+            children: [
+              Icon(Icons.pets, color: Colors.green[700]),
+              const SizedBox(width: 8),
+              Text(
+                'Race: ${chatbotProvider.selectedBreed}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 8),
-          ElevatedButton.icon(
-            onPressed: () {
-              chatbotProvider.getDiagnosis();
-            },
-            icon: const Icon(Icons.pets),
-            label: const Text('Obtenir un diagnostic'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green[700],
-              foregroundColor: Colors.white,
+          Row(
+            children: [
+              Icon(Icons.warning, color: Colors.orange[700]),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Symptômes: ${chatbotProvider.selectedSymptoms.join(', ')}',
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    chatbotProvider.getDiagnosis();
+                  },
+                  icon: const Icon(Icons.medical_services),
+                  label: const Text('Obtenir un diagnostic'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green[700],
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton.icon(
+                onPressed: () {
+                  _showSymptomDetails(chatbotProvider.selectedSymptoms);
+                },
+                icon: const Icon(Icons.info),
+                label: const Text('Détails'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue[700],
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSymptomDetails(List<String> symptoms) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Détails des Symptômes'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: symptoms.map((symptom) => 
+            ListTile(
+              leading: const Icon(Icons.medical_information),
+              title: Text(symptom),
             ),
+          ).toList(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Fermer'),
           ),
         ],
       ),

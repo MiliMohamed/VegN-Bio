@@ -134,30 +134,29 @@ class RestaurantCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (restaurant.isActive)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.green[100],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        'Ouvert',
-                        style: TextStyle(
-                          color: Colors.green[700],
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.green[100],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      restaurant.code,
+                      style: TextStyle(
+                        color: Colors.green[700],
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
-                restaurant.description,
+                '${restaurant.address}, ${restaurant.city}',
                 style: TextStyle(
                   color: Colors.grey[600],
                   fontSize: 14,
