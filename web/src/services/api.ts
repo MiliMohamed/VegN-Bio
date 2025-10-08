@@ -124,4 +124,86 @@ export const feedbackService = {
   updateReportStatus: (reportId: number, statusData: any) => api.patch(`/reports/${reportId}/status`, statusData),
 };
 
+// Service pour les réservations d'événements
+export const bookingService = {
+  getBookingsByEvent: (eventId: number) => api.get(`/bookings/event/${eventId}`),
+  createBooking: (bookingData: any) => api.post('/bookings', bookingData),
+  getBooking: (bookingId: number) => api.get(`/bookings/${bookingId}`),
+  updateBooking: (bookingId: number, bookingData: any) => api.put(`/bookings/${bookingId}`, bookingData),
+  deleteBooking: (bookingId: number) => api.delete(`/bookings/${bookingId}`),
+  getBookingsByCustomer: (customerEmail: string) => api.get(`/bookings/customer/${customerEmail}`),
+};
+
+// Service pour les allergènes
+export const allergenService = {
+  getAll: () => api.get('/allergens'),
+  getById: (id: string) => api.get(`/allergens/${id}`),
+  search: (name: string) => api.get(`/allergens/search?name=${encodeURIComponent(name)}`),
+};
+
+// Service pour les consultations vétérinaires (Chatbot)
+export const veterinaryService = {
+  createConsultation: (consultationData: any) => api.post('/veterinary/consultations', consultationData),
+  getConsultations: () => api.get('/veterinary/consultations'),
+  getConsultation: (id: number) => api.get(`/veterinary/consultations/${id}`),
+  updateConsultation: (id: number, consultationData: any) => api.put(`/veterinary/consultations/${id}`, consultationData),
+  deleteConsultation: (id: number) => api.delete(`/veterinary/consultations/${id}`),
+};
+
+// Service pour les diagnostics vétérinaires
+export const diagnosisService = {
+  createDiagnosis: (diagnosisData: any) => api.post('/veterinary/diagnoses', diagnosisData),
+  getDiagnoses: () => api.get('/veterinary/diagnoses'),
+  getDiagnosis: (id: number) => api.get(`/veterinary/diagnoses/${id}`),
+  updateDiagnosis: (id: number, diagnosisData: any) => api.put(`/veterinary/diagnoses/${id}`, diagnosisData),
+  deleteDiagnosis: (id: number) => api.delete(`/veterinary/diagnoses/${id}`),
+};
+
+// Service pour le chatbot
+export const chatbotService = {
+  sendMessage: (message: string) => api.post('/chatbot/message', { message }),
+  getConversationHistory: () => api.get('/chatbot/history'),
+  clearHistory: () => api.delete('/chatbot/history'),
+};
+
+// Service pour les tickets de caisse
+export const ticketService = {
+  createTicket: (ticketData: any) => api.post('/tickets', ticketData),
+  getTickets: () => api.get('/tickets'),
+  getTicket: (id: number) => api.get(`/tickets/${id}`),
+  updateTicket: (id: number, ticketData: any) => api.put(`/tickets/${id}`, ticketData),
+  deleteTicket: (id: number) => api.delete(`/tickets/${id}`),
+  getTicketsByDateRange: (startDate: string, endDate: string) => 
+    api.get(`/tickets/date-range?start=${startDate}&end=${endDate}`),
+};
+
+// Service pour les lignes de ticket
+export const ticketLineService = {
+  createTicketLine: (ticketLineData: any) => api.post('/ticket-lines', ticketLineData),
+  getTicketLines: () => api.get('/ticket-lines'),
+  getTicketLine: (id: number) => api.get(`/ticket-lines/${id}`),
+  updateTicketLine: (id: number, ticketLineData: any) => api.put(`/ticket-lines/${id}`, ticketLineData),
+  deleteTicketLine: (id: number) => api.delete(`/ticket-lines/${id}`),
+  getTicketLinesByTicket: (ticketId: number) => api.get(`/ticket-lines/ticket/${ticketId}`),
+};
+
+// Service pour les rapports d'erreur
+export const errorReportService = {
+  createErrorReport: (errorData: any) => api.post('/error-reports', errorData),
+  getErrorReports: () => api.get('/error-reports'),
+  getErrorReport: (id: number) => api.get(`/error-reports/${id}`),
+  updateErrorReport: (id: number, errorData: any) => api.put(`/error-reports/${id}`, errorData),
+  deleteErrorReport: (id: number) => api.delete(`/error-reports/${id}`),
+  getErrorReportsByStatus: (status: string) => api.get(`/error-reports/status/${status}`),
+};
+
+// Service pour les utilisateurs
+export const userService = {
+  getUsers: () => api.get('/users'),
+  getUser: (id: number) => api.get(`/users/${id}`),
+  updateUser: (id: number, userData: any) => api.put(`/users/${id}`, userData),
+  deleteUser: (id: number) => api.delete(`/users/${id}`),
+  getUsersByRole: (role: string) => api.get(`/users/role/${role}`),
+};
+
 export default api;

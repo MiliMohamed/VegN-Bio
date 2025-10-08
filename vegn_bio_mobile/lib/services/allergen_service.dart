@@ -13,8 +13,11 @@ class AllergenService {
   final Logger _logger = Logger();
 
   void initialize() {
+    final baseUrl = dotenv.env['API_BASE_URL'] ?? 'https://vegn-bio-backend.onrender.com/api/v1';
+    _logger.d('Initializing AllergenService with baseUrl: $baseUrl');
+    
     _dio = Dio(BaseOptions(
-      baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:8080/api/v1',
+      baseUrl: baseUrl,
       connectTimeout: Duration(milliseconds: int.parse(dotenv.env['API_TIMEOUT'] ?? '30000')),
       receiveTimeout: Duration(milliseconds: int.parse(dotenv.env['API_TIMEOUT'] ?? '30000')),
       headers: {

@@ -15,8 +15,11 @@ class ChatbotService {
   final Uuid _uuid = const Uuid();
 
   void initialize() {
+    final baseUrl = dotenv.env['API_BASE_URL'] ?? 'https://vegn-bio-backend.onrender.com/api/v1';
+    _logger.d('Initializing ChatbotService with baseUrl: $baseUrl');
+    
     _dio = Dio(BaseOptions(
-      baseUrl: dotenv.env['CHATBOT_API_URL'] ?? 'http://localhost:8080/api/v1/chatbot',
+      baseUrl: baseUrl,
       connectTimeout: Duration(milliseconds: int.parse(dotenv.env['API_TIMEOUT'] ?? '30000')),
       receiveTimeout: Duration(milliseconds: int.parse(dotenv.env['API_TIMEOUT'] ?? '30000')),
       headers: {
@@ -35,7 +38,7 @@ class ChatbotService {
   // Envoyer un message au chatbot
   Future<ChatMessage> sendMessage(String message, {String? userId}) async {
     try {
-      final response = await _dio.post('/chat', data: {
+      final response = await _dio.post('/chatbot/chat', data: {
         'message': message,
         'userId': userId,
         'timestamp': DateTime.now().toIso8601String(),
@@ -55,7 +58,7 @@ class ChatbotService {
     String? userId,
   }) async {
     try {
-      final response = await _dio.post('/diagnosis', data: {
+      final response = await _dio.post('/chatbot/diagnosis', data: {
         'animalBreed': animalBreed,
         'symptoms': symptoms,
         'userId': userId,
@@ -76,14 +79,14 @@ class ChatbotService {
     String? userId,
   }) async {
     try {
-      final response = await _dio.post('/recommendations', data: {
+      final response = await _dio.post('/chatbot/recommendations', data: {
         'animalBreed': animalBreed,
         'symptoms': symptoms,
         'userId': userId,
         'timestamp': DateTime.now().toIso8601String(),
       });
 
-      return List<String>.from(response.data['recommendations']);
+      return List<String>.from(response.data);
     } catch (e) {
       _logger.e('Erreur lors de l\'obtention des recommandations: $e');
       rethrow;
@@ -99,7 +102,7 @@ class ChatbotService {
     String? userId,
   }) async {
     try {
-      await _dio.post('/consultations', data: {
+      await _dio.post('/chatbot/consultations', data: {
         'animalBreed': animalBreed,
         'symptoms': symptoms,
         'diagnosis': diagnosis,
@@ -121,7 +124,7 @@ class ChatbotService {
         queryParams['userId'] = userId;
       }
 
-      final response = await _dio.get('/consultations', queryParameters: queryParams);
+      final response = await _dio.get('/chatbot/consultations', queryParameters: queryParams);
       final List<dynamic> data = response.data;
       return data.map((json) => VeterinaryDiagnosis.fromJson(json)).toList();
     } catch (e) {
@@ -133,7 +136,7 @@ class ChatbotService {
   // Obtenir les races d'animaux supportées
   Future<List<String>> getSupportedBreeds() async {
     try {
-      final response = await _dio.get('/breeds');
+      final response = await _dio.get('/chatbot/breeds');
       return List<String>.from(response.data['breeds']);
     } catch (e) {
       _logger.e('Erreur lors de la récupération des races supportées: $e');
@@ -144,7 +147,7 @@ class ChatbotService {
   // Obtenir les symptômes communs pour une race
   Future<List<String>> getCommonSymptoms(String breed) async {
     try {
-      final response = await _dio.get('/symptoms/$breed');
+      final response = await _dio.get('/chatbot/symptoms/$breed');
       return List<String>.from(response.data['symptoms']);
     } catch (e) {
       _logger.e('Erreur lors de la récupération des symptômes pour $breed: $e');

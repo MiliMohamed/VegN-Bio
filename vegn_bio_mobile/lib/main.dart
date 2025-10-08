@@ -15,7 +15,22 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   // Charger les variables d'environnement
-  await dotenv.load(fileName: "assets/.env");
+  try {
+    await dotenv.load(fileName: "assets/.env");
+    print('✅ Environment variables loaded successfully');
+    print('API_BASE_URL: ${dotenv.env['API_BASE_URL']}');
+  } catch (e) {
+    print('⚠️ Failed to load .env file: $e');
+    print('Using fallback environment variables');
+    // Si le fichier .env n'existe pas, utiliser les valeurs par défaut
+    dotenv.env['API_BASE_URL'] = 'https://vegn-bio-backend.onrender.com/api/v1';
+    dotenv.env['API_TIMEOUT'] = '30000';
+    dotenv.env['ERROR_REPORTING_ENABLED'] = 'true';
+    dotenv.env['ERROR_REPORTING_URL'] = 'https://vegn-bio-backend.onrender.com/api/v1/errors';
+    dotenv.env['CHATBOT_API_URL'] = 'https://vegn-bio-backend.onrender.com/api/v1/chatbot';
+    dotenv.env['CHATBOT_LEARNING_ENABLED'] = 'true';
+    dotenv.env['CHATBOT_CONFIDENCE_THRESHOLD'] = '0.7';
+  }
   
   // Initialiser les services
   ApiService().initialize();
