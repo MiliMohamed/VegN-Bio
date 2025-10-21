@@ -28,8 +28,16 @@ public class MenuController {
     
     @GetMapping("/restaurant/{restaurantId}")
     public ResponseEntity<List<MenuDto>> getMenusByRestaurant(@PathVariable Long restaurantId) {
-        List<MenuDto> menus = menuService.getMenusByRestaurant(restaurantId);
-        return ResponseEntity.ok(menus);
+        try {
+            List<MenuDto> menus = menuService.getMenusByRestaurant(restaurantId);
+            return ResponseEntity.ok(menus);
+        } catch (RuntimeException e) {
+            // Log l'erreur pour le debugging
+            System.err.println("Error fetching menus for restaurant " + restaurantId + ": " + e.getMessage());
+            e.printStackTrace();
+            // Retourner une liste vide plutôt qu'une erreur 500
+            return ResponseEntity.ok(List.of());
+        }
     }
     
     @GetMapping("/restaurant/{restaurantId}/active")
