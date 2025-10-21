@@ -189,7 +189,7 @@ SELECT
     COUNT(CASE WHEN severity = 'HIGH' THEN 1 END) as high_errors,
     COUNT(CASE WHEN severity = 'MEDIUM' THEN 1 END) as medium_errors,
     COUNT(CASE WHEN severity = 'LOW' THEN 1 END) as low_errors,
-    ROUND(AVG(CASE WHEN status = 'RESOLVED' THEN 1.0 ELSE 0.0 END) * 100, 2) as resolution_rate,
+    ROUND(AVG(CASE WHEN status = 'RESOLVED' THEN 1.0 ELSE 0.0 END)::numeric * 100, 2) as resolution_rate,
     COUNT(CASE WHEN created_at > NOW() - INTERVAL '24 hours' THEN 1 END) as recent_errors_24h
 FROM error_reports;
 
@@ -199,7 +199,7 @@ SELECT
     COUNT(DISTINCT vc.animal_breed) as supported_breeds,
     COUNT(DISTINCT cs.symptom) as known_symptoms,
     COUNT(*) as total_consultations,
-    ROUND(AVG(vc.confidence), 2) as average_confidence,
+    ROUND(AVG(vc.confidence)::numeric, 2) as average_confidence,
     COUNT(CASE WHEN vc.created_at > NOW() - INTERVAL '7 days' THEN 1 END) as consultations_last_week,
     COUNT(CASE WHEN vc.created_at > NOW() - INTERVAL '30 days' THEN 1 END) as consultations_last_month
 FROM veterinary_consultations vc
