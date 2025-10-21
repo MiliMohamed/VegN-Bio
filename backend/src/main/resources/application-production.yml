@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/vegnbiodb}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/vegnbiodb}?sslmode=require&connectTimeout=30&socketTimeout=60&tcpKeepAlive=true&ApplicationName=VegN-Bio-Backend
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     hikari:
@@ -23,7 +23,7 @@ spring:
         order_updates: true
         hbm2ddl.auto: none
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:db/migration
     validate-on-migrate: false
     ignore-missing-migrations: true
