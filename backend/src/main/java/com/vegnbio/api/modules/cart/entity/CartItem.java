@@ -41,4 +41,22 @@ public class CartItem {
     public long getTotalPriceCents() {
         return quantity * unitPriceCents;
     }
+    
+    // Getters manuels pour éviter les problèmes de compilation
+    public Long getId() { return id; }
+    public Cart getCart() { return cart; }
+    public MenuItem getMenuItem() { return menuItem; }
+    public Integer getQuantity() { return quantity; }
+    public Long getUnitPriceCents() { return unitPriceCents; }
+    public java.time.LocalDateTime getAddedAt() { return addedAt; }
+    public String getSpecialInstructions() { return specialInstructions; }
+    
+    // Setters manuels
+    public void setId(Long id) { this.id = id; }
+    public void setCart(Cart cart) { this.cart = cart; }
+    public void setMenuItem(MenuItem menuItem) { this.menuItem = menuItem; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public void setUnitPriceCents(Long unitPriceCents) { this.unitPriceCents = unitPriceCents; }
+    public void setAddedAt(java.time.LocalDateTime addedAt) { this.addedAt = addedAt; }
+    public void setSpecialInstructions(String specialInstructions) { this.specialInstructions = specialInstructions; }
 }
