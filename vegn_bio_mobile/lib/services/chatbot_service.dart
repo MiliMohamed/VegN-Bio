@@ -144,14 +144,47 @@ class ChatbotService {
     }
   }
 
-  // Obtenir les symptômes communs pour une race
-  Future<List<String>> getCommonSymptoms(String breed) async {
+  // Obtenir des recommandations préventives
+  Future<List<String>> getPreventiveRecommendations(String breed) async {
     try {
-      final response = await _dio.get('/chatbot/symptoms/$breed');
-      return List<String>.from(response.data['symptoms']);
+      final response = await _dio.get('/chatbot/preventive/$breed');
+      return List<String>.from(response.data['recommendations']);
     } catch (e) {
-      _logger.e('Erreur lors de la récupération des symptômes pour $breed: $e');
+      _logger.e('Erreur lors de la récupération des recommandations préventives pour $breed: $e');
       rethrow;
     }
   }
-}
+
+  // Obtenir des statistiques d'apprentissage
+  Future<Map<String, dynamic>> getLearningStatistics() async {
+    try {
+      final response = await _dio.get('/chatbot/statistics');
+      return Map<String, dynamic>.from(response.data);
+    } catch (e) {
+      _logger.e('Erreur lors de la récupération des statistiques d\'apprentissage: $e');
+      rethrow;
+    }
+  }
+
+  // Améliorer le système d'apprentissage avec une nouvelle consultation
+  Future<void> improveLearning({
+    required String animalBreed,
+    required List<String> symptoms,
+    required String diagnosis,
+    required String recommendation,
+    String? userId,
+  }) async {
+    try {
+      await _dio.post('/chatbot/learn', data: {
+        'animalBreed': animalBreed,
+        'symptoms': symptoms,
+        'diagnosis': diagnosis,
+        'recommendation': recommendation,
+        'userId': userId,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
+    } catch (e) {
+      _logger.e('Erreur lors de l\'amélioration du système d\'apprentissage: $e');
+      rethrow;
+    }
+  }

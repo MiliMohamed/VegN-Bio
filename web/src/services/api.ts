@@ -170,6 +170,10 @@ export const chatbotService = {
   sendMessage: (message: string) => api.post('/chatbot/message', { message }),
   getConversationHistory: () => api.get('/chatbot/history'),
   clearHistory: () => api.delete('/chatbot/history'),
+  getLearningStatistics: () => api.get('/chatbot/learning-statistics'),
+  getLearningData: () => api.get('/chatbot/learning-data'),
+  updateLearningData: (data: any) => api.put('/chatbot/learning-data', data),
+  resetLearningData: () => api.delete('/chatbot/learning-data'),
 };
 
 // Service pour les tickets de caisse
@@ -196,11 +200,15 @@ export const ticketLineService = {
 // Service pour les rapports d'erreur
 export const errorReportService = {
   createErrorReport: (errorData: any) => api.post('/error-reports', errorData),
-  getErrorReports: () => api.get('/error-reports'),
+  getErrorReports: (params?: any) => api.get('/error-reports', { params }),
   getErrorReport: (id: number) => api.get(`/error-reports/${id}`),
   updateErrorReport: (id: number, errorData: any) => api.put(`/error-reports/${id}`, errorData),
   deleteErrorReport: (id: number) => api.delete(`/error-reports/${id}`),
   getErrorReportsByStatus: (status: string) => api.get(`/error-reports/status/${status}`),
+  getErrorStatistics: () => api.get('/error-reports/statistics'),
+  getRecentErrors: (hours: number = 24) => api.get(`/error-reports/recent?hours=${hours}`),
+  updateErrorStatus: (id: number, status: string) => api.patch(`/error-reports/${id}/status?status=${status}`),
+  createBulkErrorReports: (requests: any[]) => api.post('/error-reports/bulk', requests),
 };
 
 // Service pour les utilisateurs
