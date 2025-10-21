@@ -9,12 +9,21 @@ import {
   Star,
   Clock,
   Users,
-  MapPin
+  MapPin,
+  ShoppingCart,
+  Heart,
+  Info
 } from 'lucide-react';
 import { menuService, restaurantService } from '../services/api';
 import MenuForm from './MenuForm';
 import MenuItemForm from './MenuItemForm';
 import '../styles/menu-improvements.css';
+
+interface Allergen {
+  id: number;
+  code: string;
+  label: string;
+}
 
 interface MenuItem {
   id: number;
@@ -22,6 +31,7 @@ interface MenuItem {
   description: string;
   priceCents: number;
   isVegan: boolean;
+  allergens: Allergen[];
 }
 
 interface Menu {
@@ -121,6 +131,25 @@ const ModernMenus: React.FC = () => {
   const handleViewMenu = (menu: Menu) => {
     // TODO: Implémenter la vue détaillée du menu
     console.log('Voir le menu:', menu);
+  };
+
+  // Actions côté client
+  const handleAddToCart = (item: MenuItem) => {
+    // TODO: Implémenter l'ajout au panier
+    console.log('Ajouter au panier:', item);
+    alert(`Ajouté au panier: ${item.name}`);
+  };
+
+  const handleAddToFavorites = (item: MenuItem) => {
+    // TODO: Implémenter l'ajout aux favoris
+    console.log('Ajouter aux favoris:', item);
+    alert(`Ajouté aux favoris: ${item.name}`);
+  };
+
+  const handleViewItemDetails = (item: MenuItem) => {
+    // TODO: Implémenter la vue détaillée de l'item
+    console.log('Voir détails:', item);
+    alert(`Détails de: ${item.name}\nDescription: ${item.description}\nPrix: ${formatPrice(item.priceCents)}`);
   };
 
   if (loading) {
@@ -229,6 +258,51 @@ const ModernMenus: React.FC = () => {
                       <Utensils className="w-3 h-3" />
                       Bio
                     </span>
+                  </div>
+                  
+                  {/* Affichage des allergènes */}
+                  {item.allergens && item.allergens.length > 0 && (
+                    <div className="allergens-section">
+                      <div className="allergens-label">
+                        <span className="allergens-icon">⚠️</span>
+                        Allergènes :
+                      </div>
+                      <div className="allergens-list">
+                        {item.allergens.map((allergen) => (
+                          <span key={allergen.id} className="allergen-badge">
+                            {allergen.label}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Actions pour chaque plat */}
+                  <div className="item-actions">
+                    <button 
+                      className="btn btn-success btn-xs"
+                      onClick={() => handleAddToCart(item)}
+                      title="Ajouter au panier"
+                    >
+                      <ShoppingCart className="w-3 h-3" />
+                      Panier
+                    </button>
+                    <button 
+                      className="btn btn-warning btn-xs"
+                      onClick={() => handleAddToFavorites(item)}
+                      title="Ajouter aux favoris"
+                    >
+                      <Heart className="w-3 h-3" />
+                      Favoris
+                    </button>
+                    <button 
+                      className="btn btn-info btn-xs"
+                      onClick={() => handleViewItemDetails(item)}
+                      title="Voir détails"
+                    >
+                      <Info className="w-3 h-3" />
+                      Détails
+                    </button>
                   </div>
                 </motion.div>
               ))}
