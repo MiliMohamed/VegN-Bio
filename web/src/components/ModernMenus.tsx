@@ -15,6 +15,7 @@ import {
   Info
 } from 'lucide-react';
 import { menuService, restaurantService } from '../services/api';
+import { useCart } from '../contexts/CartContext';
 import MenuForm from './MenuForm';
 import MenuItemForm from './MenuItemForm';
 import '../styles/menu-improvements.css';
@@ -43,6 +44,7 @@ interface Menu {
 }
 
 const ModernMenus: React.FC = () => {
+  const { addToCart } = useCart();
   const [menus, setMenus] = React.useState<Menu[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [selectedRestaurant, setSelectedRestaurant] = React.useState<number>(1);
@@ -135,9 +137,28 @@ const ModernMenus: React.FC = () => {
 
   // Actions côté client
   const handleAddToCart = (item: MenuItem) => {
-    // TODO: Implémenter l'ajout au panier
-    console.log('Ajouter au panier:', item);
-    alert(`Ajouté au panier: ${item.name}`);
+    const selectedRestaurantData = restaurants.find(r => r.id === selectedRestaurant);
+    addToCart({
+      id: item.id,
+      name: item.name,
+      description: item.description,
+      priceCents: item.priceCents,
+      isVegan: item.isVegan,
+      allergens: item.allergens,
+      restaurantId: selectedRestaurant,
+      restaurantName: selectedRestaurantData?.name || 'Restaurant'
+    }, selectedRestaurantData?.name || 'Restaurant');
+    
+    // Notification visuelle
+    const button = document.querySelector(`[data-item-id="${item.id}"]`);
+    if (button) {
+      button.textContent = '✓ Ajouté';
+      button.classList.add('btn-success');
+      setTimeout(() => {
+        button.textContent = 'Panier';
+        button.classList.remove('btn-success');
+      }, 2000);
+    }
   };
 
   const handleAddToFavorites = (item: MenuItem) => {
@@ -283,6 +304,7 @@ const ModernMenus: React.FC = () => {
                       className="btn btn-success btn-xs"
                       onClick={() => handleAddToCart(item)}
                       title="Ajouter au panier"
+                      data-item-id={item.id}
                     >
                       <ShoppingCart className="w-3 h-3" />
                       Panier

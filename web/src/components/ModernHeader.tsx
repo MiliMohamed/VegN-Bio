@@ -6,13 +6,16 @@ import {
   Bell, 
   Settings, 
   LogOut,
-  User
+  User,
+  ShoppingCart
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
 
 const ModernHeader: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { getTotalItems } = useCart();
   const location = useLocation();
 
   const getPageTitle = () => {
@@ -26,7 +29,8 @@ const ModernHeader: React.FC = () => {
       '/app/marketplace': 'Marketplace',
       '/app/reviews': 'Avis clients',
       '/app/chatbot': 'Assistant IA',
-      '/app/users': 'Utilisateurs'
+      '/app/users': 'Utilisateurs',
+      '/app/cart': 'Mon Panier'
     };
     return titles[path] || 'VegN Bio';
   };
@@ -48,6 +52,11 @@ const ModernHeader: React.FC = () => {
       </div>
       
       <div className="modern-header-actions">
+        <Link to="/app/cart" className="cart-btn">
+          <ShoppingCart className="w-5 h-5" />
+          <span className="cart-badge">{getTotalItems()}</span>
+        </Link>
+        
         <button className="notification-btn">
           <Bell className="w-5 h-5" />
           <span className="notification-badge">3</span>

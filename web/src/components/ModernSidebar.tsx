@@ -36,6 +36,12 @@ const ModernSidebar: React.FC = () => {
       description: 'Carte des plats'
     },
     {
+      path: '/app/cart',
+      icon: <ShoppingCart className="w-5 h-5" />,
+      label: 'Mon Panier',
+      description: 'Mes commandes'
+    },
+    {
       path: '/app/rooms',
       icon: <Calendar className="w-5 h-5" />,
       label: 'Salles de réunion',
