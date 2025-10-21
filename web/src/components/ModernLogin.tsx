@@ -43,15 +43,22 @@ const ModernLogin: React.FC = () => {
 
     try {
       const response = await authService.login(formData.email, formData.password);
-      const { token, user } = response.data;
+      const { accessToken, role, fullName } = response.data;
       
       // Stocker les informations de l'utilisateur
-      localStorage.setItem('token', token);
-      localStorage.setItem('userRole', user.role);
-      localStorage.setItem('userEmail', user.email);
-      localStorage.setItem('userName', user.fullName || user.email);
+      localStorage.setItem('token', accessToken);
+      localStorage.setItem('userRole', role);
+      localStorage.setItem('userEmail', formData.email);
+      localStorage.setItem('userName', fullName);
       
-      login(token, user);
+      // Créer l'objet user pour le contexte
+      const user = {
+        email: formData.email,
+        role: role,
+        name: fullName
+      };
+      
+      login(accessToken, user);
       setSuccess('Connexion réussie !');
       
       // Rediriger vers le dashboard
