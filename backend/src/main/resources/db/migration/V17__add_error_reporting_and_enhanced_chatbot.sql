@@ -215,13 +215,63 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
--- Triggers pour mettre à jour automatiquement updated_at
-CREATE TRIGGER update_error_reports_updated_at BEFORE UPDATE ON error_reports FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_veterinary_consultations_updated_at BEFORE UPDATE ON veterinary_consultations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_chatbot_learning_stats_updated_at BEFORE UPDATE ON chatbot_learning_stats FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_preventive_recommendations_updated_at BEFORE UPDATE ON preventive_recommendations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_breed_symptoms_updated_at BEFORE UPDATE ON breed_symptoms FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_veterinary_diagnoses_updated_at BEFORE UPDATE ON veterinary_diagnoses FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+-- Triggers pour mettre à jour automatiquement updated_at (seulement s'ils n'existent pas déjà)
+DO $$ 
+BEGIN
+    -- Trigger pour error_reports
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.triggers 
+        WHERE trigger_name = 'update_error_reports_updated_at' 
+        AND event_object_table = 'error_reports'
+    ) THEN
+        CREATE TRIGGER update_error_reports_updated_at BEFORE UPDATE ON error_reports FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
+    
+    -- Trigger pour veterinary_consultations
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.triggers 
+        WHERE trigger_name = 'update_veterinary_consultations_updated_at' 
+        AND event_object_table = 'veterinary_consultations'
+    ) THEN
+        CREATE TRIGGER update_veterinary_consultations_updated_at BEFORE UPDATE ON veterinary_consultations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
+    
+    -- Trigger pour chatbot_learning_stats
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.triggers 
+        WHERE trigger_name = 'update_chatbot_learning_stats_updated_at' 
+        AND event_object_table = 'chatbot_learning_stats'
+    ) THEN
+        CREATE TRIGGER update_chatbot_learning_stats_updated_at BEFORE UPDATE ON chatbot_learning_stats FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
+    
+    -- Trigger pour preventive_recommendations
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.triggers 
+        WHERE trigger_name = 'update_preventive_recommendations_updated_at' 
+        AND event_object_table = 'preventive_recommendations'
+    ) THEN
+        CREATE TRIGGER update_preventive_recommendations_updated_at BEFORE UPDATE ON preventive_recommendations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
+    
+    -- Trigger pour breed_symptoms
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.triggers 
+        WHERE trigger_name = 'update_breed_symptoms_updated_at' 
+        AND event_object_table = 'breed_symptoms'
+    ) THEN
+        CREATE TRIGGER update_breed_symptoms_updated_at BEFORE UPDATE ON breed_symptoms FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
+    
+    -- Trigger pour veterinary_diagnoses
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.triggers 
+        WHERE trigger_name = 'update_veterinary_diagnoses_updated_at' 
+        AND event_object_table = 'veterinary_diagnoses'
+    ) THEN
+        CREATE TRIGGER update_veterinary_diagnoses_updated_at BEFORE UPDATE ON veterinary_diagnoses FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
+END $$;
 
 -- Vue pour les statistiques d'erreurs
 CREATE OR REPLACE VIEW error_statistics AS
