@@ -25,25 +25,26 @@ public class ErrorReportingService {
     
     @Transactional
     public ErrorReportDto createErrorReport(CreateErrorReportRequest request) {
-        log.info("Creating error report: {}", request.getTitle());
+        log.info("Creating error report: {}", request.title());
         
         ErrorReport errorReport = ErrorReport.builder()
-                .title(request.getTitle())
-                .description(request.getDescription())
-                .errorType(request.getErrorType())
-                .severity(ErrorSeverity.valueOf(request.getSeverity()))
+                .title(request.title())
+                .description(request.description())
+                .errorType(request.errorType())
+                .severity(ErrorSeverity.valueOf(request.severity()))
                 .status(ErrorStatus.OPEN)
-                .userAgent(request.getUserAgent())
-                .url(request.getUrl())
-                .stackTrace(request.getStackTrace())
-                .userId(request.getUserId())
+                .userAgent(request.userAgent())
+                .url(request.url())
+                .stackTrace(request.stackTrace())
+                .userId(request.userId())
                 .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
         
         errorReportRepository.save(errorReport);
         
         // Log pour monitoring
-        log.error("Error reported: {} - {}", request.getTitle(), request.getDescription());
+        log.error("Error reported: {} - {}", request.title(), request.description());
         
         return convertToDto(errorReport);
     }
