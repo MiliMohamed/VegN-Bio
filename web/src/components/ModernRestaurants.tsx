@@ -1,27 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { 
-  Building2, 
   MapPin, 
   Phone, 
-  Mail, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Search,
-  Filter,
-  Eye,
-  Star,
-  Users,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  MoreVertical,
-  Wifi,
-  Printer,
-  Truck,
+  Clock, 
+  Users, 
+  Wifi, 
   Coffee,
   Calendar,
-  Monitor
+  Star,
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
+  Search,
+  Filter,
+  CheckCircle
 } from 'lucide-react';
 import { restaurantService } from '../services/api';
 
@@ -29,219 +23,111 @@ interface Restaurant {
   id: number;
   name: string;
   code: string;
-  city: string;
-  address?: string;
-  phone?: string;
-  email?: string;
-  wifiAvailable?: boolean;
-  meetingRoomsCount?: number;
-  restaurantCapacity?: number;
-  printerAvailable?: boolean;
-  memberTrays?: boolean;
-  deliveryAvailable?: boolean;
-  specialEvents?: string;
-  mondayThursdayHours?: string;
-  fridayHours?: string;
-  saturdayHours?: string;
-  sundayHours?: string;
-}
-
-interface CreateRestaurantData {
-  name: string;
-  code: string;
-  city: string;
   address: string;
+  city: string;
   phone: string;
-  email: string;
-  wifiAvailable: boolean;
-  meetingRoomsCount: number;
-  restaurantCapacity: number;
-  printerAvailable: boolean;
-  memberTrays: boolean;
-  deliveryAvailable: boolean;
-  specialEvents: string;
-  mondayThursdayHours: string;
-  fridayHours: string;
-  saturdayHours: string;
-  sundayHours: string;
 }
 
 const ModernRestaurants: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [editingRestaurant, setEditingRestaurant] = useState<Restaurant | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterCity, setFilterCity] = useState('');
-  const [newRestaurant, setNewRestaurant] = useState<CreateRestaurantData>({
-    name: '',
-    code: '',
-    city: '',
-    address: '',
-    phone: '',
-    email: '',
-    wifiAvailable: false,
-    meetingRoomsCount: 0,
-    restaurantCapacity: 0,
-    printerAvailable: false,
-    memberTrays: false,
-    deliveryAvailable: false,
-    specialEvents: '',
-    mondayThursdayHours: '',
-    fridayHours: '',
-    saturdayHours: '',
-    sundayHours: ''
-  });
-
-  // Vérifier si l'utilisateur peut gérer les restaurants (ADMIN seulement)
-  const userRole = localStorage.getItem('userRole');
-  const canManageRestaurants = userRole === 'ADMIN';
+  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    fetchRestaurants();
-  }, []);
-
   const fetchRestaurants = async () => {
     try {
-      setLoading(true);
-      setError('');
       const response = await restaurantService.getAll();
       setRestaurants(response.data);
-    } catch (err: any) {
-      setError('Erreur lors du chargement des restaurants');
-      console.error('Error fetching restaurants:', err);
+      } catch (error) {
+        console.error('Erreur lors du chargement des restaurants:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCreateRestaurant = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await restaurantService.create(newRestaurant);
-      setRestaurants([...restaurants, response.data]);
-      setNewRestaurant({
-        name: '',
-        code: '',
-        city: '',
-        address: '',
-        phone: '',
-        email: '',
-        wifiAvailable: false,
-        meetingRoomsCount: 0,
-        restaurantCapacity: 0,
-        printerAvailable: false,
-        memberTrays: false,
-        deliveryAvailable: false,
-        specialEvents: '',
-        mondayThursdayHours: '',
-        fridayHours: '',
-        saturdayHours: '',
-        sundayHours: ''
-      });
-      setShowCreateForm(false);
-      alert('Restaurant créé avec succès');
-    } catch (err: any) {
-      console.error('Erreur lors de la création:', err);
-      alert('Erreur lors de la création du restaurant');
-    }
+    fetchRestaurants();
+  }, []);
+
+  const getRestaurantDetails = (code: string) => {
+    const details: { [key: string]: any } = {
+      'BAS': {
+        name: 'VEG\'N BIO BASTILLE',
+        features: ['Wi-Fi très haut débit', 'Plateaux membres', '2 salles de réunion réservables', '100 places de restaurant', '1 imprimante'],
+        hours: {
+          weekdays: 'Lundi à Jeudi : de 9h à 24h',
+          friday: 'Vendredi : de 9h à 1h du matin',
+          saturday: 'Samedi : de 9h à 5h du matin',
+          sunday: 'Dimanche : de 11h à 24h du matin'
+        },
+        services: ['Réservation de salles', 'Plateaux repas', 'Événements privés']
+      },
+      'REP': {
+        name: 'VEG\'N BIO REPUBLIQUE',
+        features: ['Wi-Fi très haut débit', '4 salles de réunion réservables', '150 places de restaurant', '1 imprimante', 'Plateaux repas livrables sur demande'],
+        hours: {
+          weekdays: 'Lundi à Jeudi : de 9h à 24h',
+          friday: 'Vendredi : de 9h à 1h du matin',
+          saturday: 'Samedi : de 9h à 5h du matin',
+          sunday: 'Dimanche : de 11h à 24h du matin'
+        },
+        services: ['Réservation de salles', 'Livraison plateaux', 'Événements privés']
+      },
+      'NAT': {
+        name: 'VEG\'N BIO NATION',
+        features: ['Wi-Fi très haut débit', 'Plateaux membres', '1 salle de réunion réservable', '80 places de restaurant', '1 imprimante', 'Plateaux repas livrables sur demande', 'Conférences et animations tous les mardi après-midi'],
+        hours: {
+          weekdays: 'Lundi à Jeudi : de 9h à 24h',
+          friday: 'Vendredi : de 9h à 1h du matin',
+          saturday: 'Samedi : de 9h à 5h du matin',
+          sunday: 'Dimanche : de 11h à 24h du matin'
+        },
+        services: ['Réservation de salles', 'Livraison plateaux', 'Animations mardi', 'Événements privés']
+      },
+      'ITA': {
+        name: 'VEG\'N BIO PLACE D\'ITALIE',
+        features: ['Wi-Fi très haut débit', 'Plateaux membres', '2 salles de réunion réservables', '70 places de restaurant', '1 imprimante', 'Plateaux repas livrables sur demande'],
+        hours: {
+          weekdays: 'Lundi à Jeudi : de 9h à 23h',
+          friday: 'Vendredi : de 9h à 1h du matin',
+          saturday: 'Samedi : de 9h à 5h du matin',
+          sunday: 'Dimanche : de 11h à 23h du matin'
+        },
+        services: ['Réservation de salles', 'Livraison plateaux', 'Événements privés']
+      },
+      'BOU': {
+        name: 'VEG\'N BIO BEAUBOURG',
+        features: ['Wi-Fi très haut débit', 'Plateaux membres', '2 salles de réunion réservables', '70 places de restaurant', '1 imprimante', 'Plateaux repas livrables sur demande'],
+        hours: {
+          weekdays: 'Lundi à Jeudi : de 9h à 23h',
+          friday: 'Vendredi : de 9h à 1h du matin',
+          saturday: 'Samedi : de 9h à 5h du matin',
+          sunday: 'Dimanche : de 11h à 23h du matin'
+        },
+        services: ['Réservation de salles', 'Livraison plateaux', 'Événements privés']
+      }
+    };
+    return details[code] || {};
   };
 
-  const handleUpdateRestaurant = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editingRestaurant) return;
+  const filteredRestaurants = restaurants.filter(restaurant =>
+    restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    restaurant.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    restaurant.city.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-    try {
-      const response = await restaurantService.update(editingRestaurant.id, editingRestaurant);
-      setRestaurants(restaurants.map(r => 
-        r.id === editingRestaurant.id ? response.data : r
-      ));
-      setEditingRestaurant(null);
-      alert('Restaurant mis à jour avec succès');
-    } catch (err: any) {
-      console.error('Erreur lors de la mise à jour:', err);
-      alert('Erreur lors de la mise à jour du restaurant');
-    }
+  const handleViewDetails = (restaurant: Restaurant) => {
+    setSelectedRestaurant(restaurant);
+    setShowModal(true);
   };
-
-  const handleDeleteRestaurant = async (id: number) => {
-    if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce restaurant ?')) {
-      return;
-    }
-
-    try {
-      await restaurantService.delete(id);
-      setRestaurants(restaurants.filter(r => r.id !== id));
-      alert('Restaurant supprimé avec succès');
-    } catch (err: any) {
-      console.error('Erreur lors de la suppression:', err);
-      alert('Erreur lors de la suppression du restaurant');
-    }
-  };
-
-  const startEdit = (restaurant: Restaurant) => {
-    setEditingRestaurant({ ...restaurant });
-    setShowCreateForm(false);
-  };
-
-  const cancelEdit = () => {
-    setEditingRestaurant(null);
-    setNewRestaurant({
-      name: '',
-      code: '',
-      city: '',
-      address: '',
-      phone: '',
-      email: '',
-      wifiAvailable: false,
-      meetingRoomsCount: 0,
-      restaurantCapacity: 0,
-      printerAvailable: false,
-      memberTrays: false,
-      deliveryAvailable: false,
-      specialEvents: '',
-      mondayThursdayHours: '',
-      fridayHours: '',
-      saturdayHours: '',
-      sundayHours: ''
-    });
-  };
-
-  // Filtrer les restaurants
-  const filteredRestaurants = restaurants.filter(restaurant => {
-    const matchesSearch = restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         restaurant.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         restaurant.city.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCity = filterCity === '' || restaurant.city === filterCity;
-    return matchesSearch && matchesCity;
-  });
-
-  const cities = Array.from(new Set(restaurants.map(r => r.city)));
 
   if (loading) {
     return (
       <div className="modern-restaurants">
         <div className="loading-container">
-          <div className="loading-spinner">
-            <Building2 className="spinner-icon" />
+          <div className="loading-spinner"></div>
             <p>Chargement des restaurants...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="modern-restaurants">
-        <div className="error-container">
-          <AlertCircle className="error-icon" />
-          <h3>Erreur de chargement</h3>
-          <p>{error}</p>
-          <button className="btn btn-primary" onClick={fetchRestaurants}>
-            Réessayer
-          </button>
         </div>
       </div>
     );
@@ -249,605 +135,212 @@ const ModernRestaurants: React.FC = () => {
 
   return (
     <div className="modern-restaurants">
-      {/* Header Section */}
       <div className="restaurants-header">
-        <div className="header-content">
-          <div className="header-info">
-            <h1 className="page-title">
-              <Building2 className="title-icon" />
-              Restaurants
-            </h1>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <h1 className="page-title">Nos Restaurants</h1>
             <p className="page-subtitle">
-              Gérez vos restaurants et leurs informations
-            </p>
-          </div>
-          <div className="header-stats">
-            <div className="stat-item">
-              <div className="stat-value">{restaurants.length}</div>
-              <div className="stat-label">Total</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-value">{cities.length}</div>
-              <div className="stat-label">Villes</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-value">100%</div>
-              <div className="stat-label">Bio</div>
-            </div>
-          </div>
-        </div>
-        {canManageRestaurants && (
-          <button 
-            className="btn btn-primary btn-lg"
-            onClick={() => setShowCreateForm(!showCreateForm)}
-          >
-            <Plus className="btn-icon" />
-            Nouveau Restaurant
-          </button>
-        )}
+            Découvrez nos 5 restaurants VegN Bio dans Paris
+          </p>
+        </motion.div>
       </div>
 
-      {/* Filters and Search */}
-      <div className="restaurants-filters">
-        <div className="search-section">
-          <div className="search-input-group">
+      {/* Barre de recherche et filtres */}
+      <motion.div 
+        className="search-section"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        <div className="search-bar">
+          <div className="search-input-container">
             <Search className="search-icon" />
             <input
               type="text"
-              className="search-input"
-              placeholder="Rechercher par nom, code ou ville..."
+              placeholder="Rechercher un restaurant..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
             />
           </div>
+          <button className="filter-btn">
+            <Filter className="w-5 h-5" />
+            Filtres
+          </button>
         </div>
-        <div className="filter-section">
-          <div className="filter-group">
-            <Filter className="filter-icon" />
-            <select
-              className="filter-select"
-              value={filterCity}
-              onChange={(e) => setFilterCity(e.target.value)}
+      </motion.div>
+
+      {/* Grille des restaurants */}
+      <div className="restaurants-grid">
+        {filteredRestaurants.map((restaurant, index) => {
+          const details = getRestaurantDetails(restaurant.code);
+          return (
+            <motion.div
+              key={restaurant.id}
+              className="restaurant-card"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+              whileHover={{ y: -5 }}
             >
-              <option value="">Toutes les villes</option>
-              {cities.map(city => (
-                <option key={city} value={city}>{city}</option>
-              ))}
-            </select>
+              <div className="restaurant-header">
+                <div className="restaurant-badge">
+                  {restaurant.code}
           </div>
+                <h3 className="restaurant-name">{restaurant.name}</h3>
+                <div className="restaurant-location">
+                  <MapPin className="w-4 h-4" />
+                  <span>{restaurant.address}, {restaurant.city}</span>
         </div>
       </div>
 
-      {/* Create/Edit Form */}
-      {(showCreateForm || editingRestaurant) && canManageRestaurants && (
-        <div className="restaurant-form-container">
-          <div className="content-card">
-            <div className="content-card-header">
-              <h3 className="content-card-title">
-                {editingRestaurant ? 'Modifier le Restaurant' : 'Nouveau Restaurant'}
-              </h3>
-              <button className="btn btn-outline-secondary" onClick={cancelEdit}>
-                Annuler
-              </button>
+              <div className="restaurant-features">
+                <div className="features-grid">
+                  {details.features?.slice(0, 3).map((feature: string, idx: number) => (
+                    <div key={idx} className="feature-item">
+                      <div className="feature-icon">
+                        {feature.includes('Wi-Fi') && <Wifi className="w-4 h-4" />}
+                        {feature.includes('salle') && <Calendar className="w-4 h-4" />}
+                        {feature.includes('place') && <Users className="w-4 h-4" />}
+                        {feature.includes('imprimante') && <Coffee className="w-4 h-4" />}
+                        {feature.includes('plateau') && <Coffee className="w-4 h-4" />}
+                        {feature.includes('conférence') && <Star className="w-4 h-4" />}
             </div>
-            <div className="content-card-body">
-              <form onSubmit={editingRestaurant ? handleUpdateRestaurant : handleCreateRestaurant}>
-                <div className="row g-3">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Nom du Restaurant *</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.name : newRestaurant.name}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, name: e.target.value})
-                          : setNewRestaurant({...newRestaurant, name: e.target.value})
-                        }
-                        required
-                      />
+                      <span className="feature-text">{feature}</span>
                     </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Code *</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.code : newRestaurant.code}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, code: e.target.value})
-                          : setNewRestaurant({...newRestaurant, code: e.target.value})
-                        }
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Ville *</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.city : newRestaurant.city}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, city: e.target.value})
-                          : setNewRestaurant({...newRestaurant, city: e.target.value})
-                        }
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Adresse</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.address || '' : newRestaurant.address}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, address: e.target.value})
-                          : setNewRestaurant({...newRestaurant, address: e.target.value})
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Téléphone</label>
-                      <input
-                        type="tel"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.phone || '' : newRestaurant.phone}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, phone: e.target.value})
-                          : setNewRestaurant({...newRestaurant, phone: e.target.value})
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Email</label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.email || '' : newRestaurant.email}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, email: e.target.value})
-                          : setNewRestaurant({...newRestaurant, email: e.target.value})
-                        }
-                      />
+                  ))}
                     </div>
                   </div>
                   
-                  {/* Nouvelles informations détaillées */}
-                  <div className="col-12">
-                    <h4 className="form-section-title">Informations détaillées</h4>
-                  </div>
-                  
-                  <div className="col-md-3">
-                    <div className="form-group">
-                      <label className="form-label">Capacité restaurant</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.restaurantCapacity || 0 : newRestaurant.restaurantCapacity}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, restaurantCapacity: parseInt(e.target.value) || 0})
-                          : setNewRestaurant({...newRestaurant, restaurantCapacity: parseInt(e.target.value) || 0})
-                        }
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="col-md-3">
-                    <div className="form-group">
-                      <label className="form-label">Salles de réunion</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.meetingRoomsCount || 0 : newRestaurant.meetingRoomsCount}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, meetingRoomsCount: parseInt(e.target.value) || 0})
-                          : setNewRestaurant({...newRestaurant, meetingRoomsCount: parseInt(e.target.value) || 0})
-                        }
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Événements spéciaux</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.specialEvents || '' : newRestaurant.specialEvents}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, specialEvents: e.target.value})
-                          : setNewRestaurant({...newRestaurant, specialEvents: e.target.value})
-                        }
-                        placeholder="Ex: Conférences tous les mardi après-midi"
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* Services disponibles */}
-                  <div className="col-12">
-                    <h4 className="form-section-title">Services disponibles</h4>
-                  </div>
-                  
-                  <div className="col-md-4">
-                    <div className="form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={editingRestaurant ? editingRestaurant.wifiAvailable || false : newRestaurant.wifiAvailable}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, wifiAvailable: e.target.checked})
-                          : setNewRestaurant({...newRestaurant, wifiAvailable: e.target.checked})
-                        }
-                      />
-                      <label className="form-check-label">
-                        <Wifi className="form-check-icon" />
-                        Wi-Fi disponible
-                      </label>
-                    </div>
-                  </div>
-                  
-                  <div className="col-md-4">
-                    <div className="form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={editingRestaurant ? editingRestaurant.printerAvailable || false : newRestaurant.printerAvailable}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, printerAvailable: e.target.checked})
-                          : setNewRestaurant({...newRestaurant, printerAvailable: e.target.checked})
-                        }
-                      />
-                      <label className="form-check-label">
-                        <Printer className="form-check-icon" />
-                        Imprimante disponible
-                      </label>
-                    </div>
-                  </div>
-                  
-                  <div className="col-md-4">
-                    <div className="form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={editingRestaurant ? editingRestaurant.memberTrays || false : newRestaurant.memberTrays}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, memberTrays: e.target.checked})
-                          : setNewRestaurant({...newRestaurant, memberTrays: e.target.checked})
-                        }
-                      />
-                      <label className="form-check-label">
-                        <Coffee className="form-check-icon" />
-                        Plateaux membres
-                      </label>
-                    </div>
-                  </div>
-                  
-                  <div className="col-md-4">
-                    <div className="form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={editingRestaurant ? editingRestaurant.deliveryAvailable || false : newRestaurant.deliveryAvailable}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, deliveryAvailable: e.target.checked})
-                          : setNewRestaurant({...newRestaurant, deliveryAvailable: e.target.checked})
-                        }
-                      />
-                      <label className="form-check-label">
-                        <Truck className="form-check-icon" />
-                        Livraison disponible
-                      </label>
-                    </div>
-                  </div>
-                  
-                  {/* Horaires */}
-                  <div className="col-12">
-                    <h4 className="form-section-title">Horaires d'ouverture</h4>
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Lundi à Jeudi</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.mondayThursdayHours || '' : newRestaurant.mondayThursdayHours}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, mondayThursdayHours: e.target.value})
-                          : setNewRestaurant({...newRestaurant, mondayThursdayHours: e.target.value})
-                        }
-                        placeholder="Ex: 9h à 24h"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Vendredi</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.fridayHours || '' : newRestaurant.fridayHours}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, fridayHours: e.target.value})
-                          : setNewRestaurant({...newRestaurant, fridayHours: e.target.value})
-                        }
-                        placeholder="Ex: 9h à 1h du matin"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Samedi</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.saturdayHours || '' : newRestaurant.saturdayHours}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, saturdayHours: e.target.value})
-                          : setNewRestaurant({...newRestaurant, saturdayHours: e.target.value})
-                        }
-                        placeholder="Ex: 9h à 5h du matin"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Dimanche</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={editingRestaurant ? editingRestaurant.sundayHours || '' : newRestaurant.sundayHours}
-                        onChange={(e) => editingRestaurant 
-                          ? setEditingRestaurant({...editingRestaurant, sundayHours: e.target.value})
-                          : setNewRestaurant({...newRestaurant, sundayHours: e.target.value})
-                        }
-                        placeholder="Ex: 11h à 24h"
-                      />
-                    </div>
-                  </div>
+              <div className="restaurant-info">
+                <div className="info-item">
+                  <Phone className="w-4 h-4" />
+                  <span>{restaurant.phone}</span>
                 </div>
-                <div className="form-actions">
-                  <button type="submit" className="btn btn-primary">
-                    <CheckCircle className="btn-icon" />
-                    {editingRestaurant ? 'Mettre à jour' : 'Créer'}
-                  </button>
+                <div className="info-item">
+                  <Clock className="w-4 h-4" />
+                  <span>Ouvert maintenant</span>
                 </div>
-              </form>
             </div>
-          </div>
-        </div>
-      )}
 
-      {/* Restaurants Grid */}
-      <div className="restaurants-grid">
-        {filteredRestaurants.length === 0 ? (
-          <div className="empty-state">
-            <Building2 className="empty-icon" />
-            <h3>Aucun restaurant trouvé</h3>
-            <p>
-              {searchTerm || filterCity 
-                ? 'Aucun restaurant ne correspond à vos critères de recherche.'
-                : 'Commencez par créer votre premier restaurant.'
-              }
-            </p>
-            {canManageRestaurants && !searchTerm && !filterCity && (
-              <button 
-                className="btn btn-primary"
-                onClick={() => setShowCreateForm(true)}
-              >
-                <Plus className="btn-icon" />
-                Créer le premier restaurant
-              </button>
-            )}
+              <div className="restaurant-actions">
+                <button 
+                  className="btn btn-primary btn-sm"
+                  onClick={() => handleViewDetails(restaurant)}
+                >
+                  <Eye className="w-4 h-4" />
+                  Voir détails
+                </button>
+                <button className="btn btn-secondary btn-sm">
+                  <Edit className="w-4 h-4" />
+                  Modifier
+                </button>
           </div>
-        ) : (
-          <div className="row g-4">
-            {filteredRestaurants.map((restaurant) => (
-              <div key={restaurant.id} className="col-lg-4 col-md-6">
-                <div className="restaurant-card">
-                  <div className="restaurant-header">
-                    <div className="restaurant-info">
-                      <h3 className="restaurant-name">{restaurant.name}</h3>
-                      <div className="restaurant-code">{restaurant.code}</div>
-                    </div>
-                    <div className="restaurant-status">
-                      <div className="status-badge active">
-                        <CheckCircle className="status-icon" />
-                        Actif
+            </motion.div>
+          );
+        })}
+        </div>
+
+      {/* Modal de détails */}
+      {showModal && selectedRestaurant && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <motion.div 
+            className="modal-content"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-header">
+              <h2 className="modal-title">{selectedRestaurant.name}</h2>
+              <button 
+                className="modal-close"
+                onClick={() => setShowModal(false)}
+              >
+                ×
+              </button>
+                  </div>
+                  
+            <div className="modal-body">
+              {(() => {
+                const details = getRestaurantDetails(selectedRestaurant.code);
+                return (
+                  <>
+                    <div className="modal-section">
+                      <h3 className="section-title">Informations générales</h3>
+                      <div className="info-grid">
+                        <div className="info-item">
+                          <MapPin className="w-4 h-4" />
+                          <span>{selectedRestaurant.address}, {selectedRestaurant.city}</span>
+                        </div>
+                        <div className="info-item">
+                          <Phone className="w-4 h-4" />
+                          <span>{selectedRestaurant.phone}</span>
+                        </div>
+                        </div>
                       </div>
+
+                    <div className="modal-section">
+                      <h3 className="section-title">Équipements disponibles</h3>
+                      <div className="features-list">
+                        {details.features?.map((feature: string, idx: number) => (
+                          <div key={idx} className="feature-item">
+                            <div className="feature-icon">
+                              {feature.includes('Wi-Fi') && <Wifi className="w-4 h-4" />}
+                              {feature.includes('salle') && <Calendar className="w-4 h-4" />}
+                              {feature.includes('place') && <Users className="w-4 h-4" />}
+                              {feature.includes('imprimante') && <Coffee className="w-4 h-4" />}
+                              {feature.includes('plateau') && <Coffee className="w-4 h-4" />}
+                              {feature.includes('conférence') && <Star className="w-4 h-4" />}
+                        </div>
+                            <span>{feature}</span>
+                      </div>
+                        ))}
                     </div>
                   </div>
                   
-                  <div className="restaurant-details">
-                    <div className="detail-item">
-                      <MapPin className="detail-icon" />
-                      <div className="detail-content">
-                        <div className="detail-label">Ville</div>
-                        <div className="detail-value">{restaurant.city}</div>
-                      </div>
-                    </div>
-                    
-                    {restaurant.address && (
-                      <div className="detail-item">
-                        <MapPin className="detail-icon" />
-                        <div className="detail-content">
-                          <div className="detail-label">Adresse</div>
-                          <div className="detail-value">{restaurant.address}</div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {restaurant.phone && (
-                      <div className="detail-item">
-                        <Phone className="detail-icon" />
-                        <div className="detail-content">
-                          <div className="detail-label">Téléphone</div>
-                          <div className="detail-value">{restaurant.phone}</div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {restaurant.email && (
-                      <div className="detail-item">
-                        <Mail className="detail-icon" />
-                        <div className="detail-content">
-                          <div className="detail-label">Email</div>
-                          <div className="detail-value">{restaurant.email}</div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {/* Nouvelles informations */}
-                    {restaurant.restaurantCapacity && (
-                      <div className="detail-item">
-                        <Users className="detail-icon" />
-                        <div className="detail-content">
-                          <div className="detail-label">Capacité</div>
-                          <div className="detail-value">{restaurant.restaurantCapacity} places</div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {restaurant.meetingRoomsCount && restaurant.meetingRoomsCount > 0 && (
-                      <div className="detail-item">
-                        <Monitor className="detail-icon" />
-                        <div className="detail-content">
-                          <div className="detail-label">Salles de réunion</div>
-                          <div className="detail-value">{restaurant.meetingRoomsCount}</div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {restaurant.specialEvents && (
-                      <div className="detail-item">
-                        <Calendar className="detail-icon" />
-                        <div className="detail-content">
-                          <div className="detail-label">Événements spéciaux</div>
-                          <div className="detail-value">{restaurant.specialEvents}</div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Services disponibles */}
-                  <div className="restaurant-services">
-                    <div className="services-title">Services disponibles</div>
-                    <div className="services-list">
-                      {restaurant.wifiAvailable && (
-                        <div className="service-badge">
-                          <Wifi className="service-icon" />
-                          <span>Wi-Fi</span>
-                        </div>
-                      )}
-                      {restaurant.printerAvailable && (
-                        <div className="service-badge">
-                          <Printer className="service-icon" />
-                          <span>Imprimante</span>
-                        </div>
-                      )}
-                      {restaurant.memberTrays && (
-                        <div className="service-badge">
-                          <Coffee className="service-icon" />
-                          <span>Plateaux membres</span>
-                        </div>
-                      )}
-                      {restaurant.deliveryAvailable && (
-                        <div className="service-badge">
-                          <Truck className="service-icon" />
-                          <span>Livraison</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {/* Horaires */}
-                  <div className="restaurant-hours">
-                    <div className="hours-title">
-                      <Clock className="hours-icon" />
-                      Horaires d'ouverture
-                    </div>
+                    <div className="modal-section">
+                      <h3 className="section-title">Horaires d'ouverture</h3>
                     <div className="hours-list">
-                      {restaurant.mondayThursdayHours && (
-                        <div className="hours-item">
-                          <span className="hours-day">Lun-Jeu:</span>
-                          <span className="hours-time">{restaurant.mondayThursdayHours}</span>
+                        {details.hours && Object.entries(details.hours).map(([key, value]) => (
+                          <div key={key} className="hour-item">
+                            <span className="hour-label">{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</span>
+                            <span className="hour-value">{value as string}</span>
                         </div>
-                      )}
-                      {restaurant.fridayHours && (
-                        <div className="hours-item">
-                          <span className="hours-day">Vendredi:</span>
-                          <span className="hours-time">{restaurant.fridayHours}</span>
+                        ))}
                         </div>
-                      )}
-                      {restaurant.saturdayHours && (
-                        <div className="hours-item">
-                          <span className="hours-day">Samedi:</span>
-                          <span className="hours-time">{restaurant.saturdayHours}</span>
-                        </div>
-                      )}
-                      {restaurant.sundayHours && (
-                        <div className="hours-item">
-                          <span className="hours-day">Dimanche:</span>
-                          <span className="hours-time">{restaurant.sundayHours}</span>
-                        </div>
-                      )}
                     </div>
+
+                    <div className="modal-section">
+                      <h3 className="section-title">Services proposés</h3>
+                      <div className="services-list">
+                        {details.services?.map((service: string, idx: number) => (
+                          <div key={idx} className="service-item">
+                            <CheckCircle className="w-4 h-4" />
+                            <span>{service}</span>
+                  </div>
+                        ))}
+                    </div>
+                    </div>
+                  </>
+                );
+              })()}
                   </div>
                   
-                  <div className="restaurant-stats">
-                    <div className="stat-mini">
-                      <Users className="stat-mini-icon" />
-                      <span>12 Menus</span>
-                    </div>
-                    <div className="stat-mini">
-                      <Star className="stat-mini-icon" />
-                      <span>4.8/5</span>
-                    </div>
-                  </div>
-                  
-                  {canManageRestaurants && (
-                    <div className="restaurant-actions">
-                      <button 
-                        className="btn btn-outline-primary btn-sm"
-                        onClick={() => startEdit(restaurant)}
-                      >
-                        <Edit className="btn-icon" />
-                        Modifier
+            <div className="modal-footer">
+              <button className="btn btn-primary">
+                Réserver une salle
                       </button>
-                      <button 
-                        className="btn btn-outline-secondary btn-sm"
-                        onClick={() => {/* View details */}}
-                      >
-                        <Eye className="btn-icon" />
-                        Voir
-                      </button>
-                      <button 
-                        className="btn btn-outline-danger btn-sm"
-                        onClick={() => handleDeleteRestaurant(restaurant.id)}
-                      >
-                        <Trash2 className="btn-icon" />
-                        Supprimer
+              <button className="btn btn-secondary">
+                Voir le menu
                       </button>
                     </div>
-                  )}
-                </div>
-              </div>
-            ))}
+          </motion.div>
           </div>
         )}
-      </div>
     </div>
   );
 };

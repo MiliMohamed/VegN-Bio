@@ -1,526 +1,268 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { 
+  ShoppingCart, 
+  Package, 
+  Truck,
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
+  Star,
+  MapPin,
+  Phone,
+  Mail
+} from 'lucide-react';
 import { marketplaceService } from '../services/api';
-import { useRestaurants } from '../hooks/useRestaurants';
-
-interface MarketplaceItem {
-  id: number;
-  supplierId: number;
-  supplierName: string;
-  title: string;
-  description: string;
-  price: number;
-  unit: string;
-  category: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 interface Supplier {
   id: number;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
+  companyName: string;
+  contactEmail: string;
+}
+
+interface Offer {
+  id: number;
+  title: string;
+  description: string;
+  unitPriceCents: number;
+  unit: string;
   status: string;
+  supplier: Supplier;
 }
 
 const ModernMarketplace: React.FC = () => {
-  const [items, setItems] = useState<MarketplaceItem[]>([]);
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('');
-  const [filterSupplier, setFilterSupplier] = useState('');
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [showSupplierForm, setShowSupplierForm] = useState(false);
-  const [newItem, setNewItem] = useState({
-    supplierId: 0,
-    title: '',
-    description: '',
-    price: 0,
-    unit: '',
-    category: 'LEGUMES'
-  });
-  const [newSupplier, setNewSupplier] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: ''
-  });
+  const [offers, setOffers] = React.useState<Offer[]>([]);
+  const [suppliers, setSuppliers] = React.useState<Supplier[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [activeTab, setActiveTab] = React.useState<'offers' | 'suppliers'>('offers');
 
-  const { getRestaurantName } = useRestaurants();
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [offersRes, suppliersRes] = await Promise.all([
+          marketplaceService.getOffers(),
+          marketplaceService.getAllSuppliers()
+        ]);
+        setOffers(offersRes.data);
+        setSuppliers(suppliersRes.data);
+      } catch (error) {
+        console.error('Erreur lors du chargement des données:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const userRole = localStorage.getItem('userRole');
-  const canManageMarketplace = userRole === 'ADMIN' || userRole === 'FOURNISSEUR';
-
-  useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const offersResponse = await marketplaceService.getOffers();
-      setItems(offersResponse.data);
-      const suppliersResponse = await marketplaceService.getSuppliers();
-      setSuppliers(suppliersResponse.data);
-    } catch (err: any) {
-      setError('Erreur lors du chargement des données');
-      console.error('Error fetching marketplace data:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreateItem = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await marketplaceService.createOffer(newItem);
-      setItems([...items, response.data]);
-      setNewItem({
-        supplierId: 0,
-        title: '',
-        description: '',
-        price: 0,
-        unit: '',
-        category: 'LEGUMES'
-      });
-      setShowCreateForm(false);
-      alert('Offre créée avec succès');
-    } catch (err: any) {
-      console.error('Erreur lors de la création:', err);
-      alert('Erreur lors de la création de l\'offre');
-    }
-  };
-
-  const handleCreateSupplier = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await marketplaceService.createSupplier(newSupplier);
-      setSuppliers([...suppliers, response.data]);
-      setNewSupplier({
-        name: '',
-        email: '',
-        phone: '',
-        address: ''
-      });
-      setShowSupplierForm(false);
-      alert('Fournisseur créé avec succès');
-    } catch (err: any) {
-      console.error('Erreur lors de la création:', err);
-      alert('Erreur lors de la création du fournisseur');
-    }
-  };
-
-  const handleDeleteItem = async (itemId: number) => {
-    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette offre ?')) {
-      return;
-    }
-    try {
-      await marketplaceService.deleteOffer(itemId);
-      setItems(items.filter(item => item.id !== itemId));
-      alert('Offre supprimée avec succès');
-    } catch (err: any) {
-      console.error('Erreur lors de la suppression:', err);
-      alert('Erreur lors de la suppression de l\'offre');
-    }
-  };
-
-  const filteredItems = items.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.supplierName.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !filterCategory || item.category === filterCategory;
-    const matchesSupplier = !filterSupplier || item.supplierId.toString() === filterSupplier;
-    return matchesSearch && matchesCategory && matchesSupplier;
-  });
-
-  const categories = [
-    { value: 'LEGUMES', label: '🥕 Légumes', color: '#27ae60' },
-    { value: 'FRUITS', label: '🍎 Fruits', color: '#e74c3c' },
-    { value: 'CEREALES', label: '🌾 Céréales', color: '#f39c12' },
-    { value: 'LEGUMINEUSES', label: '🫘 Légumineuses', color: '#8e44ad' },
-    { value: 'EPICES', label: '🌶️ Épices', color: '#e67e22' },
-    { value: 'AUTRES', label: '🌱 Autres', color: '#95a5a6' }
-  ];
-
-  const getCategoryIcon = (category: string) => {
-    const cat = categories.find(c => c.value === category);
-    return cat ? cat.label.split(' ')[0] : '🌱';
-  };
-
-  const getCategoryColor = (category: string) => {
-    const cat = categories.find(c => c.value === category);
-    return cat ? cat.color : '#95a5a6';
+  const formatPrice = (priceCents: number) => {
+    return (priceCents / 100).toFixed(2) + ' €';
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'ACTIVE': return '#27ae60';
-      case 'INACTIVE': return '#e74c3c';
-      case 'PENDING': return '#f39c12';
-      default: return '#95a5a6';
-    }
+    const colors: { [key: string]: string } = {
+      'PUBLISHED': 'success',
+      'DRAFT': 'warning',
+      'ARCHIVED': 'danger'
+    };
+    return colors[status] || 'primary';
+  };
+
+  const getStatusText = (status: string) => {
+    const texts: { [key: string]: string } = {
+      'PUBLISHED': 'Publiée',
+      'DRAFT': 'Brouillon',
+      'ARCHIVED': 'Archivée'
+    };
+    return texts[status] || 'Inconnu';
   };
 
   if (loading) {
     return (
-      <div className="modern-loading">
-        <div className="loading-spinner"></div>
-        <p>Chargement du marketplace...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="modern-error">
-        <div className="error-icon">⚠️</div>
-        <p>{error}</p>
-        <button className="modern-btn primary" onClick={fetchData}>Réessayer</button>
+      <div className="modern-marketplace">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Chargement du marketplace...</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="modern-marketplace">
-      <div className="modern-page-header">
-        <div className="header-content">
-          <div className="header-title">
-            <h1>🛒 Marketplace Bio</h1>
-            <p>Découvrez les meilleurs produits bio de nos fournisseurs locaux</p>
-          </div>
-          {canManageMarketplace && (
-            <div className="header-actions">
-              <button 
-                className="modern-btn primary"
-                onClick={() => setShowCreateForm(!showCreateForm)}
-              >
-                <span className="btn-icon">➕</span>
-                {showCreateForm ? 'Annuler' : 'Créer une offre'}
-              </button>
-              <button 
-                className="modern-btn secondary"
-                onClick={() => setShowSupplierForm(!showSupplierForm)}
-              >
-                <span className="btn-icon">🏪</span>
-                {showSupplierForm ? 'Annuler' : 'Ajouter fournisseur'}
-              </button>
-            </div>
-          )}
-        </div>
+      <div className="marketplace-header">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <h1 className="page-title">Marketplace Bio</h1>
+          <p className="page-subtitle">
+            Découvrez nos fournisseurs partenaires et leurs produits biologiques franciliens
+          </p>
+        </motion.div>
       </div>
 
-      {showCreateForm && canManageMarketplace && (
-        <div className="modern-form-container">
-          <div className="form-header">
-            <h3>🛍️ Créer une nouvelle offre</h3>
-            <p>Ajoutez un nouveau produit au marketplace</p>
+      <div className="marketplace-tabs">
+        <motion.button
+          className={`tab-button ${activeTab === 'offers' ? 'active' : ''}`}
+          onClick={() => setActiveTab('offers')}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <Package className="w-5 h-5" />
+          Offres ({offers.length})
+        </motion.button>
+        <motion.button
+          className={`tab-button ${activeTab === 'suppliers' ? 'active' : ''}`}
+          onClick={() => setActiveTab('suppliers')}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <Truck className="w-5 h-5" />
+          Fournisseurs ({suppliers.length})
+        </motion.button>
+      </div>
+
+      {activeTab === 'offers' && (
+        <div className="offers-section">
+          <div className="section-actions">
+            <motion.button
+              className="btn btn-primary"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <Plus className="w-5 h-5" />
+              Nouvelle offre
+            </motion.button>
           </div>
-          <form onSubmit={handleCreateItem} className="modern-form">
-            <div className="form-grid">
-              <div className="form-group">
-                <label>🏪 Fournisseur *</label>
-                <select
-                  value={newItem.supplierId}
-                  onChange={(e) => setNewItem({...newItem, supplierId: parseInt(e.target.value)})}
-                  required
-                  className="modern-select"
-                >
-                  <option value={0}>Sélectionner un fournisseur</option>
-                  {suppliers.map((supplier) => (
-                    <option key={supplier.id} value={supplier.id}>
-                      {supplier.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label>📝 Titre *</label>
-                <input
-                  type="text"
-                  value={newItem.title}
-                  onChange={(e) => setNewItem({...newItem, title: e.target.value})}
-                  required
-                  className="modern-input"
-                  placeholder="Nom du produit"
-                />
-              </div>
-            </div>
-            <div className="form-grid">
-              <div className="form-group">
-                <label>💰 Prix (€) *</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={newItem.price}
-                  onChange={(e) => setNewItem({...newItem, price: parseFloat(e.target.value)})}
-                  min={0}
-                  required
-                  className="modern-input"
-                  placeholder="0.00"
-                />
-              </div>
-              <div className="form-group">
-                <label>📏 Unité *</label>
-                <select
-                  value={newItem.unit}
-                  onChange={(e) => setNewItem({...newItem, unit: e.target.value})}
-                  required
-                  className="modern-select"
-                >
-                  <option value="">Sélectionner une unité</option>
-                  <option value="kg">Kilogramme (kg)</option>
-                  <option value="g">Gramme (g)</option>
-                  <option value="L">Litre (L)</option>
-                  <option value="mL">Millilitre (mL)</option>
-                  <option value="pièce">Pièce</option>
-                  <option value="boîte">Boîte</option>
-                  <option value="paquet">Paquet</option>
-                </select>
-              </div>
-            </div>
-            <div className="form-group">
-              <label>📄 Description *</label>
-              <textarea
-                value={newItem.description}
-                onChange={(e) => setNewItem({...newItem, description: e.target.value})}
-                required
-                className="modern-textarea"
-                placeholder="Décrivez le produit..."
-                rows={4}
-              />
-            </div>
-            <div className="form-group">
-              <label>🏷️ Catégorie *</label>
-              <select
-                value={newItem.category}
-                onChange={(e) => setNewItem({...newItem, category: e.target.value})}
-                required
-                className="modern-select"
+
+          <div className="offers-grid">
+            {offers.map((offer, index) => (
+              <motion.div
+                key={offer.id}
+                className="offer-card"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
               >
-                {categories.map((category) => (
-                  <option key={category.value} value={category.value}>
-                    {category.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-actions">
-              <button type="submit" className="modern-btn primary">
-                <span className="btn-icon">✅</span>
-                Créer l'offre
-              </button>
-              <button type="button" className="modern-btn secondary" onClick={() => setShowCreateForm(false)}>
-                <span className="btn-icon">❌</span>
-                Annuler
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {showSupplierForm && canManageMarketplace && (
-        <div className="modern-form-container">
-          <div className="form-header">
-            <h3>🏪 Ajouter un nouveau fournisseur</h3>
-            <p>Enregistrez un nouveau fournisseur dans le système</p>
-          </div>
-          <form onSubmit={handleCreateSupplier} className="modern-form">
-            <div className="form-grid">
-              <div className="form-group">
-                <label>📝 Nom *</label>
-                <input
-                  type="text"
-                  value={newSupplier.name}
-                  onChange={(e) => setNewSupplier({...newSupplier, name: e.target.value})}
-                  required
-                  className="modern-input"
-                  placeholder="Nom du fournisseur"
-                />
-              </div>
-              <div className="form-group">
-                <label>📧 Email *</label>
-                <input
-                  type="email"
-                  value={newSupplier.email}
-                  onChange={(e) => setNewSupplier({...newSupplier, email: e.target.value})}
-                  required
-                  className="modern-input"
-                  placeholder="email@exemple.com"
-                />
-              </div>
-            </div>
-            <div className="form-grid">
-              <div className="form-group">
-                <label>📞 Téléphone *</label>
-                <input
-                  type="tel"
-                  value={newSupplier.phone}
-                  onChange={(e) => setNewSupplier({...newSupplier, phone: e.target.value})}
-                  required
-                  className="modern-input"
-                  placeholder="0123456789"
-                />
-              </div>
-              <div className="form-group">
-                <label>📍 Adresse *</label>
-                <input
-                  type="text"
-                  value={newSupplier.address}
-                  onChange={(e) => setNewSupplier({...newSupplier, address: e.target.value})}
-                  required
-                  className="modern-input"
-                  placeholder="Adresse complète"
-                />
-              </div>
-            </div>
-            <div className="form-actions">
-              <button type="submit" className="modern-btn primary">
-                <span className="btn-icon">✅</span>
-                Créer le fournisseur
-              </button>
-              <button type="button" className="modern-btn secondary" onClick={() => setShowSupplierForm(false)}>
-                <span className="btn-icon">❌</span>
-                Annuler
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      <div className="modern-filters">
-        <div className="search-container">
-          <div className="search-box">
-            <span className="search-icon">🔍</span>
-            <input
-              type="text"
-              placeholder="Rechercher un produit..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="modern-search"
-            />
-          </div>
-        </div>
-        <div className="filter-container">
-          <select
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            className="modern-filter"
-          >
-            <option value="">Toutes les catégories</option>
-            {categories.map((category) => (
-              <option key={category.value} value={category.value}>
-                {category.label}
-              </option>
-            ))}
-          </select>
-          <select
-            value={filterSupplier}
-            onChange={(e) => setFilterSupplier(e.target.value)}
-            className="modern-filter"
-          >
-            <option value="">Tous les fournisseurs</option>
-            {suppliers.map((supplier) => (
-              <option key={supplier.id} value={supplier.id.toString()}>
-                {supplier.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className="marketplace-stats">
-        <div className="stat-card">
-          <div className="stat-icon">🛍️</div>
-          <div className="stat-content">
-            <span className="stat-number">{filteredItems.length}</span>
-            <span className="stat-label">Produits disponibles</span>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon">🏪</div>
-          <div className="stat-content">
-            <span className="stat-number">{suppliers.length}</span>
-            <span className="stat-label">Fournisseurs actifs</span>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon">🏷️</div>
-          <div className="stat-content">
-            <span className="stat-number">{categories.length}</span>
-            <span className="stat-label">Catégories</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="modern-marketplace-grid">
-        {filteredItems.length === 0 ? (
-          <div className="modern-empty-state">
-            <div className="empty-icon">🛒</div>
-            <h3>Aucune offre trouvée</h3>
-            <p>Il n'y a pas de produits correspondant à vos critères de recherche.</p>
-          </div>
-        ) : (
-          filteredItems.map((item) => {
-            const categoryColor = getCategoryColor(item.category);
-            const statusColor = getStatusColor(item.status);
-            return (
-              <div key={item.id} className="modern-marketplace-card">
-                <div className="product-image" style={{ backgroundColor: categoryColor }}>
-                  <div className="category-badge" style={{ backgroundColor: categoryColor }}>
-                    {getCategoryIcon(item.category)}
+                <div className="offer-header">
+                  <div className="offer-status">
+                    <span className={`badge badge-${getStatusColor(offer.status)}`}>
+                      {getStatusText(offer.status)}
+                    </span>
                   </div>
-                  <div className="product-placeholder">🌱</div>
-                </div>
-                <div className="product-content">
-                  <div className="product-header">
-                    <h3 className="product-title">{item.title}</h3>
-                    <div className="product-status" style={{ backgroundColor: statusColor }}>
-                      {item.status}
-                    </div>
-                  </div>
-                  <p className="product-supplier">🏪 {item.supplierName}</p>
-                  <p className="product-description">{item.description}</p>
-                  <div className="product-details">
-                    <div className="price-section">
-                      <span className="product-price">{item.price}€</span>
-                      <span className="product-unit">/ {item.unit}</span>
-                    </div>
-                    <div className="product-meta">
-                      <span className="product-category" style={{ color: categoryColor }}>
-                        {getCategoryIcon(item.category)} {item.category}
-                      </span>
-                      <span className="product-date">📅 {new Date(item.createdAt).toLocaleDateString('fr-FR')}</span>
-                    </div>
+                  <h3 className="offer-title">{offer.title}</h3>
+                  <div className="offer-supplier">
+                    <Truck className="w-4 h-4" />
+                    <span>{offer.supplier.companyName}</span>
                   </div>
                 </div>
-                <div className="product-actions">
-                  <button className="modern-btn primary small">
-                    <span className="btn-icon">👁️</span>
+
+                <div className="offer-description">
+                  <p>{offer.description}</p>
+                </div>
+
+                <div className="offer-details">
+                  <div className="detail-item">
+                    <div className="detail-label">Prix unitaire</div>
+                    <div className="detail-value">{formatPrice(offer.unitPriceCents)} / {offer.unit}</div>
+                  </div>
+                </div>
+
+                <div className="offer-actions">
+                  <button className="btn btn-primary btn-sm">
+                    <ShoppingCart className="w-4 h-4" />
+                    Commander
+                  </button>
+                  <button className="btn btn-secondary btn-sm">
+                    <Eye className="w-4 h-4" />
                     Voir détails
                   </button>
-                  <button className="modern-btn secondary small">
-                    <span className="btn-icon">📞</span>
-                    Contacter
+                  <button className="btn btn-secondary btn-sm">
+                    <Edit className="w-4 h-4" />
+                    Modifier
                   </button>
-                  {canManageMarketplace && (
-                    <button 
-                      className="modern-btn danger small"
-                      onClick={() => handleDeleteItem(item.id)}
-                    >
-                      <span className="btn-icon">🗑️</span>
-                      Supprimer
-                    </button>
-                  )}
                 </div>
-              </div>
-            );
-          })
-        )}
-      </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'suppliers' && (
+        <div className="suppliers-section">
+          <div className="section-actions">
+            <motion.button
+              className="btn btn-primary"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <Plus className="w-5 h-5" />
+              Nouveau fournisseur
+            </motion.button>
+          </div>
+
+          <div className="suppliers-grid">
+            {suppliers.map((supplier, index) => (
+              <motion.div
+                key={supplier.id}
+                className="supplier-card"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+              >
+                <div className="supplier-header">
+                  <div className="supplier-logo">
+                    <Truck className="w-8 h-8" />
+                  </div>
+                  <h3 className="supplier-name">{supplier.companyName}</h3>
+                </div>
+
+                <div className="supplier-contact">
+                  <div className="contact-item">
+                    <Mail className="w-4 h-4" />
+                    <span>{supplier.contactEmail}</span>
+                  </div>
+                </div>
+
+                <div className="supplier-stats">
+                  <div className="stat-item">
+                    <div className="stat-value">12</div>
+                    <div className="stat-label">Offres actives</div>
+                  </div>
+                  <div className="stat-item">
+                    <div className="stat-value">4.8</div>
+                    <div className="stat-label">Note moyenne</div>
+                  </div>
+                </div>
+
+                <div className="supplier-actions">
+                  <button className="btn btn-primary btn-sm">
+                    <Eye className="w-4 h-4" />
+                    Voir profil
+                  </button>
+                  <button className="btn btn-secondary btn-sm">
+                    <Edit className="w-4 h-4" />
+                    Modifier
+                  </button>
+                  <button className="btn btn-danger btn-sm">
+                    <Trash2 className="w-4 h-4" />
+                    Supprimer
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

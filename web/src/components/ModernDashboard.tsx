@@ -1,184 +1,193 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { 
-  Building2, 
-  Utensils, 
-  Calendar, 
-  Star, 
-  TrendingUp, 
   Users, 
-  ShoppingBag,
-  DollarSign,
-  Activity,
+  MapPin, 
+  Utensils, 
+  Calendar,
+  TrendingUp,
+  TrendingDown,
+  Star,
   Clock,
   CheckCircle,
   AlertCircle,
-  Plus,
-  ArrowUpRight,
-  ArrowDownRight,
-  Eye
+  Leaf,
+  Heart
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import DatabasePopulator from './DatabasePopulator';
-import BackendTester from './BackendTester';
-import ReviewsTester from './ReviewsTester';
+import { restaurantService, eventService, feedbackService } from '../services/api';
 
 interface DashboardStats {
-  restaurants: number;
-  menus: number;
-  events: number;
-  reviews: number;
-  suppliers: number;
-  revenue: number;
-  activeUsers: number;
+  totalRestaurants: number;
+  totalEvents: number;
+  totalReviews: number;
+  averageRating: number;
+  upcomingEvents: number;
   pendingReviews: number;
 }
 
 const ModernDashboard: React.FC = () => {
-  const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
-    restaurants: 7,
-    menus: 23,
-    events: 5,
-    reviews: 156,
-    suppliers: 12,
-    revenue: 12500,
-    activeUsers: 89,
-    pendingReviews: 8
+    totalRestaurants: 0,
+    totalEvents: 0,
+    totalReviews: 0,
+    averageRating: 0,
+    upcomingEvents: 0,
+    pendingReviews: 0
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simuler le chargement des données
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
+    const fetchDashboardData = async () => {
+      try {
+        const [restaurantsRes, eventsRes, reviewsRes] = await Promise.all([
+          restaurantService.getAll(),
+          eventService.getAll(),
+          feedbackService.getReviews()
+        ]);
+
+        const restaurants = restaurantsRes.data;
+        const events = eventsRes.data;
+        const reviews = reviewsRes.data;
+
+        // Calculer les statistiques
+        const now = new Date();
+        const upcomingEvents = events.filter((event: any) => 
+          new Date(event.dateStart) > now
+        ).length;
+
+        const averageRating = reviews.length > 0 
+          ? reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviews.length
+          : 0;
+
+        setStats({
+          totalRestaurants: restaurants.length,
+          totalEvents: events.length,
+          totalReviews: reviews.length,
+          averageRating: Math.round(averageRating * 10) / 10,
+          upcomingEvents,
+          pendingReviews: 0 // À implémenter selon l'API
+        });
+      } catch (error) {
+        console.error('Erreur lors du chargement des données:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
   }, []);
-
-  const getRoleGreeting = () => {
-    switch (user?.role) {
-      case 'ADMIN': return 'Administrateur';
-      case 'RESTAURATEUR': return 'Chef Restaurateur';
-      case 'CLIENT': return 'Cher Client';
-      case 'FOURNISSEUR': return 'Partenaire Fournisseur';
-      default: return 'Utilisateur';
-    }
-  };
-
-  const getTimeGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Bonjour';
-    if (hour < 18) return 'Bon après-midi';
-    return 'Bonsoir';
-  };
 
   const statCards = [
     {
       title: 'Restaurants',
-      value: stats.restaurants,
-      icon: Building2,
+      value: stats.totalRestaurants,
+      icon: <MapPin className="w-6 h-6" />,
       color: 'primary',
-      change: '+2',
-      changeType: 'increase'
-    },
-    {
-      title: 'Menus Actifs',
-      value: stats.menus,
-      icon: Utensils,
-      color: 'success',
-      change: '+5',
-      changeType: 'increase'
+      change: '+2 ce mois',
+      trend: 'up'
     },
     {
       title: 'Événements',
-      value: stats.events,
-      icon: Calendar,
-      color: 'warning',
-      change: '+1',
-      changeType: 'increase'
+      value: stats.totalEvents,
+      icon: <Calendar className="w-6 h-6" />,
+      color: 'success',
+      change: '+5 cette semaine',
+      trend: 'up'
     },
     {
-      title: 'Avis Clients',
-      value: stats.reviews,
-      icon: Star,
+      title: 'Avis clients',
+      value: stats.totalReviews,
+      icon: <Star className="w-6 h-6" />,
+      color: 'warning',
+      change: '+12 aujourd\'hui',
+      trend: 'up'
+    },
+    {
+      title: 'Note moyenne',
+      value: stats.averageRating,
+      icon: <Heart className="w-6 h-6" />,
       color: 'info',
-      change: '+12',
-      changeType: 'increase'
+      change: '+0.2 cette semaine',
+      trend: 'up'
     }
   ];
 
   const recentActivities = [
     {
       id: 1,
-      type: 'review',
-      message: 'Nouvel avis 5 étoiles pour VegN-Bio Bastille',
-      time: 'Il y a 5 minutes',
-      icon: Star,
+      type: 'event',
+      title: 'Nouvel événement créé',
+      description: 'Conférence sur l\'alimentation durable - République',
+      time: 'Il y a 2 heures',
+      icon: <Calendar className="w-4 h-4" />,
       color: 'success'
     },
     {
       id: 2,
-      type: 'event',
-      message: 'Événement "Atelier Cuisine Bio" créé',
-      time: 'Il y a 1 heure',
-      icon: Calendar,
+      type: 'review',
+      title: 'Nouvel avis client',
+      description: 'Excellent restaurant ! - Bastille',
+      time: 'Il y a 4 heures',
+      icon: <Star className="w-4 h-4" />,
       color: 'warning'
     },
     {
       id: 3,
       type: 'menu',
-      message: 'Menu "Automne Bio" mis à jour',
-      time: 'Il y a 2 heures',
-      icon: Utensils,
+      title: 'Menu mis à jour',
+      description: 'Menu Printemps Bio - Nation',
+      time: 'Il y a 6 heures',
+      icon: <Utensils className="w-4 h-4" />,
       color: 'info'
     },
     {
       id: 4,
-      type: 'supplier',
-      message: 'Nouveau fournisseur "BioFarm" ajouté',
-      time: 'Il y a 3 heures',
-      icon: ShoppingBag,
+      type: 'user',
+      title: 'Nouvel utilisateur',
+      description: 'Inscription client - Place d\'Italie',
+      time: 'Il y a 8 heures',
+      icon: <Users className="w-4 h-4" />,
       color: 'primary'
     }
   ];
 
   const quickActions = [
     {
-      title: 'Créer un Menu',
-      description: 'Ajouter un nouveau menu',
-      icon: Plus,
+      title: 'Ajouter un événement',
+      description: 'Créer un nouvel événement ou animation',
+      icon: <Calendar className="w-8 h-8" />,
       color: 'success',
-      action: '/app/menus'
-    },
-    {
-      title: 'Nouvel Événement',
-      description: 'Organiser un événement',
-      icon: Calendar,
-      color: 'warning',
       action: '/app/events'
     },
     {
-      title: 'Ajouter Restaurant',
-      description: 'Créer un nouveau restaurant',
-      icon: Building2,
+      title: 'Gérer les menus',
+      description: 'Modifier les cartes des restaurants',
+      icon: <Utensils className="w-8 h-8" />,
       color: 'primary',
-      action: '/app/restaurants'
+      action: '/app/menus'
     },
     {
-      title: 'Voir les Avis',
+      title: 'Voir les avis',
       description: 'Consulter les retours clients',
-      icon: Star,
-      color: 'info',
+      icon: <Star className="w-8 h-8" />,
+      color: 'warning',
       action: '/app/reviews'
+    },
+    {
+      title: 'Réservations',
+      description: 'Gérer les réservations de salles',
+      icon: <Clock className="w-8 h-8" />,
+      color: 'info',
+      action: '/app/rooms'
     }
   ];
 
   if (loading) {
     return (
-      <div className="dashboard-loading">
-        <div className="loading-spinner">
-          <Activity className="spinner-icon" />
-          <p>Chargement du tableau de bord...</p>
+      <div className="modern-dashboard">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Chargement des données...</p>
         </div>
       </div>
     );
@@ -186,221 +195,128 @@ const ModernDashboard: React.FC = () => {
 
   return (
     <div className="modern-dashboard">
-      {/* Header Section */}
       <div className="dashboard-header">
-        <div className="welcome-section">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <h1 className="dashboard-title">
-            {getTimeGreeting()}, {user?.name}! 👋
+            <Leaf className="w-8 h-8" />
+            Tableau de bord VegN Bio
           </h1>
           <p className="dashboard-subtitle">
-            {getRoleGreeting()} - Voici un aperçu de votre activité sur VegN-Bio
+            Bienvenue dans votre espace de gestion des restaurants végétariens et biologiques
           </p>
-        </div>
-        <div className="header-actions">
-          <div className="date-info">
-            <Clock className="date-icon" />
-            <span>{new Date().toLocaleDateString('fr-FR', { 
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
-            })}</span>
-          </div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="stats-grid">
-        {statCards.map((card, index) => {
-          const Icon = card.icon;
-          return (
-            <div key={index} className={`stat-card stat-card-${card.color}`}>
-              <div className="stat-header">
-                <div className="stat-icon">
-                  <Icon />
-                </div>
-                <div className="stat-change">
-                  {card.changeType === 'increase' ? (
-                    <ArrowUpRight className="change-icon increase" />
-                  ) : (
-                    <ArrowDownRight className="change-icon decrease" />
-                  )}
-                  <span className={`change-text ${card.changeType}`}>
-                    {card.change}
-                  </span>
-                </div>
-              </div>
-              <div className="stat-content">
-                <div className="stat-value">{card.value}</div>
-                <div className="stat-title">{card.title}</div>
+      {/* Statistiques */}
+      <motion.div 
+        className="modern-stats"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        {statCards.map((stat, index) => (
+          <motion.div
+            key={stat.title}
+            className={`modern-stat-card stat-${stat.color}`}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+            whileHover={{ y: -5 }}
+          >
+            <div className="stat-icon">
+              {stat.icon}
+            </div>
+            <div className="stat-content">
+              <div className="modern-stat-value">{stat.value}</div>
+              <div className="modern-stat-label">{stat.title}</div>
+              <div className={`modern-stat-change ${stat.trend}`}>
+                {stat.trend === 'up' ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+                {stat.change}
               </div>
             </div>
-          );
-        })}
-      </div>
+          </motion.div>
+        ))}
+      </motion.div>
 
       <div className="dashboard-content">
-        <div className="row g-4">
-          {/* Recent Activities */}
-          <div className="col-lg-8">
-            <div className="content-card">
-              <div className="content-card-header">
-                <h3 className="content-card-title">
-                  <Activity className="card-icon" />
-                  Activité Récente
-                </h3>
-                <button className="btn btn-outline-primary btn-sm">
-                  <Eye className="btn-icon" />
-                  Voir tout
-                </button>
-              </div>
-              <div className="content-card-body">
-                <div className="activities-list">
-                  {recentActivities.map((activity) => {
-                    const Icon = activity.icon;
-                    return (
-                      <div key={activity.id} className="activity-item">
-                        <div className={`activity-icon activity-icon-${activity.color}`}>
-                          <Icon />
-                        </div>
-                        <div className="activity-content">
-                          <p className="activity-message">{activity.message}</p>
-                          <span className="activity-time">{activity.time}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
+        {/* Activités récentes */}
+        <motion.div 
+          className="dashboard-section"
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <div className="section-header">
+            <h2 className="section-title">Activités récentes</h2>
+            <p className="section-subtitle">Dernières actions sur la plateforme</p>
+          </div>
+          
+          <div className="activities-list">
+            {recentActivities.map((activity, index) => (
+              <motion.div
+                key={activity.id}
+                className="activity-item"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+              >
+                <div className={`activity-icon activity-${activity.color}`}>
+                  {activity.icon}
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="col-lg-4">
-            <div className="content-card">
-              <div className="content-card-header">
-                <h3 className="content-card-title">
-                  <TrendingUp className="card-icon" />
-                  Actions Rapides
-                </h3>
-              </div>
-              <div className="content-card-body">
-                <div className="quick-actions">
-                  {quickActions.map((action, index) => {
-                    const Icon = action.icon;
-                    return (
-                      <button key={index} className={`quick-action-btn quick-action-${action.color}`}>
-                        <div className="action-icon">
-                          <Icon />
-                        </div>
-                        <div className="action-content">
-                          <div className="action-title">{action.title}</div>
-                          <div className="action-description">{action.description}</div>
-                        </div>
-                        <ArrowUpRight className="action-arrow" />
-                      </button>
-                    );
-                  })}
+                <div className="activity-content">
+                  <div className="activity-title">{activity.title}</div>
+                  <div className="activity-description">{activity.description}</div>
+                  <div className="activity-time">{activity.time}</div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Additional Stats Row */}
-        <div className="row g-4 mt-4">
-          <div className="col-md-3">
-            <div className="mini-stat-card">
-              <div className="mini-stat-icon">
-                <Users />
-              </div>
-              <div className="mini-stat-content">
-                <div className="mini-stat-value">{stats.activeUsers}</div>
-                <div className="mini-stat-label">Utilisateurs Actifs</div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="mini-stat-card">
-              <div className="mini-stat-icon">
-                <DollarSign />
-              </div>
-              <div className="mini-stat-content">
-                <div className="mini-stat-value">€{stats.revenue.toLocaleString()}</div>
-                <div className="mini-stat-label">Revenus du Mois</div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="mini-stat-card">
-              <div className="mini-stat-icon">
-                <ShoppingBag />
-              </div>
-              <div className="mini-stat-content">
-                <div className="mini-stat-value">{stats.suppliers}</div>
-                <div className="mini-stat-label">Fournisseurs</div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="mini-stat-card pending-reviews">
-              <div className="mini-stat-icon">
-                <AlertCircle />
-              </div>
-              <div className="mini-stat-content">
-                <div className="mini-stat-value">{stats.pendingReviews}</div>
-                <div className="mini-stat-label">Avis en Attente</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Performance Chart Placeholder */}
-        <div className="row g-4 mt-4">
-          <div className="col-12">
-            <div className="content-card">
-              <div className="content-card-header">
-                <h3 className="content-card-title">
-                  <TrendingUp className="card-icon" />
-                  Performance des Restaurants
-                </h3>
-                <div className="chart-actions">
-                  <button className="btn btn-outline-secondary btn-sm">7 jours</button>
-                  <button className="btn btn-primary btn-sm">30 jours</button>
-                  <button className="btn btn-outline-secondary btn-sm">90 jours</button>
+                <div className="activity-status">
+                  <CheckCircle className="w-4 h-4" />
                 </div>
-              </div>
-              <div className="content-card-body">
-                <div className="chart-placeholder">
-                  <div className="chart-info">
-                    <TrendingUp className="chart-icon" />
-                    <h4>Graphique de Performance</h4>
-                    <p>Visualisez les tendances de vos restaurants, menus et événements</p>
-                    <button className="btn btn-primary">
-                      <Eye className="btn-icon" />
-                      Voir les Détails
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </motion.div>
 
-        {/* Admin Tools - Admin Only */}
-        {user?.role === 'ADMIN' && (
-          <div className="row g-4 mt-4">
-            <div className="col-md-4">
-              <DatabasePopulator />
-            </div>
-            <div className="col-md-4">
-              <BackendTester />
-            </div>
-            <div className="col-md-4">
-              <ReviewsTester />
-            </div>
+        {/* Actions rapides */}
+        <motion.div 
+          className="dashboard-section"
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+          <div className="section-header">
+            <h2 className="section-title">Actions rapides</h2>
+            <p className="section-subtitle">Accès direct aux fonctionnalités principales</p>
           </div>
-        )}
+          
+          <div className="quick-actions-grid">
+            {quickActions.map((action, index) => (
+              <motion.a
+                key={action.title}
+                href={action.action}
+                className={`quick-action-card action-${action.color}`}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 + index * 0.1 }}
+                whileHover={{ y: -5, scale: 1.02 }}
+              >
+                <div className="action-icon">
+                  {action.icon}
+                </div>
+                <div className="action-content">
+                  <h3 className="action-title">{action.title}</h3>
+                  <p className="action-description">{action.description}</p>
+                </div>
+                <div className="action-arrow">
+                  →
+                </div>
+              </motion.a>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </div>
   );

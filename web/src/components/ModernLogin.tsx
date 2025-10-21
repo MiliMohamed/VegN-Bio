@@ -1,234 +1,232 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Leaf, ArrowRight, User, Lock } from 'lucide-react';
-import { authService } from '../services/api';
+import { 
+  Mail, 
+  Lock, 
+  Eye, 
+  EyeOff, 
+  ArrowRight,
+  Leaf,
+  CheckCircle,
+  AlertCircle
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { authService } from '../services/api';
+import '../styles/modern-auth.css';
 
 const ModernLogin: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  
   const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+    setError('');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
+    setError('');
 
     try {
-      const response = await authService.login(email, password);
+      const response = await authService.login(formData.email, formData.password);
+      const { token, user } = response.data;
       
-      const userData = {
-        email: email,
-        role: response.data.role,
-        name: response.data.fullName || email
-      };
+      // Stocker les informations de l'utilisateur
+      localStorage.setItem('token', token);
+      localStorage.setItem('userRole', user.role);
+      localStorage.setItem('userEmail', user.email);
+      localStorage.setItem('userName', user.fullName || user.email);
       
-      login(response.data.accessToken, userData);
-      navigate('/app/dashboard');
-    } catch (err: any) {
-      setError('Email ou mot de passe incorrect');
+      login(token, user);
+      setSuccess('Connexion réussie !');
+      
+      // Rediriger vers le dashboard
+      setTimeout(() => {
+        navigate('/app/dashboard');
+      }, 1000);
+      
+    } catch (error: any) {
+      setError(error.response?.data?.message || 'Erreur de connexion');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="login-container">
-        <div className="row g-0 min-vh-100">
-          {/* Left Side - Branding */}
-          <div className="col-lg-6 d-none d-lg-flex">
-            <div className="login-branding">
-              <div className="branding-content">
-                <motion.div
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8 }}
+    <div className="modern-auth">
+      <div className="auth-background">
+        <div className="auth-pattern"></div>
+      </div>
+      
+      <div className="auth-container">
+        <motion.div 
+          className="auth-card"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="auth-header">
+            <div className="auth-logo">
+              <Leaf className="logo-icon" />
+              <span className="logo-text">VEG'N BIO</span>
+            </div>
+            <h1 className="auth-title">Connexion</h1>
+            <p className="auth-subtitle">
+              Accédez à votre espace de gestion des restaurants
+            </p>
+          </div>
+
+          {error && (
+            <motion.div 
+              className="alert alert-error"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <AlertCircle className="w-5 h-5" />
+              {error}
+            </motion.div>
+          )}
+
+          {success && (
+            <motion.div 
+              className="alert alert-success"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <CheckCircle className="w-5 h-5" />
+              {success}
+            </motion.div>
+          )}
+
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">
+                <Mail className="w-4 h-4" />
+                Adresse email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="form-input"
+                placeholder="votre@email.com"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
+                <Lock className="w-4 h-4" />
+                Mot de passe
+              </label>
+              <div className="password-input-container">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="form-input"
+                  placeholder="Votre mot de passe"
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
                 >
-                  <div className="brand-logo">
-                    <Leaf className="logo-icon" />
-                    <h1>VegN-Bio</h1>
-                  </div>
-                  <h2>Bienvenue dans l'avenir culinaire</h2>
-                  <p>
-                    Découvrez une expérience gastronomique unique avec nos plats 
-                    100% végétaux et biologiques. Rejoignez la révolution verte.
-                  </p>
-                  <div className="features-list">
-                    <div className="feature-item">
-                      <div className="feature-check">✓</div>
-                      <span>Produits 100% biologiques</span>
-                    </div>
-                    <div className="feature-item">
-                      <div className="feature-check">✓</div>
-                      <span>Recettes innovantes</span>
-                    </div>
-                    <div className="feature-item">
-                      <div className="feature-check">✓</div>
-                      <span>Communauté passionnée</span>
-                    </div>
-                  </div>
-                </motion.div>
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
-              <div className="branding-decoration">
-                <div className="decoration-circle decoration-1"></div>
-                <div className="decoration-circle decoration-2"></div>
-                <div className="decoration-circle decoration-3"></div>
+            </div>
+
+            <div className="form-options">
+              <label className="checkbox-label">
+                <input type="checkbox" className="checkbox-input" />
+                <span className="checkbox-text">Se souvenir de moi</span>
+              </label>
+              <a href="#" className="forgot-password">Mot de passe oublié ?</a>
+            </div>
+
+            <button 
+              type="submit" 
+              className={`btn btn-primary btn-lg ${loading ? 'loading' : ''}`}
+              disabled={loading}
+            >
+              {loading ? (
+                <div className="loading-spinner"></div>
+              ) : (
+                <>
+                  Se connecter
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="auth-footer">
+            <p className="auth-text">
+              Pas encore de compte ?{' '}
+              <Link to="/register" className="auth-link">
+                Créer un compte
+              </Link>
+            </p>
+            <Link to="/" className="back-home">
+              ← Retour à l'accueil
+            </Link>
+          </div>
+        </motion.div>
+
+        <motion.div 
+          className="auth-info"
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div className="info-content">
+            <h2 className="info-title">Bienvenue chez VegN Bio</h2>
+            <p className="info-description">
+              Gérez facilement vos restaurants végétariens et biologiques depuis votre espace personnel.
+            </p>
+            
+            <div className="info-features">
+              <div className="feature-item">
+                <CheckCircle className="w-5 h-5" />
+                <span>Gestion des menus saisonniers</span>
+              </div>
+              <div className="feature-item">
+                <CheckCircle className="w-5 h-5" />
+                <span>Réservation de salles de réunion</span>
+              </div>
+              <div className="feature-item">
+                <CheckCircle className="w-5 h-5" />
+                <span>Organisation d'événements</span>
+              </div>
+              <div className="feature-item">
+                <CheckCircle className="w-5 h-5" />
+                <span>Suivi des avis clients</span>
               </div>
             </div>
           </div>
-
-          {/* Right Side - Login Form */}
-          <div className="col-lg-6">
-            <div className="login-form-container">
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="login-form-wrapper"
-              >
-                <div className="login-form-header">
-                  <div className="mobile-logo d-lg-none">
-                    <Leaf className="logo-icon" />
-                    <span>VegN-Bio</span>
-                  </div>
-                  <h3>Connexion</h3>
-                  <p>Connectez-vous à votre compte VegN-Bio</p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="login-form">
-                  <div className="form-group">
-                    <label htmlFor="email" className="form-label">
-                      <User className="label-icon" />
-                      Adresse email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      className="form-control"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="votre@email.com"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="password" className="form-label">
-                      <Lock className="label-icon" />
-                      Mot de passe
-                    </label>
-                    <div className="password-input-group">
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        id="password"
-                        className="form-control"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="••••••••"
-                        required
-                      />
-                      <button
-                        type="button"
-                        className="password-toggle"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? <EyeOff /> : <Eye />}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="form-options">
-                    <div className="form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="remember"
-                      />
-                      <label className="form-check-label" htmlFor="remember">
-                        Se souvenir de moi
-                      </label>
-                    </div>
-                    <Link to="/forgot-password" className="forgot-password">
-                      Mot de passe oublié ?
-                    </Link>
-                  </div>
-
-                  {error && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="alert alert-danger"
-                    >
-                      {error}
-                    </motion.div>
-                  )}
-
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-lg w-100"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <div className="spinner-border spinner-border-sm me-2" role="status">
-                        <span className="visually-hidden">Chargement...</span>
-                      </div>
-                    ) : (
-                      <ArrowRight className="btn-icon" />
-                    )}
-                    {loading ? 'Connexion...' : 'Se connecter'}
-                  </button>
-                </form>
-
-                <div className="login-footer">
-                  <p>
-                    Pas encore de compte ?{' '}
-                    <Link to="/register" className="register-link">
-                      Créer un compte
-                    </Link>
-                  </p>
-                  <div className="demo-accounts">
-                    <p className="demo-title">Comptes de démonstration :</p>
-                    <div className="demo-buttons">
-                      <button
-                        className="btn btn-outline-secondary btn-sm"
-                        onClick={() => {
-                          setEmail('admin@vegnbio.com');
-                          setPassword('admin123');
-                        }}
-                      >
-                        Admin
-                      </button>
-                      <button
-                        className="btn btn-outline-secondary btn-sm"
-                        onClick={() => {
-                          setEmail('chef@vegnbio.com');
-                          setPassword('chef123');
-                        }}
-                      >
-                        Restaurateur
-                      </button>
-                      <button
-                        className="btn btn-outline-secondary btn-sm"
-                        onClick={() => {
-                          setEmail('client@vegnbio.com');
-                          setPassword('client123');
-                        }}
-                      >
-                        Client
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
