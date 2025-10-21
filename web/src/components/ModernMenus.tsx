@@ -100,7 +100,8 @@ const ModernMenus: React.FC = () => {
   };
 
   const getCategories = () => {
-    const categories = [...new Set(menuItems.map(item => item.category))];
+    const categorySet = new Set(menuItems.map(item => item.category));
+    const categories = Array.from(categorySet);
     return categories.filter(Boolean);
   };
 
