@@ -51,8 +51,5 @@ WHERE status IN ('PENDING', 'CONFIRMED');
 -- Contrainte pour s'assurer que end_time > start_time
 ALTER TABLE room_reservations ADD CONSTRAINT chk_reservation_time CHECK (end_time > start_time);
 
--- Contrainte pour s'assurer que la capacité de la salle est respectée
-ALTER TABLE room_reservations ADD CONSTRAINT chk_attendees_capacity 
-CHECK (attendees_count IS NULL OR attendees_count <= (
-    SELECT capacity FROM rooms WHERE id = room_reservations.room_id
-));
+-- Note: Capacity validation should be handled at the application level
+-- PostgreSQL doesn't support subqueries in CHECK constraints
