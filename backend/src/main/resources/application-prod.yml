@@ -1,11 +1,12 @@
 # Configuration de production pour le logging et la sécurité
 logging:
   level:
-    com.vegnbio.api: DEBUG
-    com.vegnbio.api.config: DEBUG
-    com.vegnbio.api.modules.auth: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.web.cors: DEBUG
+    com.vegnbio.api: INFO
+    com.vegnbio.api.config: WARN
+    com.vegnbio.api.modules.auth: INFO
+    org.springframework.security: WARN
+    org.springframework.web.cors: WARN
+    root: WARN
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
@@ -13,7 +14,7 @@ logging:
 # Configuration de sécurité
 spring:
   security:
-    debug: true
+    debug: false
   
 # Configuration CORS
 cors:

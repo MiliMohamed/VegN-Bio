@@ -26,20 +26,13 @@ public class DebugFilter implements Filter {
         String queryString = httpRequest.getQueryString();
         String fullUrl = uri + (queryString != null ? "?" + queryString : "");
         
-        // Log de la requête entrante
-        log.info("🔍 Request: {} {} from IP: {}", method, fullUrl, getClientIpAddress(httpRequest));
-        
-        // Log des headers importants
-        log.debug("Headers - Origin: {}, Referer: {}, User-Agent: {}", 
-                httpRequest.getHeader("Origin"),
-                httpRequest.getHeader("Referer"),
-                httpRequest.getHeader("User-Agent"));
+        // Log seulement les requêtes importantes en production
+        if (uri.startsWith("/api/v1/auth/") || httpResponse.getStatus() >= 400) {
+            log.info("🔍 Request: {} {} from IP: {} -> Status: {}", method, fullUrl, getClientIpAddress(httpRequest), httpResponse.getStatus());
+        }
         
         // Continuer avec la chaîne de filtres
         chain.doFilter(request, response);
-        
-        // Log de la réponse
-        log.info("✅ Response: {} {} -> Status: {}", method, fullUrl, httpResponse.getStatus());
     }
     
     private String getClientIpAddress(HttpServletRequest request) {

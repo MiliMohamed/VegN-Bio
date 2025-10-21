@@ -35,11 +35,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         final String requestURI = request.getRequestURI();
         final String method = request.getMethod();
         
-        log.debug("🔐 JWT Filter processing: {} {}", method, requestURI);
-        
         // Skip JWT validation for authentication endpoints
         if (requestURI.startsWith("/api/v1/auth/")) {
-            log.debug("🔓 Skipping JWT validation for auth endpoint: {}", requestURI);
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,23 +46,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         final String userEmail;
         
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            log.debug("🔓 No valid Authorization header found for: {}", requestURI);
             filterChain.doFilter(request, response);
             return;
         }
         
         jwt = authHeader.substring(7);
-        log.debug("🔑 JWT token found, length: {}", jwt.length());
         
         try {
             userEmail = jwtService.extractUsername(jwt);
-            log.debug("👤 Extracted username: {}", userEmail);
             
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userService.loadUserByUsername(userEmail);
                 
                 if (jwtService.validateToken(jwt, userDetails)) {
-                    log.debug("✅ JWT token is valid for user: {}", userEmail);
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -73,12 +66,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     );
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-                } else {
-                    log.warn("❌ JWT token is invalid for user: {}", userEmail);
                 }
             }
         } catch (Exception e) {
-            log.error("💥 Error processing JWT token: {}", e.getMessage());
+            log.error("Error processing JWT token: {}", e.getMessage());
         }
         
         filterChain.doFilter(request, response);

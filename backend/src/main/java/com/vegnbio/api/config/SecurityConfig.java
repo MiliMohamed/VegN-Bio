@@ -89,8 +89,8 @@ public class SecurityConfig {
                 // Endpoints racine - ACCÈS LIBRE pour les tests
                 .requestMatchers("/", "/api", "/api/v1").permitAll()
                 
-                // TEMPORAIRE: Permettre l'accès à tous les autres endpoints pour diagnostiquer
-                .anyRequest().permitAll()
+                // Tous les autres endpoints nécessitent une authentification
+                .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
