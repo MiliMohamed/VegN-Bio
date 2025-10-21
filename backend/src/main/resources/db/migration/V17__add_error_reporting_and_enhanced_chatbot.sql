@@ -61,7 +61,8 @@ CREATE TABLE IF NOT EXISTS preventive_recommendations (
     priority INTEGER DEFAULT 1,
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(breed, recommendation)
 );
 
 -- Index pour les recommandations préventives
