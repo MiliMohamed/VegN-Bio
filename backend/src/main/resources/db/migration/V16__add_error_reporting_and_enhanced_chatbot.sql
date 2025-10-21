@@ -1,21 +1,18 @@
 -- Migration pour ajouter les tables d'erreurs et améliorer le système de chatbot
 -- V16__add_error_reporting_and_enhanced_chatbot.sql
 
--- Table pour les rapports d'erreurs
-CREATE TABLE IF NOT EXISTS error_reports (
-    id BIGSERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    error_type VARCHAR(100) NOT NULL,
-    severity VARCHAR(20) NOT NULL CHECK (severity IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')),
-    status VARCHAR(20) NOT NULL DEFAULT 'OPEN' CHECK (status IN ('OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED')),
-    user_agent TEXT,
-    url TEXT,
-    stack_trace TEXT,
-    user_id VARCHAR(100),
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- Ajouter les colonnes manquantes à la table error_reports existante (créée dans V8)
+ALTER TABLE error_reports 
+ADD COLUMN IF NOT EXISTS title VARCHAR(255),
+ADD COLUMN IF NOT EXISTS severity VARCHAR(20) CHECK (severity IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')),
+ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'OPEN' CHECK (status IN ('OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED')),
+ADD COLUMN IF NOT EXISTS user_agent TEXT,
+ADD COLUMN IF NOT EXISTS url TEXT,
+ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+-- Renommer les colonnes existantes pour correspondre à la nouvelle structure
+ALTER TABLE error_reports RENAME COLUMN error_message TO description;
+ALTER TABLE error_reports RENAME COLUMN timestamp TO created_at;
 
 -- Index pour améliorer les performances des requêtes
 CREATE INDEX IF NOT EXISTS idx_error_reports_status ON error_reports(status);
