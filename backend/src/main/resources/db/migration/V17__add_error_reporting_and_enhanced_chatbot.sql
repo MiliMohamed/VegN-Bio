@@ -1,5 +1,5 @@
 -- Migration pour ajouter les tables d'erreurs et améliorer le système de chatbot
--- V16__add_error_reporting_and_enhanced_chatbot.sql
+-- V17__add_error_reporting_and_enhanced_chatbot.sql
 
 -- Ajouter les colonnes manquantes à la table error_reports existante (créée dans V8)
 ALTER TABLE error_reports 
