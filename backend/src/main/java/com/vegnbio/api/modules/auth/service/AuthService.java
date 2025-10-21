@@ -5,6 +5,7 @@ import com.vegnbio.api.modules.auth.dto.LoginRequest;
 import com.vegnbio.api.modules.auth.dto.RegisterRequest;
 import com.vegnbio.api.modules.auth.entity.User;
 import com.vegnbio.api.modules.auth.repo.UserRepository;
+import com.vegnbio.api.modules.auth.exception.EmailAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class AuthService {
     
     private final UserRepository userRepository;
@@ -25,7 +26,7 @@ public class AuthService {
     
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) {
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists: " + request.email());
         }
         
         User user = User.builder()

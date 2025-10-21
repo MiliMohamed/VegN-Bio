@@ -33,21 +33,28 @@ public class ChatbotService {
     }
     
     @PostConstruct
-    @Transactional(readOnly = true)
     public void initializeLearningSystem() {
         log.info("Initializing veterinary learning system...");
         
         try {
-            // Charger les données existantes pour l'apprentissage
+            // Charger les données existantes pour l'apprentissage de manière asynchrone
+            initializeLearningDataAsync();
+            log.info("Learning system initialization started");
+        } catch (Exception e) {
+            log.warn("Failed to initialize learning system: {}", e.getMessage());
+            // Continue without failing the application startup
+        }
+    }
+    
+    private void initializeLearningDataAsync() {
+        try {
             List<VeterinaryConsultation> existingConsultations = consultationRepository.findAll();
             for (VeterinaryConsultation consultation : existingConsultations) {
                 improveLearningFromConsultation(consultation);
             }
-            
             log.info("Learning system initialized with {} consultations", existingConsultations.size());
         } catch (Exception e) {
-            log.warn("Failed to initialize learning system: {}", e.getMessage());
-            // Continue without failing the application startup
+            log.warn("Failed to load existing consultations: {}", e.getMessage());
         }
     }
     
@@ -217,7 +224,7 @@ public class ChatbotService {
     }
     
     // Méthode pour améliorer le système d'apprentissage
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void improveLearningFromConsultation(VeterinaryConsultation consultation) {
         String breed = consultation.getAnimalBreed().toLowerCase();
         
