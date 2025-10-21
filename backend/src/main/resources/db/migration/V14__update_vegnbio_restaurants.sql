@@ -249,9 +249,9 @@ INSERT INTO users (email, password_hash, role, full_name) VALUES
 ('fournisseur@vegnbio.fr', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IjdQj8Kz8Kz8Kz8Kz8Kz8Kz8Kz8Kz8', 'FOURNISSEUR', 'Fournisseur VegN Bio');
 
 -- Avis clients
-INSERT INTO reviews (user_id, restaurant_id, rating, comment) VALUES
-((SELECT id FROM users WHERE email='client@vegnbio.fr'), (SELECT id FROM restaurants WHERE code='BAS'), 5, 'Excellent restaurant végétarien ! Les plats sont délicieux et les ingrédients sont vraiment bio.'),
-((SELECT id FROM users WHERE email='client@vegnbio.fr'), (SELECT id FROM restaurants WHERE code='REP'), 4, 'Très bon accueil et cuisine savoureuse. Je recommande !'),
-((SELECT id FROM users WHERE email='client@vegnbio.fr'), (SELECT id FROM restaurants WHERE code='NAT'), 5, 'Parfait pour une pause déjeuner. Les animations du mardi sont super !'),
-((SELECT id FROM users WHERE email='client@vegnbio.fr'), (SELECT id FROM restaurants WHERE code='ITA'), 4, 'Belle découverte de la cuisine italienne végétarienne.'),
-((SELECT id FROM users WHERE email='client@vegnbio.fr'), (SELECT id FROM restaurants WHERE code='BOU'), 5, 'Ambiance culturelle unique, parfait après une visite au Centre Pompidou !');
+INSERT INTO reviews (restaurant_id, customer_name, customer_email, rating, comment, status) VALUES
+((SELECT id FROM restaurants WHERE code='BAS'), 'Client VegN Bio', 'client@vegnbio.fr', 5, 'Excellent restaurant végétarien ! Les plats sont délicieux et les ingrédients sont vraiment bio.', 'APPROVED'),
+((SELECT id FROM restaurants WHERE code='REP'), 'Client VegN Bio', 'client@vegnbio.fr', 4, 'Très bon accueil et cuisine savoureuse. Je recommande !', 'APPROVED'),
+((SELECT id FROM restaurants WHERE code='NAT'), 'Client VegN Bio', 'client@vegnbio.fr', 5, 'Parfait pour une pause déjeuner. Les animations du mardi sont super !', 'APPROVED'),
+((SELECT id FROM restaurants WHERE code='ITA'), 'Client VegN Bio', 'client@vegnbio.fr', 4, 'Belle découverte de la cuisine italienne végétarienne.', 'APPROVED'),
+((SELECT id FROM restaurants WHERE code='BOU'), 'Client VegN Bio', 'client@vegnbio.fr', 5, 'Ambiance culturelle unique, parfait après une visite au Centre Pompidou !', 'APPROVED');
