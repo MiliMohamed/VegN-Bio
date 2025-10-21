@@ -4,12 +4,14 @@ import com.vegnbio.api.modules.chatbot.dto.*;
 import com.vegnbio.api.modules.chatbot.entity.VeterinaryConsultation;
 import com.vegnbio.api.modules.chatbot.repo.VeterinaryConsultationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class ChatbotService {
@@ -17,11 +19,20 @@ public class ChatbotService {
     private static final Logger log = LoggerFactory.getLogger(ChatbotService.class);
     private final VeterinaryConsultationRepository consultationRepository;
     
+    // Cache pour améliorer les performances
+    private final Map<String, List<String>> breedSymptomsCache = new ConcurrentHashMap<>();
+    private final Map<String, List<String>> supportedBreedsCache = new ConcurrentHashMap<>();
+    
+    // Système d'apprentissage basé sur les consultations
+    private final Map<String, Map<String, Integer>> symptomDiagnosisPatterns = new ConcurrentHashMap<>();
+    private final Map<String, Double> breedConfidenceScores = new ConcurrentHashMap<>();
+    
     public ChatbotService(VeterinaryConsultationRepository consultationRepository) {
         this.consultationRepository = consultationRepository;
+        initializeLearningSystem();
     }
     
-    // Base de données de connaissances vétérinaires
+    // Base de données de connaissances vétérinaires enrichie
     private final Map<String, Map<String, String>> veterinaryKnowledge = initializeVeterinaryKnowledge();
     
     public ChatMessageDto sendMessage(ChatRequest request) {
@@ -106,6 +117,11 @@ public class ChatbotService {
     }
     
     public List<String> getCommonSymptoms(String breed) {
+        // Vérifier le cache d'abord
+        if (breedSymptomsCache.containsKey(breed)) {
+            return breedSymptomsCache.get(breed);
+        }
+        
         List<String> symptoms = consultationRepository.findDistinctSymptomsByBreed(breed);
         
         // Ajouter des symptômes communs si la base de données est vide
@@ -113,7 +129,94 @@ public class ChatbotService {
             symptoms = getDefaultSymptomsForBreed(breed);
         }
         
+        // Mettre en cache pour améliorer les performances
+        breedSymptomsCache.put(breed, symptoms);
+        
         return symptoms;
+    }
+    
+    // Nouvelle méthode pour obtenir des recommandations préventives
+    public List<String> getPreventiveRecommendations(String breed) {
+        List<String> recommendations = new ArrayList<>();
+        
+        switch (breed.toLowerCase()) {
+            case "chien":
+                recommendations.addAll(Arrays.asList(
+                    "Vaccination annuelle contre la rage et les maladies courantes",
+                    "Vermifugation régulière (tous les 3 mois)",
+                    "Brossage des dents quotidien pour éviter les problèmes dentaires",
+                    "Exercice régulier pour maintenir un poids santé",
+                    "Surveillance des oreilles pour éviter les infections"
+                ));
+                break;
+            case "chat":
+                recommendations.addAll(Arrays.asList(
+                    "Vaccination annuelle contre le typhus et le coryza",
+                    "Vermifugation régulière (tous les 3 mois)",
+                    "Stérilisation recommandée pour éviter les problèmes de reproduction",
+                    "Surveillance des reins avec une alimentation adaptée",
+                    "Brossage régulier pour éviter les boules de poils"
+                ));
+                break;
+            case "lapin":
+                recommendations.addAll(Arrays.asList(
+                    "Alimentation riche en foin pour l'usure des dents",
+                    "Surveillance des dents qui poussent continuellement",
+                    "Environnement propre pour éviter les problèmes respiratoires",
+                    "Vaccination contre la myxomatose et la maladie hémorragique",
+                    "Surveillance du poids pour éviter l'obésité"
+                ));
+                break;
+            default:
+                recommendations.addAll(Arrays.asList(
+                    "Consultation vétérinaire régulière",
+                    "Surveillance du comportement et de l'appétit",
+                    "Environnement propre et adapté",
+                    "Alimentation équilibrée et appropriée"
+                ));
+        }
+        
+        return recommendations;
+    }
+    
+    // Nouvelle méthode pour obtenir des statistiques d'apprentissage
+    public Map<String, Object> getLearningStatistics() {
+        Map<String, Object> stats = new HashMap<>();
+        
+        long totalConsultations = consultationRepository.count();
+        List<String> breeds = consultationRepository.findDistinctAnimalBreeds();
+        List<String> symptoms = consultationRepository.findDistinctSymptoms();
+        
+        stats.put("totalConsultations", totalConsultations);
+        stats.put("supportedBreeds", breeds.size());
+        stats.put("knownSymptoms", symptoms.size());
+        stats.put("averageConfidence", calculateAverageConfidence());
+        stats.put("mostCommonBreeds", getMostCommonBreeds());
+        stats.put("mostCommonSymptoms", getMostCommonSymptoms());
+        
+        return stats;
+    }
+    
+    // Méthode pour améliorer le système d'apprentissage
+    @Transactional
+    public void improveLearningFromConsultation(VeterinaryConsultation consultation) {
+        String breed = consultation.getAnimalBreed().toLowerCase();
+        
+        // Mettre à jour les patterns de symptômes-diagnostic
+        for (String symptom : consultation.getSymptoms()) {
+            String key = breed + "_" + symptom.toLowerCase();
+            Map<String, Integer> patterns = symptomDiagnosisPatterns.computeIfAbsent(key, k -> new HashMap<>());
+            patterns.merge(consultation.getDiagnosis(), 1, Integer::sum);
+        }
+        
+        // Mettre à jour les scores de confiance par race
+        breedConfidenceScores.merge(breed, consultation.getConfidence(), 
+            (existing, newValue) -> (existing + newValue) / 2);
+        
+        // Invalider le cache pour cette race
+        breedSymptomsCache.remove(breed);
+        
+        log.info("Learning system updated with consultation for breed: {}", breed);
     }
     
     private List<VeterinaryConsultation> findSimilarConsultations(String breed, List<String> symptoms) {
@@ -215,6 +318,9 @@ public class ChatbotService {
         dogKnowledge.put("fièvre", "Fièvre possible - surveillez la température");
         dogKnowledge.put("perte d'appétit", "Perte d'appétit - vérifiez l'état général");
         dogKnowledge.put("léthargie", "Léthargie - peut indiquer un problème de santé");
+        dogKnowledge.put("vomissements", "Vomissements - surveillez la fréquence et la couleur");
+        dogKnowledge.put("diarrhée", "Diarrhée - vérifiez l'hydratation");
+        dogKnowledge.put("toux", "Toux - peut indiquer une infection respiratoire");
         knowledge.put("chien", dogKnowledge);
         
         // Connaissances pour les chats
@@ -222,9 +328,87 @@ public class ChatbotService {
         catKnowledge.put("fièvre", "Fièvre chez le chat - surveillez attentivement");
         catKnowledge.put("perte d'appétit", "Perte d'appétit chez le chat - consultez rapidement");
         catKnowledge.put("léthargie", "Léthargie chez le chat - peut être grave");
+        catKnowledge.put("vomissements", "Vomissements chez le chat - surveillez les boules de poils");
+        catKnowledge.put("difficultés urinaires", "Difficultés urinaires - urgence vétérinaire");
+        catKnowledge.put("perte de poils", "Perte de poils - peut être due au stress ou à une maladie");
         knowledge.put("chat", catKnowledge);
         
+        // Connaissances pour les lapins
+        Map<String, String> rabbitKnowledge = new HashMap<>();
+        rabbitKnowledge.put("perte d'appétit", "Perte d'appétit chez le lapin - urgence vétérinaire");
+        rabbitKnowledge.put("léthargie", "Léthargie chez le lapin - surveillez attentivement");
+        rabbitKnowledge.put("difficultés respiratoires", "Difficultés respiratoires - infection possible");
+        rabbitKnowledge.put("diarrhée", "Diarrhée chez le lapin - problème digestif grave");
+        knowledge.put("lapin", rabbitKnowledge);
+        
         return knowledge;
+    }
+    
+    // Méthodes utilitaires pour le système d'apprentissage
+    private void initializeLearningSystem() {
+        log.info("Initializing veterinary learning system...");
+        
+        // Charger les données existantes pour l'apprentissage
+        List<VeterinaryConsultation> existingConsultations = consultationRepository.findAll();
+        for (VeterinaryConsultation consultation : existingConsultations) {
+            improveLearningFromConsultation(consultation);
+        }
+        
+        log.info("Learning system initialized with {} consultations", existingConsultations.size());
+    }
+    
+    private Double calculateAverageConfidence() {
+        List<VeterinaryConsultation> consultations = consultationRepository.findAll();
+        if (consultations.isEmpty()) {
+            return 0.0;
+        }
+        
+        double totalConfidence = consultations.stream()
+            .mapToDouble(VeterinaryConsultation::getConfidence)
+            .sum();
+        
+        return totalConfidence / consultations.size();
+    }
+    
+    private List<Map<String, Object>> getMostCommonBreeds() {
+        List<VeterinaryConsultation> consultations = consultationRepository.findAll();
+        Map<String, Long> breedCounts = consultations.stream()
+            .collect(Collectors.groupingBy(
+                VeterinaryConsultation::getAnimalBreed,
+                Collectors.counting()
+            ));
+        
+        return breedCounts.entrySet().stream()
+            .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+            .limit(5)
+            .map(entry -> {
+                Map<String, Object> breedInfo = new HashMap<>();
+                breedInfo.put("breed", entry.getKey());
+                breedInfo.put("count", entry.getValue());
+                return breedInfo;
+            })
+            .collect(Collectors.toList());
+    }
+    
+    private List<Map<String, Object>> getMostCommonSymptoms() {
+        List<VeterinaryConsultation> consultations = consultationRepository.findAll();
+        Map<String, Long> symptomCounts = consultations.stream()
+            .flatMap(consultation -> consultation.getSymptoms().stream())
+            .collect(Collectors.groupingBy(
+                symptom -> symptom,
+                Collectors.counting()
+            ));
+        
+        return symptomCounts.entrySet().stream()
+            .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+            .limit(10)
+            .map(entry -> {
+                Map<String, Object> symptomInfo = new HashMap<>();
+                symptomInfo.put("symptom", entry.getKey());
+                symptomInfo.put("count", entry.getValue());
+                return symptomInfo;
+            })
+            .collect(Collectors.toList());
     }
     
     private List<String> getDefaultSymptomsForBreed(String breed) {

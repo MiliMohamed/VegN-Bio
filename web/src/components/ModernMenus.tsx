@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Utensils, 
@@ -11,6 +11,8 @@ import {
   Users
 } from 'lucide-react';
 import { menuService } from '../services/api';
+import MenuForm from './MenuForm';
+import MenuItemForm from './MenuItemForm';
 
 interface MenuItem {
   id: number;
@@ -32,6 +34,9 @@ const ModernMenus: React.FC = () => {
   const [menus, setMenus] = React.useState<Menu[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [selectedRestaurant, setSelectedRestaurant] = React.useState<number>(1);
+  const [showMenuForm, setShowMenuForm] = useState(false);
+  const [showMenuItemForm, setShowMenuItemForm] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
 
   React.useEffect(() => {
     const fetchMenus = async () => {
@@ -50,6 +55,41 @@ const ModernMenus: React.FC = () => {
 
   const formatPrice = (priceCents: number) => {
     return (priceCents / 100).toFixed(2) + ' €';
+  };
+
+  const handleCreateMenu = () => {
+    setShowMenuForm(true);
+  };
+
+  const handleMenuSuccess = () => {
+    // Recharger les menus
+    const fetchMenus = async () => {
+      try {
+        const response = await menuService.getMenusByRestaurant(selectedRestaurant);
+        setMenus(response.data);
+      } catch (error) {
+        console.error('Erreur lors du chargement des menus:', error);
+      }
+    };
+    fetchMenus();
+  };
+
+  const handleAddMenuItem = (menu: Menu) => {
+    setSelectedMenu(menu);
+    setShowMenuItemForm(true);
+  };
+
+  const handleMenuItemSuccess = () => {
+    // Recharger les menus
+    const fetchMenus = async () => {
+      try {
+        const response = await menuService.getMenusByRestaurant(selectedRestaurant);
+        setMenus(response.data);
+      } catch (error) {
+        console.error('Erreur lors du chargement des menus:', error);
+      }
+    };
+    fetchMenus();
   };
 
   if (loading) {
@@ -133,7 +173,10 @@ const ModernMenus: React.FC = () => {
                 <Edit className="w-4 h-4" />
                 Modifier le menu
               </button>
-              <button className="btn btn-secondary btn-sm">
+              <button 
+                className="btn btn-secondary btn-sm"
+                onClick={() => handleAddMenuItem(menu)}
+              >
                 <Plus className="w-4 h-4" />
                 Ajouter un plat
               </button>
@@ -141,6 +184,23 @@ const ModernMenus: React.FC = () => {
           </motion.div>
         ))}
       </div>
+
+      {/* Formulaires */}
+      <MenuForm
+        isOpen={showMenuForm}
+        onClose={() => setShowMenuForm(false)}
+        onSuccess={handleMenuSuccess}
+        restaurantId={selectedRestaurant}
+      />
+
+      {selectedMenu && (
+        <MenuItemForm
+          isOpen={showMenuItemForm}
+          onClose={() => setShowMenuItemForm(false)}
+          onSuccess={handleMenuItemSuccess}
+          menuId={selectedMenu.id}
+        />
+      )}
     </div>
   );
 };

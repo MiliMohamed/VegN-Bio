@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://vegn-bio-backend.onrender.com/api/v1';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://vegn-bio-backend.onrender.com';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -12,7 +12,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // Don't add token for public endpoints (register, login)
-    const publicEndpoints = ['/auth/register', '/auth/login'];
+    const publicEndpoints = ['api/v1/auth/register', 'api/v1/auth/login'];
     const isPublicEndpoint = publicEndpoints.some(endpoint => config.url?.includes(endpoint));
     
     if (!isPublicEndpoint) {

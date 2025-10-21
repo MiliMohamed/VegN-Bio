@@ -1,26 +1,45 @@
 package com.vegnbio.api.modules.errorreporting.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ErrorReportDto {
-    
-    private String id;
+    private Long id;
+    private String title;
+    private String description;
     private String errorType;
-    private String errorMessage;
+    private String severity;
+    private String status;
+    private String userAgent;
+    private String url;
     private String stackTrace;
     private String userId;
-    private String deviceInfo;
-    private String appVersion;
-    private LocalDateTime timestamp;
-    private Map<String, String> additionalData;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+}
+
+@Data
+@Builder
+public class CreateErrorReportRequest {
+    @NotBlank(message = "Title is required")
+    private String title;
+    
+    @NotBlank(message = "Description is required")
+    private String description;
+    
+    @NotBlank(message = "Error type is required")
+    private String errorType;
+    
+    @NotNull(message = "Severity is required")
+    private String severity;
+    
+    private String userAgent;
+    private String url;
+    private String stackTrace;
+    private String userId;
 }

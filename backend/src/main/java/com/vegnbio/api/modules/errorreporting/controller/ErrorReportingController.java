@@ -1,61 +1,66 @@
 package com.vegnbio.api.modules.errorreporting.controller;
 
-import com.vegnbio.api.modules.errorreporting.dto.*;
+import com.vegnbio.api.modules.errorreporting.dto.ErrorReportDto;
+import com.vegnbio.api.modules.errorreporting.dto.CreateErrorReportRequest;
 import com.vegnbio.api.modules.errorreporting.service.ErrorReportingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/errors")
+@RequestMapping("/api/v1/error-reports")
 @RequiredArgsConstructor
 public class ErrorReportingController {
     
     private final ErrorReportingService errorReportingService;
     
-    @PostMapping("/report")
-    public ResponseEntity<Void> reportError(@Valid @RequestBody ErrorReportRequest request) {
-        errorReportingService.reportError(request);
-        return ResponseEntity.ok().build();
+    @PostMapping
+    public ResponseEntity<ErrorReportDto> createErrorReport(@Valid @RequestBody CreateErrorReportRequest request) {
+        ErrorReportDto report = errorReportingService.createErrorReport(request);
+        return ResponseEntity.ok(report);
     }
     
-    @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<ErrorReportDto>> getErrorReportsByUser(@PathVariable String userId) {
-        List<ErrorReportDto> reports = errorReportingService.getErrorReports(userId);
+    @GetMapping
+    public ResponseEntity<List<ErrorReportDto>> getAllErrorReports(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String severity) {
+        List<ErrorReportDto> reports = errorReportingService.getAllErrorReports(status, severity);
         return ResponseEntity.ok(reports);
     }
     
-    @GetMapping("/type/{errorType}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<ErrorReportDto>> getErrorReportsByType(@PathVariable String errorType) {
-        List<ErrorReportDto> reports = errorReportingService.getErrorReportsByType(errorType);
-        return ResponseEntity.ok(reports);
+    @GetMapping("/{id}")
+    public ResponseEntity<ErrorReportDto> getErrorReport(@PathVariable Long id) {
+        ErrorReportDto report = errorReportingService.getErrorReportById(id);
+        return ResponseEntity.ok(report);
     }
     
     @GetMapping("/statistics")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ErrorStatisticsDto> getErrorStatistics(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
-        
-        LocalDateTime start = startDate != null ? startDate : LocalDateTime.now().minusDays(30);
-        LocalDateTime end = endDate != null ? endDate : LocalDateTime.now();
-        
-        ErrorStatisticsDto statistics = errorReportingService.getErrorStatistics(start, end);
+    public ResponseEntity<Map<String, Object>> getErrorStatistics() {
+        Map<String, Object> statistics = errorReportingService.getErrorStatistics();
         return ResponseEntity.ok(statistics);
     }
     
-    @DeleteMapping("/cleanup")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> cleanupOldReports(@RequestParam(defaultValue = "30") int daysToKeep) {
-        errorReportingService.cleanupOldReports(daysToKeep);
-        return ResponseEntity.ok().build();
+    @GetMapping("/recent")
+    public ResponseEntity<List<ErrorReportDto>> getRecentErrors(@RequestParam(defaultValue = "24") int hours) {
+        List<ErrorReportDto> reports = errorReportingService.getRecentErrors(hours);
+        return ResponseEntity.ok(reports);
+    }
+    
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ErrorReportDto> updateErrorStatus(
+            @PathVariable Long id, 
+            @RequestParam String status) {
+        ErrorReportDto report = errorReportingService.updateErrorStatus(id, status);
+        return ResponseEntity.ok(report);
+    }
+    
+    @PostMapping("/bulk")
+    public ResponseEntity<Map<String, Object>> createBulkErrorReports(@Valid @RequestBody List<CreateErrorReportRequest> requests) {
+        Map<String, Object> result = errorReportingService.createBulkErrorReports(requests);
+        return ResponseEntity.ok(result);
     }
 }

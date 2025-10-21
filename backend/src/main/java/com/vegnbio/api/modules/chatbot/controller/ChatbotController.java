@@ -59,4 +59,23 @@ public class ChatbotController {
         List<String> symptoms = chatbotService.getCommonSymptoms(breed);
         return ResponseEntity.ok(Map.of("symptoms", symptoms));
     }
+    
+    @GetMapping("/preventive/{breed}")
+    public ResponseEntity<Map<String, List<String>>> getPreventiveRecommendations(@PathVariable String breed) {
+        List<String> recommendations = chatbotService.getPreventiveRecommendations(breed);
+        return ResponseEntity.ok(Map.of("recommendations", recommendations));
+    }
+    
+    @GetMapping("/statistics")
+    public ResponseEntity<Map<String, Object>> getLearningStatistics() {
+        Map<String, Object> statistics = chatbotService.getLearningStatistics();
+        return ResponseEntity.ok(statistics);
+    }
+    
+    @PostMapping("/learn")
+    public ResponseEntity<Void> improveLearning(@RequestBody ConsultationRequest request) {
+        // Cette méthode permet aux vétérinaires d'améliorer le système d'apprentissage
+        chatbotService.saveConsultation(request);
+        return ResponseEntity.ok().build();
+    }
 }

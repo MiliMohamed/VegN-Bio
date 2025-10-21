@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Entity
 @Table(name = "error_reports")
@@ -21,11 +19,28 @@ public class ErrorReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(nullable = false)
+    private String title;
+    
+    @Column(columnDefinition = "TEXT")
+    private String description;
+    
     @Column(name = "error_type", nullable = false)
     private String errorType;
     
-    @Column(name = "error_message", nullable = false, columnDefinition = "TEXT")
-    private String errorMessage;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ErrorSeverity severity;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ErrorStatus status;
+    
+    @Column(name = "user_agent")
+    private String userAgent;
+    
+    @Column(name = "url")
+    private String url;
     
     @Column(name = "stack_trace", columnDefinition = "TEXT")
     private String stackTrace;
@@ -33,23 +48,28 @@ public class ErrorReport {
     @Column(name = "user_id")
     private String userId;
     
-    @Column(name = "device_info")
-    private String deviceInfo;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
     
-    @Column(name = "app_version")
-    private String appVersion;
-    
-    @Column(name = "timestamp", nullable = false)
-    private LocalDateTime timestamp;
-    
-    @ElementCollection
-    @CollectionTable(name = "error_report_additional_data", joinColumns = @JoinColumn(name = "error_report_id"))
-    @MapKeyColumn(name = "data_key")
-    @Column(name = "data_value")
-    private Map<String, String> additionalData;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
     
     @PrePersist
     protected void onCreate() {
-        timestamp = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+}
+
+enum ErrorSeverity {
+    LOW, MEDIUM, HIGH, CRITICAL
+}
+
+enum ErrorStatus {
+    OPEN, IN_PROGRESS, RESOLVED, CLOSED
 }

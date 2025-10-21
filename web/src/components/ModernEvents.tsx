@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Calendar, 
@@ -13,6 +13,8 @@ import {
   XCircle
 } from 'lucide-react';
 import { eventService } from '../services/api';
+import EventForm from './EventForm';
+import BookingForm from './BookingForm';
 
 interface Event {
   id: number;
@@ -28,6 +30,9 @@ interface Event {
 const ModernEvents: React.FC = () => {
   const [events, setEvents] = React.useState<Event[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [showEventForm, setShowEventForm] = useState(false);
+  const [showBookingForm, setShowBookingForm] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   React.useEffect(() => {
     const fetchEvents = async () => {
@@ -77,6 +82,32 @@ const ModernEvents: React.FC = () => {
     return names[restaurantId] || 'Restaurant';
   };
 
+  const handleCreateEvent = () => {
+    setShowEventForm(true);
+  };
+
+  const handleEventSuccess = () => {
+    // Recharger les événements
+    const fetchEvents = async () => {
+      try {
+        const response = await eventService.getAll();
+        setEvents(response.data);
+      } catch (error) {
+        console.error('Erreur lors du chargement des événements:', error);
+      }
+    };
+    fetchEvents();
+  };
+
+  const handleBookEvent = (event: Event) => {
+    setSelectedEvent(event);
+    setShowBookingForm(true);
+  };
+
+  const handleBookingSuccess = () => {
+    // Optionnel: recharger les données ou afficher un message de succès
+  };
+
   if (loading) {
     return (
       <div className="modern-events">
@@ -109,6 +140,7 @@ const ModernEvents: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
+          onClick={handleCreateEvent}
         >
           <Plus className="w-5 h-5" />
           Créer un événement
@@ -173,17 +205,20 @@ const ModernEvents: React.FC = () => {
             </div>
 
             <div className="event-actions">
-              <button className="btn btn-primary btn-sm">
+              <button 
+                className="btn btn-primary btn-sm"
+                onClick={() => handleBookEvent(event)}
+              >
+                <Calendar className="w-4 h-4" />
+                Réserver
+              </button>
+              <button className="btn btn-secondary btn-sm">
                 <Eye className="w-4 h-4" />
                 Voir détails
               </button>
               <button className="btn btn-secondary btn-sm">
                 <Edit className="w-4 h-4" />
                 Modifier
-              </button>
-              <button className="btn btn-danger btn-sm">
-                <Trash2 className="w-4 h-4" />
-                Supprimer
               </button>
             </div>
           </motion.div>
@@ -200,11 +235,28 @@ const ModernEvents: React.FC = () => {
           <Calendar className="w-16 h-16" />
           <h3>Aucun événement</h3>
           <p>Créez votre premier événement pour commencer</p>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={handleCreateEvent}>
             <Plus className="w-5 h-5" />
             Créer un événement
           </button>
         </motion.div>
+      )}
+
+      {/* Formulaires */}
+      <EventForm
+        isOpen={showEventForm}
+        onClose={() => setShowEventForm(false)}
+        onSuccess={handleEventSuccess}
+      />
+
+      {selectedEvent && (
+        <BookingForm
+          isOpen={showBookingForm}
+          onClose={() => setShowBookingForm(false)}
+          onSuccess={handleBookingSuccess}
+          eventId={selectedEvent.id}
+          eventTitle={selectedEvent.title}
+        />
       )}
     </div>
   );
