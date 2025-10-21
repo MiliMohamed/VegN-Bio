@@ -1,0 +1,8 @@
+﻿{
+    "password":  "DemoPassword123!",
+    "fullName":  "Demo User 20251021130706",
+    "createdAt":  "2025-10-21T11:08:56.235593",
+    "token":  "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQ0xJRU5UIiwidXNlcklkIjo3LCJzdWIiOiJkZW1vMjAyNTEwMjExMzA3MDZAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjEwNDQ5MzcsImV4cCI6MTc2MTA1MjEzN30.RlggRItyQxha0CCqqqUrZChVzjdo869RWKujZW8oj4c",
+    "email":  "demo20251021130706@example.com",
+    "userId":  7
+}
