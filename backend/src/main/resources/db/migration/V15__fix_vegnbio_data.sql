@@ -94,13 +94,6 @@ INSERT INTO events (restaurant_id, title, type, date_start, date_end, capacity, 
 ((SELECT id FROM restaurants WHERE code='NAT'), 'Conférence Nutrition Végétarienne', 'CONFÉRENCE', CURRENT_DATE + INTERVAL '10 days', CURRENT_DATE + INTERVAL '10 days' + INTERVAL '2 hours', 50, 'Conférence sur la nutrition végétarienne'),
 ((SELECT id FROM restaurants WHERE code='NAT'), 'Atelier Pâtisserie Végétale', 'ATELIER', CURRENT_DATE + INTERVAL '17 days', CURRENT_DATE + INTERVAL '17 days' + INTERVAL '3 hours', 15, 'Apprenez la pâtisserie végétale bio');
 
--- Utilisateurs de démonstration
-INSERT INTO users (email, password_hash, role, full_name) VALUES
-('admin@vegnbio.fr', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IjdQj8Kz8Kz8Kz8Kz8Kz8Kz8Kz8Kz8', 'ADMIN', 'Administrateur VegN Bio'),
-('restaurateur@vegnbio.fr', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IjdQj8Kz8Kz8Kz8Kz8Kz8Kz8Kz8Kz8', 'RESTAURATEUR', 'Restaurateur VegN Bio'),
-('client@vegnbio.fr', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IjdQj8Kz8Kz8Kz8Kz8Kz8Kz8Kz8Kz8', 'CLIENT', 'Client VegN Bio'),
-('fournisseur@vegnbio.fr', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IjdQj8Kz8Kz8Kz8Kz8Kz8Kz8Kz8Kz8', 'FOURNISSEUR', 'Fournisseur VegN Bio');
-
 -- Avis clients (seulement si les utilisateurs existent)
 INSERT INTO reviews (restaurant_id, customer_name, customer_email, rating, comment, status) VALUES
 ((SELECT id FROM restaurants WHERE code='BAS'), 'Client VegN Bio', 'client@vegnbio.fr', 5, 'Excellent restaurant végétarien ! Les plats sont délicieux et les ingrédients sont vraiment bio.', 'APPROVED'),
