@@ -1,4 +1,4 @@
--- Migration V4: Ajout du module gestion des salles et réservations
+-- Migration V12: Ajout du module gestion des salles et réservations
 -- Tables pour la gestion des salles de réunion et leurs réservations
 
 CREATE TABLE IF NOT EXISTS rooms (

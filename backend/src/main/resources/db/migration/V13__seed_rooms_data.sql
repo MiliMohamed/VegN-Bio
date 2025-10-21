@@ -1,4 +1,4 @@
--- Migration V5: Données de test pour les salles des restaurants Veg'N Bio
+-- Migration V13: Données de test pour les salles des restaurants Veg'N Bio
 -- Ajout des salles selon les spécifications des restaurants
 
 -- Salles pour VEG'N BIO BASTILLE (restaurant_id = 1)

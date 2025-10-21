@@ -1,4 +1,4 @@
--- Migration V3: Ajouter les détails des restaurants VEG'N BIO
+-- Migration V11: Ajouter les détails des restaurants VEG'N BIO
 -- Ajouter les colonnes pour les informations détaillées des restaurants
 
 ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS wifi_available BOOLEAN DEFAULT FALSE;
