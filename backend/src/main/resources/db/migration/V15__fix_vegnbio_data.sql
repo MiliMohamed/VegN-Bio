@@ -94,46 +94,6 @@ INSERT INTO events (restaurant_id, title, type, date_start, date_end, capacity, 
 ((SELECT id FROM restaurants WHERE code='NAT'), 'Conférence Nutrition Végétarienne', 'CONFÉRENCE', CURRENT_DATE + INTERVAL '10 days', CURRENT_DATE + INTERVAL '10 days' + INTERVAL '2 hours', 50, 'Conférence sur la nutrition végétarienne'),
 ((SELECT id FROM restaurants WHERE code='NAT'), 'Atelier Pâtisserie Végétale', 'ATELIER', CURRENT_DATE + INTERVAL '17 days', CURRENT_DATE + INTERVAL '17 days' + INTERVAL '3 hours', 15, 'Apprenez la pâtisserie végétale bio');
 
--- Fournisseurs locaux franciliens
-INSERT INTO suppliers (company_name, contact_email) VALUES
-('Ferme Bio de la Vallée de Chevreuse', 'contact@ferme-chevreuse-bio.fr'),
-('Jardin Bio de Seine-et-Marne', 'info@jardin-seine-marne-bio.fr'),
-('Producteurs Bio de l''Essonne', 'contact@producteurs-essonne-bio.fr'),
-('Coopérative Bio de la Brie', 'info@coop-brie-bio.fr'),
-('Maraîchers Bio de la Plaine de France', 'contact@maraichers-plaine-bio.fr');
-
--- Offres des fournisseurs
-INSERT INTO offers (supplier_id, title, description, unit_price_cents, unit, status) VALUES
--- Ferme Bio de la Vallée de Chevreuse
-((SELECT id FROM suppliers WHERE company_name='Ferme Bio de la Vallée de Chevreuse'), 
- 'Légumes de saison bio', 'Panier de légumes bio de saison, récoltés le matin', 2500, 'panier', 'PUBLISHED'),
-((SELECT id FROM suppliers WHERE company_name='Ferme Bio de la Vallée de Chevreuse'), 
- 'Herbes aromatiques fraîches', 'Mélange d''herbes aromatiques bio fraîches', 890, 'bouquet', 'PUBLISHED'),
-
--- Jardin Bio de Seine-et-Marne
-((SELECT id FROM suppliers WHERE company_name='Jardin Bio de Seine-et-Marne'), 
- 'Tomates bio de serre', 'Tomates bio de serre, variétés anciennes', 1800, 'kg', 'PUBLISHED'),
-((SELECT id FROM suppliers WHERE company_name='Jardin Bio de Seine-et-Marne'), 
- 'Salades bio variées', 'Mélange de salades bio, 5 variétés', 1200, 'kg', 'PUBLISHED'),
-
--- Producteurs Bio de l'Essonne
-((SELECT id FROM suppliers WHERE company_name='Producteurs Bio de l''Essonne'), 
- 'Céréales bio complètes', 'Mélange de céréales bio complètes', 3200, 'kg', 'PUBLISHED'),
-((SELECT id FROM suppliers WHERE company_name='Producteurs Bio de l''Essonne'), 
- 'Légumineuses bio', 'Assortiment de légumineuses bio', 2800, 'kg', 'PUBLISHED'),
-
--- Coopérative Bio de la Brie
-((SELECT id FROM suppliers WHERE company_name='Coopérative Bio de la Brie'), 
- 'Fromages végétaux bio', 'Assortiment de fromages végétaux bio', 4500, 'kg', 'PUBLISHED'),
-((SELECT id FROM suppliers WHERE company_name='Coopérative Bio de la Brie'), 
- 'Laits végétaux bio', 'Laits végétaux bio variés', 3200, 'L', 'PUBLISHED'),
-
--- Maraîchers Bio de la Plaine de France
-((SELECT id FROM suppliers WHERE company_name='Maraîchers Bio de la Plaine de France'), 
- 'Fruits de saison bio', 'Panier de fruits bio de saison', 2200, 'panier', 'PUBLISHED'),
-((SELECT id FROM suppliers WHERE company_name='Maraîchers Bio de la Plaine de France'), 
- 'Épices bio locales', 'Mélange d''épices bio locales', 1500, 'kg', 'PUBLISHED');
-
 -- Utilisateurs de démonstration
 INSERT INTO users (email, password_hash, role, full_name) VALUES
 ('admin@vegnbio.fr', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IjdQj8Kz8Kz8Kz8Kz8Kz8Kz8Kz8Kz8', 'ADMIN', 'Administrateur VegN Bio'),
@@ -142,9 +102,9 @@ INSERT INTO users (email, password_hash, role, full_name) VALUES
 ('fournisseur@vegnbio.fr', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IjdQj8Kz8Kz8Kz8Kz8Kz8Kz8Kz8Kz8', 'FOURNISSEUR', 'Fournisseur VegN Bio');
 
 -- Avis clients (seulement si les utilisateurs existent)
-INSERT INTO reviews (user_id, restaurant_id, rating, comment) VALUES
-((SELECT id FROM users WHERE email='client@vegnbio.fr'), (SELECT id FROM restaurants WHERE code='BAS'), 5, 'Excellent restaurant végétarien ! Les plats sont délicieux et les ingrédients sont vraiment bio.'),
-((SELECT id FROM users WHERE email='client@vegnbio.fr'), (SELECT id FROM restaurants WHERE code='REP'), 4, 'Très bon accueil et cuisine savoureuse. Je recommande !'),
-((SELECT id FROM users WHERE email='client@vegnbio.fr'), (SELECT id FROM restaurants WHERE code='NAT'), 5, 'Parfait pour une pause déjeuner. Les animations du mardi sont super !'),
-((SELECT id FROM users WHERE email='client@vegnbio.fr'), (SELECT id FROM restaurants WHERE code='ITA'), 4, 'Belle découverte de la cuisine italienne végétarienne.'),
-((SELECT id FROM users WHERE email='client@vegnbio.fr'), (SELECT id FROM restaurants WHERE code='BOU'), 5, 'Ambiance culturelle unique, parfait après une visite au Centre Pompidou !');
+INSERT INTO reviews (restaurant_id, customer_name, customer_email, rating, comment, status) VALUES
+((SELECT id FROM restaurants WHERE code='BAS'), 'Client VegN Bio', 'client@vegnbio.fr', 5, 'Excellent restaurant végétarien ! Les plats sont délicieux et les ingrédients sont vraiment bio.', 'APPROVED'),
+((SELECT id FROM restaurants WHERE code='REP'), 'Client VegN Bio', 'client@vegnbio.fr', 4, 'Très bon accueil et cuisine savoureuse. Je recommande !', 'APPROVED'),
+((SELECT id FROM restaurants WHERE code='NAT'), 'Client VegN Bio', 'client@vegnbio.fr', 5, 'Parfait pour une pause déjeuner. Les animations du mardi sont super !', 'APPROVED'),
+((SELECT id FROM restaurants WHERE code='ITA'), 'Client VegN Bio', 'client@vegnbio.fr', 4, 'Belle découverte de la cuisine italienne végétarienne.', 'APPROVED'),
+((SELECT id FROM restaurants WHERE code='BOU'), 'Client VegN Bio', 'client@vegnbio.fr', 5, 'Ambiance culturelle unique, parfait après une visite au Centre Pompidou !', 'APPROVED');
