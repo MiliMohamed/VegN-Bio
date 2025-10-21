@@ -146,7 +146,8 @@ INSERT INTO preventive_recommendations (breed, recommendation, category, priorit
 ('Lapin', 'Surveillance des dents qui poussent continuellement', 'surveillance', 1),
 ('Lapin', 'Environnement propre pour éviter les problèmes respiratoires', 'environnement', 2),
 ('Lapin', 'Vaccination contre la myxomatose et la maladie hémorragique', 'vaccination', 1),
-('Lapin', 'Surveillance du poids pour éviter l''obésité', 'surveillance', 2);
+('Lapin', 'Surveillance du poids pour éviter l''obésité', 'surveillance', 2)
+ON CONFLICT (breed, recommendation) DO NOTHING;
 
 -- Insérer des symptômes communs par race
 INSERT INTO breed_symptoms (breed, symptom, frequency, severity, is_emergency) VALUES
@@ -175,7 +176,8 @@ INSERT INTO breed_symptoms (breed, symptom, frequency, severity, is_emergency) V
 ('Lapin', 'Difficultés respiratoires', 2, 'CRITICAL', true),
 ('Lapin', 'Diarrhée', 3, 'CRITICAL', true),
 ('Lapin', 'Perte de poils', 2, 'MEDIUM', false),
-('Lapin', 'Grincement de dents', 2, 'HIGH', false);
+('Lapin', 'Grincement de dents', 2, 'HIGH', false)
+ON CONFLICT (breed, symptom) DO NOTHING;
 
 -- Fonction pour mettre à jour automatiquement le timestamp updated_at
 CREATE OR REPLACE FUNCTION update_updated_at_column()
