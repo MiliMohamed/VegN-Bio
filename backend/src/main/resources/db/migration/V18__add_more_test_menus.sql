@@ -35,7 +35,7 @@ VALUES ((SELECT id FROM restaurants WHERE code='BOU'), 'Menu Beaubourg Gourmet B
 INSERT INTO menu_items (menu_id, name, description, price_cents, is_vegan)
 VALUES 
   ((SELECT id FROM menus WHERE title='Menu Beaubourg Gourmet Bio 2024' AND restaurant_id=(SELECT id FROM restaurants WHERE code='BOU')), 'Risotto aux champignons', 'Riz bio, champignons de saison, parmesan végétal', 1650, TRUE),
-  ((SELECT id FROM menus WHERE title='Menu Beaubourg Gourmet Bio 2024' AND restaurant_id=(SELECT id FROM restaurants WHERE code='BOU')), 'Tartare d\'avocat', 'Avocat, tomates, oignons, coriandre', 1200, TRUE);
+  ((SELECT id FROM menus WHERE title='Menu Beaubourg Gourmet Bio 2024' AND restaurant_id=(SELECT id FROM restaurants WHERE code='BOU')), 'Tartare d''avocat', 'Avocat, tomates, oignons, coriandre', 1200, TRUE);
 
 -- Ajouter un menu pour Bastille en plus de celui existant
 INSERT INTO menus (restaurant_id, title, active_from, active_to)
