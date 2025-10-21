@@ -1,0 +1,16 @@
+{
+  "total_endpoints": 4,
+  "api_url": "https://vegn-bio-backend.onrender.com/api/v1",
+  "frontend_url": "https://veg-n-bio-front-pi.vercel.app",
+  "timestamp": "2025-10-21 22:43:03",
+  "successful_endpoints": 0,
+  "success_rate": 0.0,
+  "tests_performed": [
+    "Connectivité de base",
+    "Accès frontend Vercel",
+    "Configuration CORS",
+    "Endpoints API",
+    "Authentification",
+    "Performance"
+  ]
+}

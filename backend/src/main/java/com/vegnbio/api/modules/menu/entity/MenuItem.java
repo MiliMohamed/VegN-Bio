@@ -34,6 +34,7 @@ public class MenuItem {
     private Integer priceCents;
     
     @Column(name = "is_vegan", nullable = false)
+    @Builder.Default
     private Boolean isVegan = false;
     
     @ManyToMany(fetch = FetchType.LAZY)

@@ -37,6 +37,7 @@ public class Offer {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private OfferStatus status = OfferStatus.DRAFT;
     
     @Column(name = "created_at", nullable = false)

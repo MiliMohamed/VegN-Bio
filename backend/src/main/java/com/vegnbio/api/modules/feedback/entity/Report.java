@@ -38,6 +38,7 @@ public class Report {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private ReportStatus status = ReportStatus.OPEN;
     
     @Column(name = "created_at", nullable = false)

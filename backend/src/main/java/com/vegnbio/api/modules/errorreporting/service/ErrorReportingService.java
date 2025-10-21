@@ -150,7 +150,7 @@ public class ErrorReportingService {
                 ErrorReportDto report = createErrorReport(request);
                 createdReports.add(report);
             } catch (Exception e) {
-                errors.add("Failed to create report for: " + request.getTitle() + " - " + e.getMessage());
+                errors.add("Failed to create report for: " + request.title() + " - " + e.getMessage());
                 log.error("Failed to create bulk error report", e);
             }
         }

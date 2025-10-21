@@ -32,10 +32,12 @@ public class Ticket {
     private LocalDateTime closedAt;
     
     @Column(name = "total_cents", nullable = false)
+    @Builder.Default
     private Integer totalCents = 0;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private TicketStatus status = TicketStatus.OPEN;
     
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

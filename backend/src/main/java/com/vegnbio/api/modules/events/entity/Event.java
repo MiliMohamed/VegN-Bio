@@ -44,6 +44,7 @@ public class Event {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private EventStatus status = EventStatus.ACTIVE;
     
     @PrePersist

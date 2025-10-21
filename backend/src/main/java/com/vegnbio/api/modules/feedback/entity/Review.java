@@ -38,6 +38,7 @@ public class Review {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private ReviewStatus status = ReviewStatus.PENDING;
     
     @Column(name = "created_at", nullable = false)

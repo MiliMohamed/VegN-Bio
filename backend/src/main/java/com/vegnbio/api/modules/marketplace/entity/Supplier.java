@@ -39,6 +39,7 @@ public class Supplier {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private SupplierStatus status = SupplierStatus.ACTIVE;
     
     @Column(name = "created_at", nullable = false)

@@ -1,0 +1,29 @@
+{
+  "local_endpoints_success": 3,
+  "local_api_url": "http://localhost:8080/api/v1",
+  "local_api_available": true,
+  "local_auth_success": true,
+  "prod_endpoints_success": 0,
+  "endpoints_tested": [
+    "/restaurants",
+    "/allergens",
+    "/menus",
+    "/events"
+  ],
+  "timestamp": "2025-10-21 22:43:41",
+  "prod_api_url": "https://vegn-bio-backend.onrender.com/api/v1",
+  "prod_results": {
+    "/menus": false,
+    "/allergens": false,
+    "/events": false,
+    "/restaurants": false
+  },
+  "prod_auth_success": false,
+  "local_results": {
+    "/menus": false,
+    "/allergens": true,
+    "/events": true,
+    "/restaurants": true
+  },
+  "frontend_vercel": "https://veg-n-bio-front-pi.vercel.app"
+}
