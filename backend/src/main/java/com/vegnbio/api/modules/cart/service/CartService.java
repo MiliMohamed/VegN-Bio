@@ -7,7 +7,7 @@ import com.vegnbio.api.modules.cart.entity.CartItem;
 import com.vegnbio.api.modules.cart.repository.CartItemRepository;
 import com.vegnbio.api.modules.cart.repository.CartRepository;
 import com.vegnbio.api.modules.menu.entity.MenuItem;
-import com.vegnbio.api.modules.menu.repository.MenuItemRepository;
+import com.vegnbio.api.modules.menu.repo.MenuItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class CartService {
                     .cart(cart)
                     .menuItem(menuItem)
                     .quantity(request.getQuantity())
-                    .unitPriceCents(menuItem.getPriceCents())
+                    .unitPriceCents(menuItem.getPriceCents().longValue())
                     .specialInstructions(request.getSpecialInstructions())
                     .build();
             

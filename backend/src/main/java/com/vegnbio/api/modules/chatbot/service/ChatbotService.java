@@ -3,20 +3,23 @@ package com.vegnbio.api.modules.chatbot.service;
 import com.vegnbio.api.modules.chatbot.dto.*;
 import com.vegnbio.api.modules.chatbot.entity.VeterinaryConsultation;
 import com.vegnbio.api.modules.chatbot.repo.VeterinaryConsultationRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class ChatbotService {
     
+    private static final Logger log = LoggerFactory.getLogger(ChatbotService.class);
     private final VeterinaryConsultationRepository consultationRepository;
+    
+    public ChatbotService(VeterinaryConsultationRepository consultationRepository) {
+        this.consultationRepository = consultationRepository;
+    }
     
     // Base de données de connaissances vétérinaires
     private final Map<String, Map<String, String>> veterinaryKnowledge = initializeVeterinaryKnowledge();

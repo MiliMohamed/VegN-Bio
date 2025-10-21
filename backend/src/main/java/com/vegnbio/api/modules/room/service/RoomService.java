@@ -2,7 +2,7 @@ package com.vegnbio.api.modules.room.service;
 
 import com.vegnbio.api.modules.auth.entity.User;
 import com.vegnbio.api.modules.restaurant.entity.Restaurant;
-import com.vegnbio.api.modules.restaurant.repository.RestaurantRepository;
+import com.vegnbio.api.modules.restaurant.repo.RestaurantRepository;
 import com.vegnbio.api.modules.room.dto.*;
 import com.vegnbio.api.modules.room.entity.Room;
 import com.vegnbio.api.modules.room.entity.RoomReservation;
@@ -141,8 +141,9 @@ public class RoomService {
                 .specialRequirements(request.getSpecialRequirements())
                 .notes(request.getNotes())
                 .status(RoomReservation.ReservationStatus.PENDING)
-                .totalPriceCents(reservation.calculateTotalPrice())
                 .build();
+        
+        reservation.setTotalPriceCents(reservation.calculateTotalPrice());
         
         reservation = reservationRepository.save(reservation);
         return convertReservationToDto(reservation);
