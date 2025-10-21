@@ -15,16 +15,15 @@ public class CorsConfig {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowCredentials(true);
     config.setAllowedOriginPatterns(List.of(
-        "http://localhost:3000", 
-        "http://127.0.0.1:3000", 
-        "http://web:3000",
-        "http://localhost:3005",
-        "http://127.0.0.1:3005",
-        "http://localhost:8080",
-        "http://127.0.0.1:8080",
+        "http://localhost:*", 
+        "http://127.0.0.1:*", 
+        "http://web:*",
         "https://*.vercel.app",
         "https://*.netlify.app",
-        "https://*.railway.app"
+        "https://*.railway.app",
+        "https://*.onrender.com",
+        "https://vegn-bio-backend.onrender.com",
+        "https://vegn-bio-frontend.onrender.com"
     ));
     config.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
     config.setAllowedHeaders(List.of("*"));
