@@ -70,6 +70,19 @@ CREATE INDEX IF NOT EXISTS idx_preventive_recommendations_breed ON preventive_re
 CREATE INDEX IF NOT EXISTS idx_preventive_recommendations_category ON preventive_recommendations(category);
 CREATE INDEX IF NOT EXISTS idx_preventive_recommendations_active ON preventive_recommendations(is_active);
 
+-- Ajouter la contrainte unique si elle n'existe pas déjà
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints 
+        WHERE table_name = 'preventive_recommendations' 
+        AND constraint_type = 'UNIQUE' 
+        AND constraint_name LIKE '%breed_recommendation%'
+    ) THEN
+        ALTER TABLE preventive_recommendations ADD CONSTRAINT preventive_recommendations_breed_recommendation_key UNIQUE (breed, recommendation);
+    END IF;
+END $$;
+
 -- Table pour les symptômes communs par race
 CREATE TABLE IF NOT EXISTS breed_symptoms (
     id BIGSERIAL PRIMARY KEY,
@@ -87,6 +100,19 @@ CREATE TABLE IF NOT EXISTS breed_symptoms (
 CREATE INDEX IF NOT EXISTS idx_breed_symptoms_breed ON breed_symptoms(breed);
 CREATE INDEX IF NOT EXISTS idx_breed_symptoms_emergency ON breed_symptoms(is_emergency);
 CREATE INDEX IF NOT EXISTS idx_breed_symptoms_frequency ON breed_symptoms(frequency);
+
+-- Ajouter la contrainte unique si elle n'existe pas déjà
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints 
+        WHERE table_name = 'breed_symptoms' 
+        AND constraint_type = 'UNIQUE' 
+        AND constraint_name LIKE '%breed_symptom%'
+    ) THEN
+        ALTER TABLE breed_symptoms ADD CONSTRAINT breed_symptoms_breed_symptom_key UNIQUE (breed, symptom);
+    END IF;
+END $$;
 
 -- Table pour les diagnostics vétérinaires avec plus de détails
 CREATE TABLE IF NOT EXISTS veterinary_diagnoses (
