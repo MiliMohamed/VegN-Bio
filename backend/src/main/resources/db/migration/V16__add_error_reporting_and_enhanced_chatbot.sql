@@ -196,13 +196,14 @@ FROM error_reports;
 -- Vue pour les statistiques du chatbot
 CREATE OR REPLACE VIEW chatbot_statistics AS
 SELECT 
-    COUNT(DISTINCT breed) as supported_breeds,
-    COUNT(DISTINCT symptom) as known_symptoms,
+    COUNT(DISTINCT vc.animal_breed) as supported_breeds,
+    COUNT(DISTINCT cs.symptom) as known_symptoms,
     COUNT(*) as total_consultations,
-    ROUND(AVG(confidence), 2) as average_confidence,
-    COUNT(CASE WHEN created_at > NOW() - INTERVAL '7 days' THEN 1 END) as consultations_last_week,
-    COUNT(CASE WHEN created_at > NOW() - INTERVAL '30 days' THEN 1 END) as consultations_last_month
-FROM veterinary_consultations;
+    ROUND(AVG(vc.confidence), 2) as average_confidence,
+    COUNT(CASE WHEN vc.created_at > NOW() - INTERVAL '7 days' THEN 1 END) as consultations_last_week,
+    COUNT(CASE WHEN vc.created_at > NOW() - INTERVAL '30 days' THEN 1 END) as consultations_last_month
+FROM veterinary_consultations vc
+LEFT JOIN consultation_symptoms cs ON vc.id = cs.consultation_id;
 
 -- Commentaires sur les tables
 COMMENT ON TABLE error_reports IS 'Table pour stocker les rapports d''erreurs de l''application';
