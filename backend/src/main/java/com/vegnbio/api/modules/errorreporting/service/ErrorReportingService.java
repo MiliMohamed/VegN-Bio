@@ -31,7 +31,7 @@ public class ErrorReportingService {
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .errorType(request.getErrorType())
-                .severity(request.getSeverity())
+                .severity(ErrorSeverity.valueOf(request.getSeverity()))
                 .status(ErrorStatus.OPEN)
                 .userAgent(request.getUserAgent())
                 .url(request.getUrl())
@@ -93,7 +93,11 @@ public class ErrorReportingService {
         }
         
         // Statistiques par type d'erreur
-        List<Map<String, Object>> errorTypeStats = errorReportRepository.findErrorTypeStatistics();
+        List<Object[]> errorTypeStatsRaw = errorReportRepository.findErrorTypeStatistics();
+        Map<String, Long> errorTypeStats = new HashMap<>();
+        for (Object[] row : errorTypeStatsRaw) {
+            errorTypeStats.put((String) row[0], (Long) row[1]);
+        }
         
         // Erreurs récentes (24h)
         LocalDateTime yesterday = LocalDateTime.now().minusHours(24);
@@ -165,8 +169,8 @@ public class ErrorReportingService {
                 .title(report.getTitle())
                 .description(report.getDescription())
                 .errorType(report.getErrorType())
-                .severity(report.getSeverity())
-                .status(report.getStatus())
+                .severity(report.getSeverity().name())
+                .status(report.getStatus().name())
                 .userAgent(report.getUserAgent())
                 .url(report.getUrl())
                 .stackTrace(report.getStackTrace())

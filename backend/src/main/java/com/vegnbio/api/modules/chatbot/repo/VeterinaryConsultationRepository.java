@@ -19,6 +19,9 @@ public interface VeterinaryConsultationRepository extends JpaRepository<Veterina
     @Query("SELECT DISTINCT v.animalBreed FROM VeterinaryConsultation v ORDER BY v.animalBreed")
     List<String> findDistinctAnimalBreeds();
     
+    @Query("SELECT DISTINCT s FROM VeterinaryConsultation v JOIN v.symptoms s ORDER BY s")
+    List<String> findDistinctSymptoms();
+    
     @Query("SELECT DISTINCT s FROM VeterinaryConsultation v JOIN v.symptoms s WHERE v.animalBreed = :breed")
     List<String> findDistinctSymptomsByBreed(@Param("breed") String breed);
     
