@@ -1,0 +1,218 @@
+{
+  "users": [
+    {
+      "description": "Comptes Administrateurs",
+      "accounts": [
+        {
+          "email": "admin@vegnbio.com",
+          "password": "AdminVegN2024!",
+          "fullName": "Administrateur Principal",
+          "role": "ADMIN",
+          "description": "Super administrateur système"
+        },
+        {
+          "email": "manager@vegnbio.com",
+          "password": "ManagerVegN2024!",
+          "fullName": "Manager Opérationnel",
+          "role": "ADMIN",
+          "description": "Manager des opérations quotidiennes"
+        },
+        {
+          "email": "support@vegnbio.com",
+          "password": "SupportVegN2024!",
+          "fullName": "Support Technique",
+          "role": "ADMIN",
+          "description": "Support technique et maintenance"
+        }
+      ]
+    },
+    {
+      "description": "Comptes Restaurateurs",
+      "accounts": [
+        {
+          "email": "bastille@vegnbio.com",
+          "password": "Bastille2024!",
+          "fullName": "Marie Dubois - Bastille",
+          "role": "RESTAURATEUR",
+          "restaurant": "Veg'N Bio Bastille",
+          "description": "Gestionnaire du restaurant Bastille"
+        },
+        {
+          "email": "republique@vegnbio.com",
+          "password": "Republique2024!",
+          "fullName": "Jean Martin - République",
+          "role": "RESTAURATEUR",
+          "restaurant": "Veg'N Bio République",
+          "description": "Gestionnaire du restaurant République"
+        },
+        {
+          "email": "nation@vegnbio.com",
+          "password": "Nation2024!",
+          "fullName": "Sophie Bernard - Nation",
+          "role": "RESTAURATEUR",
+          "restaurant": "Veg'N Bio Nation",
+          "description": "Gestionnaire du restaurant Nation"
+        },
+        {
+          "email": "italie@vegnbio.com",
+          "password": "Italie2024!",
+          "fullName": "Pierre Leroy - Place d'Italie",
+          "role": "RESTAURATEUR",
+          "restaurant": "Veg'N Bio Place d'Italie",
+          "description": "Gestionnaire du restaurant Place d'Italie"
+        },
+        {
+          "email": "montparnasse@vegnbio.com",
+          "password": "Montparnasse2024!",
+          "fullName": "Claire Moreau - Montparnasse",
+          "role": "RESTAURATEUR",
+          "restaurant": "Veg'N Bio Montparnasse",
+          "description": "Gestionnaire du restaurant Montparnasse"
+        },
+        {
+          "email": "ivry@vegnbio.com",
+          "password": "Ivry2024!",
+          "fullName": "Thomas Petit - Ivry",
+          "role": "RESTAURATEUR",
+          "restaurant": "Veg'N Bio Ivry",
+          "description": "Gestionnaire du restaurant Ivry"
+        },
+        {
+          "email": "beaubourg@vegnbio.com",
+          "password": "Beaubourg2024!",
+          "fullName": "Isabelle Rousseau - Beaubourg",
+          "role": "RESTAURATEUR",
+          "restaurant": "Veg'N Bio Beaubourg",
+          "description": "Gestionnaire du restaurant Beaubourg"
+        }
+      ]
+    },
+    {
+      "description": "Comptes Fournisseurs",
+      "accounts": [
+        {
+          "email": "biofrance@supplier.com",
+          "password": "BioFrance2024!",
+          "fullName": "BioFrance - Fournisseur Bio",
+          "role": "FOURNISSEUR",
+          "specialty": "Produits bio certifiés",
+          "description": "Fournisseur principal de produits bio"
+        },
+        {
+          "email": "terroir@supplier.com",
+          "password": "Terroir2024!",
+          "fullName": "Terroir Vert - Légumes Locaux",
+          "role": "FOURNISSEUR",
+          "specialty": "Légumes locaux et de saison",
+          "description": "Fournisseur de légumes locaux"
+        },
+        {
+          "email": "grains@supplier.com",
+          "password": "Grains2024!",
+          "fullName": "Grains d'Or - Céréales Bio",
+          "role": "FOURNISSEUR",
+          "specialty": "Céréales et graines bio",
+          "description": "Fournisseur de céréales bio"
+        },
+        {
+          "email": "epices@supplier.com",
+          "password": "Epices2024!",
+          "fullName": "Epices du Monde - Épices Bio",
+          "role": "FOURNISSEUR",
+          "specialty": "Épices et condiments bio",
+          "description": "Fournisseur d'épices bio"
+        },
+        {
+          "email": "proteines@supplier.com",
+          "password": "Proteines2024!",
+          "fullName": "Protéines Végétales - Alternatives",
+          "role": "FOURNISSEUR",
+          "specialty": "Alternatives protéiques végétales",
+          "description": "Fournisseur de protéines végétales"
+        },
+        {
+          "email": "boissons@supplier.com",
+          "password": "Boissons2024!",
+          "fullName": "Boissons Nature - Jus et Thés",
+          "role": "FOURNISSEUR",
+          "specialty": "Jus bio et thés naturels",
+          "description": "Fournisseur de boissons naturelles"
+        }
+      ]
+    },
+    {
+      "description": "Comptes Clients VIP",
+      "accounts": [
+        {
+          "email": "client1@example.com",
+          "password": "Client12024!",
+          "fullName": "Alice Dupont",
+          "role": "CLIENT",
+          "description": "Client fidèle - Paris 11e"
+        },
+        {
+          "email": "client2@example.com",
+          "password": "Client22024!",
+          "fullName": "Bob Martin",
+          "role": "CLIENT",
+          "description": "Client régulier - Paris 3e"
+        },
+        {
+          "email": "client3@example.com",
+          "password": "Client32024!",
+          "fullName": "Claire Dubois",
+          "role": "CLIENT",
+          "description": "Client VIP - Paris 13e"
+        },
+        {
+          "email": "client4@example.com",
+          "password": "Client42024!",
+          "fullName": "David Bernard",
+          "role": "CLIENT",
+          "description": "Client fidèle - Paris 14e"
+        },
+        {
+          "email": "client5@example.com",
+          "password": "Client52024!",
+          "fullName": "Emma Leroy",
+          "role": "CLIENT",
+          "description": "Client régulier - Ivry-sur-Seine"
+        },
+        {
+          "email": "client6@example.com",
+          "password": "Client62024!",
+          "fullName": "François Moreau",
+          "role": "CLIENT",
+          "description": "Client VIP - Paris 4e"
+        },
+        {
+          "email": "client7@example.com",
+          "password": "Client72024!",
+          "fullName": "Gabrielle Petit",
+          "role": "CLIENT",
+          "description": "Client fidèle - Paris 11e"
+        },
+        {
+          "email": "client8@example.com",
+          "password": "Client82024!",
+          "fullName": "Henri Rousseau",
+          "role": "CLIENT",
+          "description": "Client régulier - Paris 3e"
+        }
+      ]
+    }
+  ],
+  "instructions": {
+    "usage": "Utilisez ces comptes pour tester l'application en mode production",
+    "password_format": "Tous les mots de passe suivent le format: [Nom/Rôle]2024!",
+    "api_endpoints": {
+      "login": "POST /api/auth/login",
+      "register": "POST /api/auth/register",
+      "get_users": "GET /api/users"
+    },
+    "scripts": {
+      "linux_mac": "./create-production-users.sh",
+      "windows": "./create-production-users.ps1"
+    }
+  }
+}

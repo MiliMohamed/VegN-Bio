@@ -1,135 +1,219 @@
-# Guide de Déploiement Gratuit - VegN-Bio
+# 🚀 Guide de Déploiement VegN-Bio
 
-## 🚀 Déploiement Recommandé : Railway + Vercel
+## 📋 Vue d'ensemble
 
-### 📋 Prérequis
-- Compte GitHub
-- Compte Railway (gratuit)
-- Compte Vercel (gratuit)
+Ce guide explique comment déployer l'application VegN-Bio avec des comptes utilisateurs de production sur votre backend Render.com.
 
----
+## 🌐 Configuration de Production
 
-## 🗄️ Étape 1 : Déployer la Base de Données PostgreSQL
+### Backend sur Render.com
+- **URL**: https://vegn-bio-backend.onrender.com
+- **API**: https://vegn-bio-backend.onrender.com/api
 
-### Sur Railway :
-1. Allez sur [railway.app](https://railway.app)
-2. Connectez votre compte GitHub
-3. Créez un nouveau projet
-4. Ajoutez un service **PostgreSQL**
-5. Railway générera automatiquement les variables d'environnement
+## 🔧 Scripts de Déploiement
 
----
-
-## 🔧 Étape 2 : Déployer le Backend (Spring Boot)
-
-### Sur Railway :
-1. Dans le même projet Railway, ajoutez un service **GitHub Repo**
-2. Sélectionnez votre repository VegN-Bio
-3. Railway détectera automatiquement que c'est un projet Java/Maven
-4. Configurez les variables d'environnement :
-
-```
-SPRING_DATASOURCE_URL=${{Postgres.DATABASE_URL}}
-SPRING_DATASOURCE_USERNAME=${{Postgres.USERNAME}}
-SPRING_DATASOURCE_PASSWORD=${{Postgres.PASSWORD}}
-JWT_SECRET=votre-cle-secrete-jwt-tres-longue-et-aleatoire
-SPRING_PROFILES_ACTIVE=production
+### 1. Script Principal de Déploiement
+```powershell
+# Déploiement complet (recommandé)
+.\deploy-production.ps1
 ```
 
-5. Railway construira et déploiera automatiquement votre backend
-6. Notez l'URL générée (ex: `https://vegnbio-backend-production.up.railway.app`)
+### 2. Scripts Individuels
 
----
+#### Créer les Utilisateurs de Production
+```powershell
+# Windows
+cd backend
+.\create-production-users.ps1
 
-## 🌐 Étape 3 : Déployer le Frontend (React)
-
-### Sur Vercel :
-1. Allez sur [vercel.com](https://vercel.com)
-2. Connectez votre compte GitHub
-3. Importez votre repository VegN-Bio
-4. Configurez le projet :
-   - **Framework Preset** : Create React App
-   - **Root Directory** : `web`
-   - **Build Command** : `npm run build`
-   - **Output Directory** : `build`
-
-5. Ajoutez la variable d'environnement :
-   ```
-   REACT_APP_API_URL=https://votre-backend-url.up.railway.app/api/v1
-   ```
-
-6. Déployez !
-
----
-
-## 🔄 Étape 4 : Configuration CORS
-
-Modifiez votre fichier `backend/src/main/java/com/vegnbio/api/config/CorsConfig.java` pour autoriser votre domaine Vercel :
-
-```java
-@Configuration
-public class CorsConfig {
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList(
-            "http://localhost:3000",
-            "https://votre-app.vercel.app"
-        ));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
-}
+# Linux/Mac
+cd backend
+./create-production-users.sh
 ```
 
----
+#### Configurer le Frontend
+```powershell
+cd web
+.\update-api-config.ps1
+```
 
-## 🎯 Alternatives Gratuites
+#### Tester les Comptes
+```powershell
+cd backend
+.\test-production-users.sh
+```
 
-### Option 2 : Render.com
-- **Frontend** : Render Static Site
-- **Backend** : Render Web Service
-- **Base de données** : Render PostgreSQL
+## 👥 Comptes Utilisateurs Créés
 
-### Option 3 : Fly.io
-- Déploiement complet avec Docker
-- Base de données PostgreSQL incluse
+### 🔐 Administrateurs (3 comptes)
+| Email | Mot de passe | Rôle | Description |
+|-------|-------------|------|-------------|
+| admin@vegnbio.com | AdminVegN2024! | ADMIN | Super administrateur |
+| manager@vegnbio.com | ManagerVegN2024! | ADMIN | Manager opérationnel |
+| support@vegnbio.com | SupportVegN2024! | ADMIN | Support technique |
 
-### Option 4 : Netlify + Railway
-- **Frontend** : Netlify
-- **Backend + DB** : Railway
+### 🏪 Restaurateurs (7 comptes)
+| Email | Mot de passe | Restaurant |
+|-------|-------------|------------|
+| bastille@vegnbio.com | Bastille2024! | Veg'N Bio Bastille |
+| republique@vegnbio.com | Republique2024! | Veg'N Bio République |
+| nation@vegnbio.com | Nation2024! | Veg'N Bio Nation |
+| italie@vegnbio.com | Italie2024! | Veg'N Bio Place d'Italie |
+| montparnasse@vegnbio.com | Montparnasse2024! | Veg'N Bio Montparnasse |
+| ivry@vegnbio.com | Ivry2024! | Veg'N Bio Ivry |
+| beaubourg@vegnbio.com | Beaubourg2024! | Veg'N Bio Beaubourg |
 
----
+### 🚚 Fournisseurs (6 comptes)
+| Email | Mot de passe | Spécialité |
+|-------|-------------|------------|
+| biofrance@supplier.com | BioFrance2024! | Produits bio certifiés |
+| terroir@supplier.com | Terroir2024! | Légumes locaux |
+| grains@supplier.com | Grains2024! | Céréales bio |
+| epices@supplier.com | Epices2024! | Épices bio |
+| proteines@supplier.com | Proteines2024! | Protéines végétales |
+| boissons@supplier.com | Boissons2024! | Jus et thés naturels |
 
-## 📝 Notes Importantes
+### 👥 Clients VIP (8 comptes)
+| Email | Mot de passe | Nom |
+|-------|-------------|-----|
+| client1@example.com | Client12024! | Alice Dupont |
+| client2@example.com | Client22024! | Bob Martin |
+| client3@example.com | Client32024! | Claire Dubois |
+| client4@example.com | Client42024! | David Bernard |
+| client5@example.com | Client52024! | Emma Leroy |
+| client6@example.com | Client62024! | François Moreau |
+| client7@example.com | Client72024! | Gabrielle Petit |
+| client8@example.com | Client82024! | Henri Rousseau |
 
-1. **Limites gratuites** :
-   - Railway : 500h/mois, 1GB RAM
-   - Vercel : 100GB bandwidth/mois
-   - Render : 750h/mois
+## 🚀 Étapes de Déploiement
 
-2. **Sécurité** :
-   - Changez le JWT_SECRET en production
-   - Configurez les domaines autorisés en CORS
+### 1. Prérequis
+- Backend déployé sur Render.com
+- Node.js installé localement
+- PowerShell (Windows) ou Bash (Linux/Mac)
 
-3. **Monitoring** :
-   - Utilisez les logs Railway et Vercel
-   - Surveillez l'utilisation des ressources
+### 2. Déploiement Automatique
+```powershell
+# Cloner le repository
+git clone https://github.com/MiliMohamed/VegN-Bio.git
+cd VegN-Bio
 
----
+# Exécuter le script de déploiement
+.\deploy-production.ps1
+```
 
-## 🆘 Dépannage
+### 3. Déploiement Manuel
 
-### Problèmes courants :
-1. **CORS errors** : Vérifiez la configuration CORS
-2. **Database connection** : Vérifiez les variables d'environnement
-3. **Build failures** : Vérifiez les logs de build
+#### Étape 1: Créer les utilisateurs
+```powershell
+cd backend
+.\create-production-users.ps1
+```
 
-### Support :
-- Railway : [docs.railway.app](https://docs.railway.app)
-- Vercel : [vercel.com/docs](https://vercel.com/docs)
+#### Étape 2: Configurer le frontend
+```powershell
+cd ../web
+.\update-api-config.ps1
+```
+
+#### Étape 3: Tester la connexion
+```powershell
+cd ../backend
+.\test-production-users.sh
+```
+
+## 🧪 Tests de Validation
+
+### Test de Connexion API
+```bash
+curl -X POST https://vegn-bio-backend.onrender.com/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@vegnbio.com","password":"AdminVegN2024!"}'
+```
+
+### Test Frontend
+1. Démarrer le frontend: `cd web && npm start`
+2. Ouvrir http://localhost:3000
+3. Se connecter avec un des comptes ci-dessus
+4. Tester les fonctionnalités
+
+## 📁 Fichiers de Configuration
+
+### Backend
+- `backend/production-users.json` - Liste complète des comptes
+- `backend/create-production-users.ps1` - Script de création Windows
+- `backend/create-production-users.sh` - Script de création Linux/Mac
+- `backend/test-production-users.sh` - Script de test
+
+### Frontend
+- `web/update-api-config.ps1` - Configuration API production
+- `web/.env.production` - Variables d'environnement
+
+### Déploiement
+- `deploy-production.ps1` - Script de déploiement complet
+- `DEPLOYMENT_GUIDE.md` - Ce guide
+
+## 🔧 Configuration Avancée
+
+### Variables d'Environnement Frontend
+```env
+REACT_APP_API_URL=https://vegn-bio-backend.onrender.com/api
+REACT_APP_APP_NAME=VegN-Bio
+REACT_APP_ENVIRONMENT=production
+REACT_APP_BACKEND_URL=https://vegn-bio-backend.onrender.com
+```
+
+### Configuration API Backend
+- URL: https://vegn-bio-backend.onrender.com/api
+- Authentification: JWT Token
+- CORS: Configuré pour le frontend
+
+## 🛠️ Dépannage
+
+### Problèmes Courants
+
+#### Backend non accessible
+- Vérifier que Render.com est en cours d'exécution
+- Vérifier l'URL du backend
+- Vérifier les logs sur Render.com
+
+#### Erreur de connexion
+- Vérifier les identifiants
+- Vérifier que l'utilisateur existe
+- Vérifier la connectivité réseau
+
+#### Frontend ne se connecte pas
+- Vérifier la configuration API
+- Vérifier le fichier .env.production
+- Redémarrer l'application frontend
+
+### Logs et Debug
+```powershell
+# Vérifier les logs du backend
+curl -X GET https://vegn-bio-backend.onrender.com/api/health
+
+# Tester la connectivité
+ping vegn-bio-backend.onrender.com
+```
+
+## 📞 Support
+
+En cas de problème:
+1. Vérifier les logs d'erreur
+2. Consulter la documentation API
+3. Tester avec les comptes de démonstration
+4. Vérifier la configuration réseau
+
+## 🎉 Félicitations !
+
+Votre application VegN-Bio est maintenant déployée en production avec tous les comptes utilisateurs nécessaires !
+
+### Accès Rapide
+- **Frontend**: http://localhost:3000 (après `npm start`)
+- **Backend**: https://vegn-bio-backend.onrender.com
+- **API**: https://vegn-bio-backend.onrender.com/api
+
+### Première Connexion
+Utilisez le compte admin pour explorer toutes les fonctionnalités:
+- **Email**: admin@vegnbio.com
+- **Mot de passe**: AdminVegN2024!

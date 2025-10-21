@@ -163,3 +163,5 @@ Votre backend VegN-Bio est maintenant déployé sur Render.com !
 - API publique : `https://vegnbio-backend.onrender.com/api/v1/restaurants`
 - Documentation : `https://vegnbio-backend.onrender.com/swagger-ui.html`
 
+
+

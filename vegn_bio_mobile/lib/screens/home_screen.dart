@@ -7,6 +7,8 @@ import 'restaurant_list_screen.dart';
 import 'chatbot_screen.dart';
 import 'allergen_filter_screen.dart';
 import 'admin_dashboard_screen.dart';
+import 'cart_screen.dart';
+import 'rooms_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const RestaurantListScreen(),
+    const CartScreen(),
+    const RoomsScreen(),
     const AllergenFilterScreen(),
     const ChatbotScreen(),
     const AdminDashboardScreen(),
@@ -64,6 +68,14 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.restaurant),
             label: 'Restaurants',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Panier',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.meeting_room),
+            label: 'Salles',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.warning),

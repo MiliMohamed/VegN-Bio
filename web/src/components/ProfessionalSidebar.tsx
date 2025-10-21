@@ -73,6 +73,14 @@ const ProfessionalSidebar: React.FC = () => {
       badgeColor: 'info'
     },
     {
+      id: 'rooms',
+      label: 'Réservation Salles',
+      icon: Calendar,
+      path: '/app/rooms',
+      badge: '12',
+      badgeColor: 'primary'
+    },
+    {
       id: 'events',
       label: 'Événements',
       icon: Calendar,

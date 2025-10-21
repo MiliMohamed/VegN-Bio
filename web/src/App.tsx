@@ -8,6 +8,7 @@ import SimpleRegister from './components/SimpleRegister';
 import ProfessionalDashboard from './components/ProfessionalDashboard';
 import ModernRestaurants from './components/ModernRestaurants';
 import ModernMenus from './components/ModernMenus';
+import ModernRooms from './components/ModernRooms';
 import ModernEvents from './components/ModernEvents';
 import ModernMarketplace from './components/ModernMarketplace';
 import ProfessionalReviews from './components/ProfessionalReviews';
@@ -53,6 +54,7 @@ function App() {
                       <Route path="/dashboard" element={<ProfessionalDashboard />} />
                       <Route path="/restaurants" element={<ModernRestaurants />} />
                       <Route path="/menus" element={<ModernMenus />} />
+                      <Route path="/rooms" element={<ModernRooms />} />
                       <Route path="/events" element={<ModernEvents />} />
                       <Route path="/marketplace" element={<ModernMarketplace />} />
                       <Route path="/reviews" element={<ProfessionalReviews />} />
