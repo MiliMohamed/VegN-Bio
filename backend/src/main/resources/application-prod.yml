@@ -1,0 +1,62 @@
+# Configuration de production pour le logging et la sécurité
+logging:
+  level:
+    com.vegnbio.api: DEBUG
+    com.vegnbio.api.config: DEBUG
+    com.vegnbio.api.modules.auth: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web.cors: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Configuration de sécurité
+spring:
+  security:
+    debug: true
+  
+# Configuration CORS
+cors:
+  allowed-origins:
+    - "https://*.vercel.app"
+    - "https://veg-n-bio-front-dujcso1tk-milimohameds-projects.vercel.app"
+    - "https://veg-n-bio-front-pi.vercel.app"
+    - "https://*.netlify.app"
+    - "https://*.onrender.com"
+    - "http://localhost:*"
+    - "http://127.0.0.1:*"
+
+# Configuration JWT
+jwt:
+  secret: ${JWT_SECRET:your-secret-key-here}
+  expiration: 86400000 # 24 heures
+
+# Configuration de l'application
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# Configuration de la base de données
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+# Configuration Flyway
+spring:
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true

@@ -64,8 +64,13 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
+                // Endpoints d'authentification - ACCÈS LIBRE
                 .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                
+                // Documentation API - ACCÈS LIBRE
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/webjars/**").permitAll()
+                
+                // Endpoints publics - ACCÈS LIBRE
                 .requestMatchers("/api/v1/restaurants", "/api/v1/allergens").permitAll()
                 .requestMatchers("/api/v1/menus", "/api/v1/menus/**", "/api/v1/menu-items/**").permitAll()
                 .requestMatchers("/api/v1/chatbot/**").permitAll()
@@ -76,16 +81,25 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/offers/supplier/**").permitAll()
                 .requestMatchers("/api/v1/reviews", "/api/v1/reports").permitAll()
                 .requestMatchers("/api/v1/reviews/restaurant/**").permitAll()
+                
+                // Endpoints d'actuateur - ACCÈS LIBRE
+                .requestMatchers("/actuator/**").permitAll()
+                
+                // Tous les autres endpoints nécessitent une authentification
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.disable())
+                .contentTypeOptions(contentTypeOptions -> contentTypeOptions.disable())
+                .httpStrictTransportSecurity(hsts -> hsts.disable())
+            )
             .httpBasic(httpBasic -> httpBasic.disable())
             .formLogin(formLogin -> formLogin.disable())
             .logout(logout -> logout.disable())
-            .requestCache(requestCache -> requestCache.disable()); // Désactiver le cache de requêtes
+            .requestCache(requestCache -> requestCache.disable());
         
         return http.build();
     }
