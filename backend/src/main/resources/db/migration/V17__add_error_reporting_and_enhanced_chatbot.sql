@@ -10,9 +10,23 @@ ADD COLUMN IF NOT EXISTS user_agent TEXT,
 ADD COLUMN IF NOT EXISTS url TEXT,
 ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
--- Renommer les colonnes existantes pour correspondre à la nouvelle structure
-ALTER TABLE error_reports RENAME COLUMN error_message TO description;
-ALTER TABLE error_reports RENAME COLUMN timestamp TO created_at;
+-- Ajouter la colonne updated_at à la table veterinary_consultations si elle n'existe pas
+ALTER TABLE veterinary_consultations 
+ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+-- Renommer les colonnes existantes pour correspondre à la nouvelle structure (seulement si elles existent)
+DO $$ 
+BEGIN
+    -- Renommer error_message vers description si la colonne error_message existe
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'error_reports' AND column_name = 'error_message') THEN
+        ALTER TABLE error_reports RENAME COLUMN error_message TO description;
+    END IF;
+    
+    -- Renommer timestamp vers created_at si la colonne timestamp existe
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'error_reports' AND column_name = 'timestamp') THEN
+        ALTER TABLE error_reports RENAME COLUMN timestamp TO created_at;
+    END IF;
+END $$;
 
 -- Index pour améliorer les performances des requêtes
 CREATE INDEX IF NOT EXISTS idx_error_reports_status ON error_reports(status);
@@ -174,6 +188,7 @@ $$ language 'plpgsql';
 
 -- Triggers pour mettre à jour automatiquement updated_at
 CREATE TRIGGER update_error_reports_updated_at BEFORE UPDATE ON error_reports FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_veterinary_consultations_updated_at BEFORE UPDATE ON veterinary_consultations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_chatbot_learning_stats_updated_at BEFORE UPDATE ON chatbot_learning_stats FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_preventive_recommendations_updated_at BEFORE UPDATE ON preventive_recommendations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_breed_symptoms_updated_at BEFORE UPDATE ON breed_symptoms FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
