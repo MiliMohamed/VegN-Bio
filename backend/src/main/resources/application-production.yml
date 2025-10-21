@@ -3,6 +3,13 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/vegnbiodb}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,12 +17,18 @@ spring:
       hibernate:
         format_sql: true
         jdbc.lob.non_contextual_creation: true
+        connection.provider_disables_autocommit: true
+        jdbc.batch_size: 20
+        order_inserts: true
+        order_updates: true
   flyway:
     enabled: true
     locations: classpath:db/migration
     validate-on-migrate: false
     ignore-missing-migrations: true
     ignore-future-migrations: true
+    connect-retries: 3
+    connect-retries-interval: 10
 server:
   port: 8080
 
