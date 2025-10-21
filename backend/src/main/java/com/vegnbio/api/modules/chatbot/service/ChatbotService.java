@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jakarta.annotation.PostConstruct;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -29,7 +30,25 @@ public class ChatbotService {
     
     public ChatbotService(VeterinaryConsultationRepository consultationRepository) {
         this.consultationRepository = consultationRepository;
-        initializeLearningSystem();
+    }
+    
+    @PostConstruct
+    @Transactional(readOnly = true)
+    public void initializeLearningSystem() {
+        log.info("Initializing veterinary learning system...");
+        
+        try {
+            // Charger les données existantes pour l'apprentissage
+            List<VeterinaryConsultation> existingConsultations = consultationRepository.findAll();
+            for (VeterinaryConsultation consultation : existingConsultations) {
+                improveLearningFromConsultation(consultation);
+            }
+            
+            log.info("Learning system initialized with {} consultations", existingConsultations.size());
+        } catch (Exception e) {
+            log.warn("Failed to initialize learning system: {}", e.getMessage());
+            // Continue without failing the application startup
+        }
     }
     
     // Base de données de connaissances vétérinaires enrichie
@@ -345,17 +364,6 @@ public class ChatbotService {
     }
     
     // Méthodes utilitaires pour le système d'apprentissage
-    private void initializeLearningSystem() {
-        log.info("Initializing veterinary learning system...");
-        
-        // Charger les données existantes pour l'apprentissage
-        List<VeterinaryConsultation> existingConsultations = consultationRepository.findAll();
-        for (VeterinaryConsultation consultation : existingConsultations) {
-            improveLearningFromConsultation(consultation);
-        }
-        
-        log.info("Learning system initialized with {} consultations", existingConsultations.size());
-    }
     
     private Double calculateAverageConfidence() {
         List<VeterinaryConsultation> consultations = consultationRepository.findAll();
