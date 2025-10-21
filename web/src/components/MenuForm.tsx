@@ -8,9 +8,11 @@ import {
   DollarSign,
   Type,
   FileText,
-  Leaf
+  Leaf,
+  Calendar
 } from 'lucide-react';
 import { menuService } from '../services/api';
+import '../styles/menu-improvements.css';
 
 interface MenuFormProps {
   isOpen: boolean;
@@ -96,7 +98,7 @@ const MenuForm: React.FC<MenuFormProps> = ({ isOpen, onClose, onSuccess, restaur
           <div className="form-group">
             <label htmlFor="title" className="form-label">
               <Type className="w-4 h-4" />
-              Titre du menu
+              Titre du menu *
             </label>
             <input
               type="text"
@@ -107,13 +109,16 @@ const MenuForm: React.FC<MenuFormProps> = ({ isOpen, onClose, onSuccess, restaur
               className="form-input"
               placeholder="Ex: Menu Printemps Bio 2024"
               required
+              maxLength={100}
             />
+            <small className="form-help">Maximum 100 caractères</small>
           </div>
 
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="activeFrom" className="form-label">
-                Date de début
+                <Calendar className="w-4 h-4" />
+                Date de début *
               </label>
               <input
                 type="date"
@@ -122,12 +127,16 @@ const MenuForm: React.FC<MenuFormProps> = ({ isOpen, onClose, onSuccess, restaur
                 value={formData.activeFrom}
                 onChange={handleChange}
                 className="form-input"
+                min={new Date().toISOString().split('T')[0]}
+                required
               />
+              <small className="form-help">Date de début de validité du menu</small>
             </div>
 
             <div className="form-group">
               <label htmlFor="activeTo" className="form-label">
-                Date de fin
+                <Calendar className="w-4 h-4" />
+                Date de fin *
               </label>
               <input
                 type="date"
@@ -136,7 +145,10 @@ const MenuForm: React.FC<MenuFormProps> = ({ isOpen, onClose, onSuccess, restaur
                 value={formData.activeTo}
                 onChange={handleChange}
                 className="form-input"
+                min={formData.activeFrom || new Date().toISOString().split('T')[0]}
+                required
               />
+              <small className="form-help">Date de fin de validité du menu</small>
             </div>
           </div>
 

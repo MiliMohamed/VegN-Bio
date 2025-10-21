@@ -77,6 +77,11 @@ const ModernDashboard: React.FC = () => {
     fetchDashboardData();
   }, []);
 
+  const handleQuickAction = (action: any) => {
+    // Navigation vers la page correspondante
+    window.location.href = action.action;
+  };
+
   const statCards = [
     {
       title: 'Restaurants',
@@ -302,6 +307,10 @@ const ModernDashboard: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.7 + index * 0.1 }}
                 whileHover={{ y: -5, scale: 1.02 }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleQuickAction(action);
+                }}
               >
                 <div className="action-icon">
                   {action.icon}

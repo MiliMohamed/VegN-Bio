@@ -1,0 +1,269 @@
+/* Améliorations pour les menus et formulaires */
+
+/* Sélecteur de restaurant */
+.restaurant-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.selector-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.selector-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.selector-input {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  min-width: 200px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.selector-input:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Actions des menus améliorées */
+.menu-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.menu-actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.menu-actions .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-secondary {
+  background: #6b7280;
+  color: white;
+}
+
+.btn-success {
+  background: #10b981;
+  color: white;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+}
+
+/* Améliorations des formulaires */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-help {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.modal-actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.modal-actions .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Actions des restaurants améliorées */
+.restaurant-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.restaurant-actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.restaurant-actions .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Améliorations des modales */
+.modal-footer {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+  border-radius: 0 0 12px 12px;
+}
+
+.modal-footer .btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.modal-footer .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .restaurant-selector {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .selector-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .selector-input {
+    min-width: auto;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .menu-actions,
+  .restaurant-actions {
+    justify-content: center;
+  }
+  
+  .modal-actions,
+  .modal-footer {
+    flex-direction: column;
+  }
+  
+  .modal-actions .btn,
+  .modal-footer .btn {
+    justify-content: center;
+  }
+}

@@ -15,9 +15,11 @@ import {
   Eye,
   Search,
   Filter,
-  CheckCircle
+  CheckCircle,
+  Utensils
 } from 'lucide-react';
 import { restaurantService } from '../services/api';
+import '../styles/menu-improvements.css';
 
 interface Restaurant {
   id: number;
@@ -120,6 +122,32 @@ const ModernRestaurants: React.FC = () => {
   const handleViewDetails = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
     setShowModal(true);
+  };
+
+  const handleEditRestaurant = (restaurant: Restaurant) => {
+    // TODO: Implémenter l'édition de restaurant
+    console.log('Édition du restaurant:', restaurant);
+  };
+
+  const handleViewMenus = (restaurant: Restaurant) => {
+    // TODO: Rediriger vers la page des menus avec le restaurant sélectionné
+    console.log('Voir les menus du restaurant:', restaurant);
+    // window.location.href = `/app/menus?restaurant=${restaurant.id}`;
+  };
+
+  const handleReserveRoom = (restaurant: Restaurant) => {
+    // TODO: Implémenter la réservation de salle
+    console.log('Réserver une salle pour:', restaurant);
+  };
+
+  const handleViewRestaurantMenus = (restaurant: Restaurant) => {
+    // TODO: Rediriger vers la page des menus
+    console.log('Voir les menus de:', restaurant);
+  };
+
+  const handleContactRestaurant = (restaurant: Restaurant) => {
+    // Ouvrir l'application de téléphonie ou d'email
+    window.open(`tel:${restaurant.phone}`, '_self');
   };
 
   if (loading) {
@@ -234,9 +262,19 @@ const ModernRestaurants: React.FC = () => {
                   <Eye className="w-4 h-4" />
                   Voir détails
                 </button>
-                <button className="btn btn-secondary btn-sm">
+                <button 
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => handleEditRestaurant(restaurant)}
+                >
                   <Edit className="w-4 h-4" />
                   Modifier
+                </button>
+                <button 
+                  className="btn btn-success btn-sm"
+                  onClick={() => handleViewMenus(restaurant)}
+                >
+                  <Utensils className="w-4 h-4" />
+                  Voir menus
                 </button>
           </div>
             </motion.div>
@@ -331,13 +369,28 @@ const ModernRestaurants: React.FC = () => {
                   </div>
                   
             <div className="modal-footer">
-              <button className="btn btn-primary">
+              <button 
+                className="btn btn-primary"
+                onClick={() => handleReserveRoom(selectedRestaurant)}
+              >
+                <Calendar className="w-4 h-4" />
                 Réserver une salle
-                      </button>
-              <button className="btn btn-secondary">
+              </button>
+              <button 
+                className="btn btn-secondary"
+                onClick={() => handleViewRestaurantMenus(selectedRestaurant)}
+              >
+                <Utensils className="w-4 h-4" />
                 Voir le menu
-                      </button>
-                    </div>
+              </button>
+              <button 
+                className="btn btn-success"
+                onClick={() => handleContactRestaurant(selectedRestaurant)}
+              >
+                <Phone className="w-4 h-4" />
+                Contacter
+              </button>
+            </div>
           </motion.div>
           </div>
         )}

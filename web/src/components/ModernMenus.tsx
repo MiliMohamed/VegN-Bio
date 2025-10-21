@@ -8,11 +8,13 @@ import {
   Eye,
   Star,
   Clock,
-  Users
+  Users,
+  MapPin
 } from 'lucide-react';
-import { menuService } from '../services/api';
+import { menuService, restaurantService } from '../services/api';
 import MenuForm from './MenuForm';
 import MenuItemForm from './MenuItemForm';
+import '../styles/menu-improvements.css';
 
 interface MenuItem {
   id: number;
@@ -37,20 +39,26 @@ const ModernMenus: React.FC = () => {
   const [showMenuForm, setShowMenuForm] = useState(false);
   const [showMenuItemForm, setShowMenuItemForm] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
+  const [restaurants, setRestaurants] = useState<any[]>([]);
 
   React.useEffect(() => {
-    const fetchMenus = async () => {
+    const fetchData = async () => {
       try {
+        // Charger la liste des restaurants
+        const restaurantsRes = await restaurantService.getAll();
+        setRestaurants(restaurantsRes.data);
+        
+        // Charger les menus du restaurant sélectionné
         const response = await menuService.getMenusByRestaurant(selectedRestaurant);
         setMenus(response.data);
       } catch (error) {
-        console.error('Erreur lors du chargement des menus:', error);
+        console.error('Erreur lors du chargement des données:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMenus();
+    fetchData();
   }, [selectedRestaurant]);
 
   const formatPrice = (priceCents: number) => {
@@ -92,6 +100,29 @@ const ModernMenus: React.FC = () => {
     fetchMenus();
   };
 
+  const handleEditMenu = (menu: Menu) => {
+    // TODO: Implémenter l'édition de menu
+    console.log('Édition du menu:', menu);
+  };
+
+  const handleDeleteMenu = async (menuId: number) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce menu ?')) {
+      try {
+        await menuService.delete(menuId);
+        // Recharger les menus
+        const response = await menuService.getMenusByRestaurant(selectedRestaurant);
+        setMenus(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la suppression du menu:', error);
+      }
+    }
+  };
+
+  const handleViewMenu = (menu: Menu) => {
+    // TODO: Implémenter la vue détaillée du menu
+    console.log('Voir le menu:', menu);
+  };
+
   if (loading) {
     return (
       <div className="modern-menus">
@@ -117,6 +148,41 @@ const ModernMenus: React.FC = () => {
           </p>
         </motion.div>
       </div>
+
+      {/* Sélecteur de restaurant */}
+      <motion.div 
+        className="restaurant-selector"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        <div className="selector-container">
+          <label htmlFor="restaurant-select" className="selector-label">
+            <MapPin className="w-4 h-4" />
+            Restaurant :
+          </label>
+          <select
+            id="restaurant-select"
+            value={selectedRestaurant}
+            onChange={(e) => setSelectedRestaurant(Number(e.target.value))}
+            className="selector-input"
+          >
+            {restaurants.map(restaurant => (
+              <option key={restaurant.id} value={restaurant.id}>
+                {restaurant.name} ({restaurant.code})
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        <button 
+          className="btn btn-primary btn-sm"
+          onClick={handleCreateMenu}
+        >
+          <Plus className="w-4 h-4" />
+          Nouveau menu
+        </button>
+      </motion.div>
 
       <div className="menus-content">
         {menus.map((menu, index) => (
@@ -169,16 +235,33 @@ const ModernMenus: React.FC = () => {
             </div>
 
             <div className="menu-actions">
-              <button className="btn btn-primary btn-sm">
-                <Edit className="w-4 h-4" />
-                Modifier le menu
+              <button 
+                className="btn btn-primary btn-sm"
+                onClick={() => handleViewMenu(menu)}
+              >
+                <Eye className="w-4 h-4" />
+                Voir
               </button>
               <button 
                 className="btn btn-secondary btn-sm"
+                onClick={() => handleEditMenu(menu)}
+              >
+                <Edit className="w-4 h-4" />
+                Modifier
+              </button>
+              <button 
+                className="btn btn-success btn-sm"
                 onClick={() => handleAddMenuItem(menu)}
               >
                 <Plus className="w-4 h-4" />
                 Ajouter un plat
+              </button>
+              <button 
+                className="btn btn-danger btn-sm"
+                onClick={() => handleDeleteMenu(menu.id)}
+              >
+                <Trash2 className="w-4 h-4" />
+                Supprimer
               </button>
             </div>
           </motion.div>
