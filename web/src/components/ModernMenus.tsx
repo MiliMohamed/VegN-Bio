@@ -78,6 +78,8 @@ const ModernMenus: React.FC = () => {
   const [menus, setMenus] = React.useState<Menu[]>([]);
   const [filteredMenuItems, setFilteredMenuItems] = React.useState<MenuItem[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [loadingMenus, setLoadingMenus] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
   const [selectedRestaurant, setSelectedRestaurant] = React.useState<number>(1);
   const [showMenuForm, setShowMenuForm] = useState(false);
   const [showMenuItemForm, setShowMenuItemForm] = useState(false);
@@ -101,50 +103,79 @@ const ModernMenus: React.FC = () => {
     return user?.role === 'ADMIN' || user?.role === 'RESTAURATEUR';
   };
 
-  // Récupérer le paramètre restaurant depuis l'URL
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const restaurantCode = urlParams.get('restaurant');
-    if (restaurantCode) {
-      // Trouver le restaurant par son code
-      const restaurant = restaurants.find(r => r.code === restaurantCode);
-      if (restaurant) {
-        setSelectedRestaurant(restaurant.id);
-      }
-    }
-  }, [restaurants]);
-
+  // Charger les restaurants au montage du composant
   React.useEffect(() => {
-    const fetchData = async () => {
+    const fetchRestaurants = async () => {
       try {
-        // Charger la liste des restaurants
+        setError(null);
         const restaurantsRes = await restaurantService.getAll();
         setRestaurants(restaurantsRes.data);
         
-        // Si aucun restaurant n'est sélectionné, sélectionner le premier par défaut
-        if (!selectedRestaurant && restaurantsRes.data.length > 0) {
-          setSelectedRestaurant(restaurantsRes.data[0].id);
-          console.log('Restaurant par défaut sélectionné:', restaurantsRes.data[0]);
+        // Vérifier les paramètres URL pour sélectionner le bon restaurant
+        const urlParams = new URLSearchParams(window.location.search);
+        const restaurantCode = urlParams.get('restaurant');
+        
+        let restaurantToSelect = null;
+        
+        if (restaurantCode) {
+          // Trouver le restaurant par son code depuis l'URL
+          restaurantToSelect = restaurantsRes.data.find((r: any) => r.code === restaurantCode);
+          if (!restaurantToSelect) {
+            console.warn(`Restaurant avec le code "${restaurantCode}" non trouvé`);
+          }
         }
         
-        // Charger les menus du restaurant sélectionné seulement si un restaurant est sélectionné
-        if (selectedRestaurant) {
-          console.log('Chargement des menus pour le restaurant:', selectedRestaurant);
-          const response = await menuService.getMenusByRestaurant(selectedRestaurant);
-          setMenus(response.data);
-          
-          // Extraire tous les items de menu pour le filtrage
-          const allMenuItems = response.data.flatMap((menu: Menu) => menu.menuItems || []);
-          setFilteredMenuItems(allMenuItems);
+        // Si aucun restaurant trouvé via URL ou pas de paramètre, prendre le premier par défaut
+        if (!restaurantToSelect && restaurantsRes.data.length > 0) {
+          restaurantToSelect = restaurantsRes.data[0];
+        }
+        
+        if (restaurantToSelect) {
+          setSelectedRestaurant(restaurantToSelect.id);
+          console.log('Restaurant sélectionné:', restaurantToSelect);
+        } else {
+          setError('Aucun restaurant disponible');
+          setLoading(false);
         }
       } catch (error) {
-        console.error('Erreur lors du chargement des données:', error);
-      } finally {
+        console.error('Erreur lors du chargement des restaurants:', error);
+        setError('Erreur lors du chargement des restaurants');
         setLoading(false);
       }
     };
 
-    fetchData();
+    fetchRestaurants();
+  }, []); // Seulement au montage
+
+  // Charger les menus quand un restaurant est sélectionné
+  React.useEffect(() => {
+    const fetchMenus = async () => {
+      if (!selectedRestaurant) return;
+      
+      try {
+        setLoadingMenus(true);
+        setError(null);
+        console.log('Chargement des menus pour le restaurant:', selectedRestaurant);
+        const response = await menuService.getMenusByRestaurant(selectedRestaurant);
+        setMenus(response.data);
+        
+        // Extraire tous les items de menu pour le filtrage
+        const allMenuItems = response.data.flatMap((menu: Menu) => menu.menuItems || []);
+        setFilteredMenuItems(allMenuItems);
+        
+        console.log(`Menus chargés: ${response.data.length} menus, ${allMenuItems.length} items`);
+      } catch (error) {
+        console.error('Erreur lors du chargement des menus:', error);
+        setError('Erreur lors du chargement des menus');
+        setMenus([]);
+        setFilteredMenuItems([]);
+      } finally {
+        setLoadingMenus(false);
+        setLoading(false);
+      }
+    };
+
+    fetchMenus();
   }, [selectedRestaurant]);
 
   // Recharger les données quand les menus changent
@@ -212,10 +243,19 @@ const ModernMenus: React.FC = () => {
     // Recharger les menus
     const fetchMenus = async () => {
       try {
+        setLoadingMenus(true);
+        setError(null);
         const response = await menuService.getMenusByRestaurant(selectedRestaurant);
         setMenus(response.data);
+        
+        // Extraire tous les items de menu pour le filtrage
+        const allMenuItems = response.data.flatMap((menu: Menu) => menu.menuItems || []);
+        setFilteredMenuItems(allMenuItems);
       } catch (error) {
         console.error('Erreur lors du chargement des menus:', error);
+        setError('Erreur lors du rechargement des menus');
+      } finally {
+        setLoadingMenus(false);
       }
     };
     fetchMenus();
@@ -231,10 +271,19 @@ const ModernMenus: React.FC = () => {
     // Recharger les menus
     const fetchMenus = async () => {
       try {
+        setLoadingMenus(true);
+        setError(null);
         const response = await menuService.getMenusByRestaurant(selectedRestaurant);
         setMenus(response.data);
+        
+        // Extraire tous les items de menu pour le filtrage
+        const allMenuItems = response.data.flatMap((menu: Menu) => menu.menuItems || []);
+        setFilteredMenuItems(allMenuItems);
       } catch (error) {
         console.error('Erreur lors du chargement des menus:', error);
+        setError('Erreur lors du rechargement des menus');
+      } finally {
+        setLoadingMenus(false);
       }
     };
     fetchMenus();
@@ -250,10 +299,27 @@ const ModernMenus: React.FC = () => {
       try {
         await menuService.delete(menuId);
         // Recharger les menus
-        const response = await menuService.getMenusByRestaurant(selectedRestaurant);
-        setMenus(response.data);
+        const fetchMenus = async () => {
+          try {
+            setLoadingMenus(true);
+            setError(null);
+            const response = await menuService.getMenusByRestaurant(selectedRestaurant);
+            setMenus(response.data);
+            
+            // Extraire tous les items de menu pour le filtrage
+            const allMenuItems = response.data.flatMap((menu: Menu) => menu.menuItems || []);
+            setFilteredMenuItems(allMenuItems);
+          } catch (error) {
+            console.error('Erreur lors du chargement des menus:', error);
+            setError('Erreur lors du rechargement des menus');
+          } finally {
+            setLoadingMenus(false);
+          }
+        };
+        fetchMenus();
       } catch (error) {
         console.error('Erreur lors de la suppression du menu:', error);
+        setError('Erreur lors de la suppression du menu');
       }
     }
   };
@@ -325,7 +391,25 @@ const ModernMenus: React.FC = () => {
       <div className="modern-menus">
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p>Chargement des menus...</p>
+          <p>Chargement des restaurants...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="modern-menus">
+        <div className="error-container">
+          <AlertTriangle className="w-8 h-8 text-red-500" />
+          <h2>Erreur de chargement</h2>
+          <p>{error}</p>
+          <button 
+            className="btn btn-primary"
+            onClick={() => window.location.reload()}
+          >
+            Recharger la page
+          </button>
         </div>
       </div>
     );
@@ -416,7 +500,31 @@ const ModernMenus: React.FC = () => {
       </motion.div>
 
       <div className="menus-content">
-        {menus.map((menu, index) => (
+        {loadingMenus && (
+          <div className="loading-menus">
+            <div className="loading-spinner"></div>
+            <p>Chargement des menus...</p>
+          </div>
+        )}
+        
+        {!loadingMenus && menus.length === 0 && (
+          <div className="no-menus">
+            <Utensils className="w-12 h-12 text-gray-400" />
+            <h3>Aucun menu disponible</h3>
+            <p>Ce restaurant n'a pas encore de menus configurés.</p>
+            {canCreateMenu() && (
+              <button 
+                className="btn btn-primary"
+                onClick={handleCreateMenu}
+              >
+                <Plus className="w-4 h-4" />
+                Créer le premier menu
+              </button>
+            )}
+          </div>
+        )}
+        
+        {!loadingMenus && menus.map((menu, index) => (
           <motion.div
             key={menu.id}
             className="menu-card"
