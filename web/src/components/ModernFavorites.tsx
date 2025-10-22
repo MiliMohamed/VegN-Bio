@@ -79,9 +79,20 @@ const ModernFavorites: React.FC = () => {
             <Heart className="w-16 h-16 text-gray-400" />
             <h2>Vos favoris sont vides</h2>
             <p>Ajoutez des plats à vos favoris en cliquant sur l'icône cœur</p>
-            <button className="btn btn-primary">
-              Découvrir nos menus
-            </button>
+            <div className="empty-favorites-actions">
+              <a href="/app/restaurants" className="btn btn-primary">
+                <MapPin className="w-4 h-4" />
+                Voir les restaurants
+              </a>
+              <a href="/app/menus" className="btn btn-secondary">
+                <ShoppingCart className="w-4 h-4" />
+                Voir les menus
+              </a>
+              <a href="/app/my-bookings" className="btn btn-info">
+                <Clock className="w-4 h-4" />
+                Mes réservations
+              </a>
+            </div>
           </motion.div>
         </div>
       </div>

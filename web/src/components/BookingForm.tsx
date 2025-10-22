@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { X, Save, User, Phone, Users, Calendar, Search } from 'lucide-react';
 import { bookingService } from '../services/api';
-import { Booking, CreateBookingRequest, Event } from '../types/events';
+import { usePersonalBookings } from '../contexts/PersonalBookingsContext';
+import { CreateBookingRequest, Event } from '../types/events';
 import '../styles/modern-theme-system.css';
 import '../styles/booking-form.css';
 
@@ -23,6 +24,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
   restaurantId,
   events = []
 }) => {
+  const { addBooking } = usePersonalBookings();
   const [formData, setFormData] = useState<CreateBookingRequest>({
     eventId: event?.id || 0,
     customerName: '',
@@ -59,7 +61,15 @@ const BookingForm: React.FC<BookingFormProps> = ({
     setError(null);
 
     try {
-      await bookingService.createBooking(formData);
+      // Créer la réservation dans le backend
+      const response = await bookingService.createBooking(formData);
+      
+      // Ajouter aussi dans le contexte local pour l'affichage immédiat
+      addBooking({
+        ...response.data,
+        event: selectedEvent || undefined
+      });
+      
       onSuccess();
       onClose();
     } catch (error) {

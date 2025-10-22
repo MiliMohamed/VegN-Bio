@@ -40,7 +40,32 @@ interface FavoritesProviderProps {
 }
 
 export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }) => {
-  const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
+  // Charger les favoris depuis localStorage au démarrage
+  const [favorites, setFavorites] = useState<FavoriteItem[]>(() => {
+    try {
+      const savedFavorites = localStorage.getItem('vegn-bio-favorites');
+      if (savedFavorites) {
+        const parsed = JSON.parse(savedFavorites);
+        // Convertir les dates string en objets Date
+        return parsed.map((item: any) => ({
+          ...item,
+          addedAt: new Date(item.addedAt)
+        }));
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des favoris:', error);
+    }
+    return [];
+  });
+
+  // Sauvegarder dans localStorage à chaque changement
+  React.useEffect(() => {
+    try {
+      localStorage.setItem('vegn-bio-favorites', JSON.stringify(favorites));
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde des favoris:', error);
+    }
+  }, [favorites]);
 
   const addToFavorites = (item: Omit<FavoriteItem, 'addedAt'>) => {
     setFavorites(prevFavorites => {

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 import { FavoritesProvider } from './contexts/FavoritesContext';
+import { PersonalBookingsProvider } from './contexts/PersonalBookingsContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { NotificationProvider } from './components/NotificationProvider';
 import ModernLandingPage from './components/ModernLandingPage';
@@ -15,6 +16,7 @@ import ModernRooms from './components/ModernRooms';
 import ModernEvents from './components/ModernEvents';
 import EventsManager from './components/EventsManager';
 import BookingsManager from './components/BookingsManager';
+import PersonalBookings from './components/PersonalBookings';
 import ModernMarketplace from './components/ModernMarketplace';
 import ModernReviews from './components/ModernReviews';
 import VeterinaryChatbot from './components/VeterinaryChatbot';
@@ -42,7 +44,8 @@ function App() {
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>
-              <Router>
+              <PersonalBookingsProvider>
+                <Router>
           <div className="App">
             <Routes>
               <Route path="/" element={<ModernLandingPage />} />
@@ -62,6 +65,7 @@ function App() {
                         <Route path="/events" element={<ModernEvents />} />
                         <Route path="/events-manager" element={<EventsManager />} />
                         <Route path="/bookings-manager" element={<BookingsManager />} />
+                        <Route path="/my-bookings" element={<PersonalBookings />} />
                         <Route path="/marketplace" element={<ModernMarketplace />} />
                         <Route path="/reviews" element={<ModernReviews />} />
                         <Route path="/chatbot" element={<VeterinaryChatbot />} />
@@ -80,9 +84,10 @@ function App() {
             </Routes>
           </div>
           </Router>
-        </FavoritesProvider>
-      </CartProvider>
-    </AuthProvider>
+              </PersonalBookingsProvider>
+            </FavoritesProvider>
+          </CartProvider>
+        </AuthProvider>
   </ThemeProvider>
 </NotificationProvider>
   );

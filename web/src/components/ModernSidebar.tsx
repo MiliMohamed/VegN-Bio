@@ -91,6 +91,12 @@ const ModernSidebar: React.FC = () => {
       description: 'Suivi des réservations'
     },
     {
+      path: '/app/my-bookings',
+      icon: <Calendar className="w-5 h-5" />,
+      label: 'Mes Réservations',
+      description: 'Vos réservations'
+    },
+    {
       path: '/app/marketplace',
       icon: <ShoppingCart className="w-5 h-5" />,
       label: 'Marketplace',

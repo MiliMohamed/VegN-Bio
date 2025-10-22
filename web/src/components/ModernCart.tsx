@@ -63,9 +63,20 @@ const ModernCart: React.FC = () => {
             <ShoppingCart className="w-16 h-16 text-gray-400" />
             <h2>Votre panier est vide</h2>
             <p>Ajoutez des plats délicieux à votre panier pour commencer votre commande</p>
-            <button className="btn btn-primary">
-              Voir les menus
-            </button>
+            <div className="empty-cart-actions">
+              <a href="/app/restaurants" className="btn btn-primary">
+                <MapPin className="w-4 h-4" />
+                Voir les restaurants
+              </a>
+              <a href="/app/menus" className="btn btn-secondary">
+                <ShoppingCart className="w-4 h-4" />
+                Voir les menus
+              </a>
+              <a href="/app/my-bookings" className="btn btn-info">
+                <Calendar className="w-4 h-4" />
+                Mes réservations
+              </a>
+            </div>
           </motion.div>
         </div>
       </div>

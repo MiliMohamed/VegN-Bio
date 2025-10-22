@@ -41,7 +41,27 @@ interface CartProviderProps {
 }
 
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  // Charger le panier depuis localStorage au démarrage
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    try {
+      const savedCart = localStorage.getItem('vegn-bio-cart');
+      if (savedCart) {
+        return JSON.parse(savedCart);
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement du panier:', error);
+    }
+    return [];
+  });
+
+  // Sauvegarder dans localStorage à chaque changement
+  React.useEffect(() => {
+    try {
+      localStorage.setItem('vegn-bio-cart', JSON.stringify(cartItems));
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde du panier:', error);
+    }
+  }, [cartItems]);
 
   const addToCart = (item: Omit<CartItem, 'quantity'>, restaurantName: string) => {
     setCartItems(prevItems => {
