@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
+import { AuthContext } from './AuthContext';
 import { 
   MapPin, 
   Phone, 
@@ -31,26 +32,44 @@ interface Restaurant {
 }
 
 const ModernRestaurants: React.FC = () => {
+  const { user } = useContext(AuthContext);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
   const [showModal, setShowModal] = useState(false);
 
+  // Fonctions de vérification des permissions
+  const canCreateRestaurant = () => {
+    return user?.role === 'ADMIN' || user?.role === 'RESTAURATEUR';
+  };
+
+  const canEditRestaurant = () => {
+    return user?.role === 'ADMIN' || user?.role === 'RESTAURATEUR';
+  };
+
+  const canDeleteRestaurant = () => {
+    return user?.role === 'ADMIN';
+  };
+
+  const canReserveRoom = () => {
+    return user?.role === 'CLIENT' || user?.role === 'ADMIN';
+  };
+
   useEffect(() => {
   const fetchRestaurants = async () => {
     try {
       const response = await restaurantService.getAll();
       setRestaurants(response.data);
-      } catch (error) {
-        console.error('Erreur lors du chargement des restaurants:', error);
+    } catch (error) {
+      console.error('Erreur lors du chargement des restaurants:', error);
     } finally {
       setLoading(false);
     }
   };
 
-    fetchRestaurants();
-  }, []);
+  fetchRestaurants();
+}, []);
 
   const getRestaurantDetails = (code: string) => {
     const details: { [key: string]: any } = {
@@ -130,9 +149,9 @@ const ModernRestaurants: React.FC = () => {
   };
 
   const handleViewMenus = (restaurant: Restaurant) => {
-    // TODO: Rediriger vers la page des menus avec le restaurant sélectionné
+    // Rediriger vers la page des menus avec le restaurant sélectionné
     console.log('Voir les menus du restaurant:', restaurant);
-    // window.location.href = `/app/menus?restaurant=${restaurant.id}`;
+    window.location.href = `/app/menus?restaurant=${restaurant.code}`;
   };
 
   const handleReserveRoom = (restaurant: Restaurant) => {
@@ -141,8 +160,9 @@ const ModernRestaurants: React.FC = () => {
   };
 
   const handleViewRestaurantMenus = (restaurant: Restaurant) => {
-    // TODO: Rediriger vers la page des menus
+    // Rediriger vers la page des menus
     console.log('Voir les menus de:', restaurant);
+    window.location.href = `/app/menus?restaurant=${restaurant.code}`;
   };
 
   const handleContactRestaurant = (restaurant: Restaurant) => {
@@ -262,13 +282,15 @@ const ModernRestaurants: React.FC = () => {
                   <Eye className="w-4 h-4" />
                   Voir détails
                 </button>
-                <button 
-                  className="btn btn-secondary btn-sm"
-                  onClick={() => handleEditRestaurant(restaurant)}
-                >
-                  <Edit className="w-4 h-4" />
-                  Modifier
-                </button>
+                {canEditRestaurant() && (
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => handleEditRestaurant(restaurant)}
+                  >
+                    <Edit className="w-4 h-4" />
+                    Modifier
+                  </button>
+                )}
                 <button 
                   className="btn btn-success btn-sm"
                   onClick={() => handleViewMenus(restaurant)}
@@ -369,13 +391,15 @@ const ModernRestaurants: React.FC = () => {
                   </div>
                   
             <div className="modal-footer">
-              <button 
-                className="btn btn-primary"
-                onClick={() => handleReserveRoom(selectedRestaurant)}
-              >
-                <Calendar className="w-4 h-4" />
-                Réserver une salle
-              </button>
+              {canReserveRoom() && (
+                <button 
+                  className="btn btn-primary"
+                  onClick={() => handleReserveRoom(selectedRestaurant)}
+                >
+                  <Calendar className="w-4 h-4" />
+                  Réserver une salle
+                </button>
+              )}
               <button 
                 className="btn btn-secondary"
                 onClick={() => handleViewRestaurantMenus(selectedRestaurant)}

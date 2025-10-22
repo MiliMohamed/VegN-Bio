@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
+import { AuthContext } from './AuthContext';
 import { 
   Utensils, 
   Plus, 
@@ -53,6 +54,7 @@ interface Menu {
 }
 
 const ModernMenus: React.FC = () => {
+  const { user } = useContext(AuthContext);
   const { addToCart } = useCart();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const [menus, setMenus] = React.useState<Menu[]>([]);
@@ -66,6 +68,32 @@ const ModernMenus: React.FC = () => {
   const [allergenPreferences, setAllergenPreferences] = useState<{ [allergenId: number]: boolean }>({});
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [showItemDetails, setShowItemDetails] = useState(false);
+
+  // Fonctions de vérification des permissions
+  const canCreateMenu = () => {
+    return user?.role === 'ADMIN' || user?.role === 'RESTAURATEUR';
+  };
+
+  const canEditMenu = () => {
+    return user?.role === 'ADMIN' || user?.role === 'RESTAURATEUR';
+  };
+
+  const canDeleteMenu = () => {
+    return user?.role === 'ADMIN' || user?.role === 'RESTAURATEUR';
+  };
+
+  // Récupérer le paramètre restaurant depuis l'URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const restaurantCode = urlParams.get('restaurant');
+    if (restaurantCode) {
+      // Trouver le restaurant par son code
+      const restaurant = restaurants.find(r => r.code === restaurantCode);
+      if (restaurant) {
+        setSelectedRestaurant(restaurant.id);
+      }
+    }
+  }, [restaurants]);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -312,13 +340,15 @@ const ModernMenus: React.FC = () => {
             className="allergen-manager-main"
           />
           
-          <button 
-            className="btn btn-primary btn-sm"
-            onClick={handleCreateMenu}
-          >
-            <Plus className="w-4 h-4" />
-            Nouveau menu
-          </button>
+          {canCreateMenu() && (
+            <button 
+              className="btn btn-primary btn-sm"
+              onClick={handleCreateMenu}
+            >
+              <Plus className="w-4 h-4" />
+              Nouveau menu
+            </button>
+          )}
         </div>
       </motion.div>
 
@@ -452,27 +482,33 @@ const ModernMenus: React.FC = () => {
                 <Eye className="w-4 h-4" />
                 Voir
               </button>
-              <button 
-                className="btn btn-secondary btn-sm"
-                onClick={() => handleEditMenu(menu)}
-              >
-                <Edit className="w-4 h-4" />
-                Modifier
-              </button>
-              <button 
-                className="btn btn-success btn-sm"
-                onClick={() => handleAddMenuItem(menu)}
-              >
-                <Plus className="w-4 h-4" />
-                Ajouter un plat
-              </button>
-              <button 
-                className="btn btn-danger btn-sm"
-                onClick={() => handleDeleteMenu(menu.id)}
-              >
-                <Trash2 className="w-4 h-4" />
-                Supprimer
-              </button>
+              {canEditMenu() && (
+                <button 
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => handleEditMenu(menu)}
+                >
+                  <Edit className="w-4 h-4" />
+                  Modifier
+                </button>
+              )}
+              {canCreateMenu() && (
+                <button 
+                  className="btn btn-success btn-sm"
+                  onClick={() => handleAddMenuItem(menu)}
+                >
+                  <Plus className="w-4 h-4" />
+                  Ajouter un plat
+                </button>
+              )}
+              {canDeleteMenu() && (
+                <button 
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handleDeleteMenu(menu.id)}
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Supprimer
+                </button>
+              )}
             </div>
           </motion.div>
         ))}
