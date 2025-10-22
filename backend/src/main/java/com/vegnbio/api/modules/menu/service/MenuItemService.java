@@ -100,6 +100,50 @@ public class MenuItemService {
         menuItemRepository.deleteById(menuItemId);
     }
     
+    @Transactional(readOnly = true)
+    public List<MenuItemDto> filterMenuItems(String name, Boolean isVegan, Integer minPrice, Integer maxPrice, List<Long> excludeAllergenIds) {
+        List<MenuItem> allItems = menuItemRepository.findAll();
+        
+        return allItems.stream()
+                .filter(item -> {
+                    // Filtre par nom
+                    if (name != null && !name.trim().isEmpty()) {
+                        if (!item.getName().toLowerCase().contains(name.toLowerCase()) &&
+                            !item.getDescription().toLowerCase().contains(name.toLowerCase())) {
+                            return false;
+                        }
+                    }
+                    
+                    // Filtre par végétalien
+                    if (isVegan != null && item.getIsVegan() != isVegan) {
+                        return false;
+                    }
+                    
+                    // Filtre par prix
+                    if (minPrice != null && item.getPriceCents() < minPrice) {
+                        return false;
+                    }
+                    if (maxPrice != null && item.getPriceCents() > maxPrice) {
+                        return false;
+                    }
+                    
+                    // Filtre par allergènes (exclure les items contenant les allergènes spécifiés)
+                    if (excludeAllergenIds != null && !excludeAllergenIds.isEmpty()) {
+                        if (item.getAllergens() != null) {
+                            boolean hasExcludedAllergen = item.getAllergens().stream()
+                                    .anyMatch(allergen -> excludeAllergenIds.contains(allergen.getId()));
+                            if (hasExcludedAllergen) {
+                                return false;
+                            }
+                        }
+                    }
+                    
+                    return true;
+                })
+                .map(this::mapToDto)
+                .toList();
+    }
+    
     private MenuItemDto mapToDto(MenuItem menuItem) {
         return new MenuItemDto(
                 menuItem.getId(),

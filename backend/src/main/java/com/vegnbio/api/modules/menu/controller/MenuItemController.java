@@ -37,6 +37,18 @@ public class MenuItemController {
         return ResponseEntity.ok(menuItems);
     }
     
+    @GetMapping("/filter")
+    public ResponseEntity<List<MenuItemDto>> filterMenuItems(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Boolean isVegan,
+            @RequestParam(required = false) Integer minPrice,
+            @RequestParam(required = false) Integer maxPrice,
+            @RequestParam(required = false) List<Long> excludeAllergenIds
+    ) {
+        List<MenuItemDto> menuItems = menuItemService.filterMenuItems(name, isVegan, minPrice, maxPrice, excludeAllergenIds);
+        return ResponseEntity.ok(menuItems);
+    }
+    
     @GetMapping("/{menuItemId}")
     public ResponseEntity<MenuItemDto> getMenuItem(@PathVariable Long menuItemId) {
         MenuItemDto menuItem = menuItemService.getMenuItemById(menuItemId);

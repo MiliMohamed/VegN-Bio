@@ -12,14 +12,22 @@ import {
   MapPin,
   ShoppingCart,
   Heart,
-  Info
+  Info,
+  AlertTriangle,
+  Shield
 } from 'lucide-react';
 import { menuService, restaurantService } from '../services/api';
 import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import MenuForm from './MenuForm';
 import MenuItemForm from './MenuItemForm';
+import MenuFilter from './MenuFilter';
+import AllergenManager from './AllergenManager';
+import MenuItemDetails from './MenuItemDetails';
 import '../styles/menu-improvements.css';
+import '../styles/allergen-manager.css';
+import '../styles/menu-filter.css';
+import '../styles/menu-item-details.css';
 
 interface Allergen {
   id: number;
@@ -48,12 +56,16 @@ const ModernMenus: React.FC = () => {
   const { addToCart } = useCart();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const [menus, setMenus] = React.useState<Menu[]>([]);
+  const [filteredMenuItems, setFilteredMenuItems] = React.useState<MenuItem[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [selectedRestaurant, setSelectedRestaurant] = React.useState<number>(1);
   const [showMenuForm, setShowMenuForm] = useState(false);
   const [showMenuItemForm, setShowMenuItemForm] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
   const [restaurants, setRestaurants] = useState<any[]>([]);
+  const [allergenPreferences, setAllergenPreferences] = useState<{ [allergenId: number]: boolean }>({});
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [showItemDetails, setShowItemDetails] = useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -65,6 +77,10 @@ const ModernMenus: React.FC = () => {
         // Charger les menus du restaurant sélectionné
         const response = await menuService.getMenusByRestaurant(selectedRestaurant);
         setMenus(response.data);
+        
+        // Extraire tous les items de menu pour le filtrage
+        const allMenuItems = response.data.flatMap((menu: Menu) => menu.menuItems || []);
+        setFilteredMenuItems(allMenuItems);
       } catch (error) {
         console.error('Erreur lors du chargement des données:', error);
       } finally {
@@ -75,8 +91,52 @@ const ModernMenus: React.FC = () => {
     fetchData();
   }, [selectedRestaurant]);
 
+  // Recharger les données quand les menus changent
+  React.useEffect(() => {
+    const allMenuItems = menus.flatMap((menu: Menu) => menu.menuItems || []);
+    setFilteredMenuItems(allMenuItems);
+  }, [menus]);
+
   const formatPrice = (priceCents: number) => {
     return (priceCents / 100).toFixed(2) + ' €';
+  };
+
+  const handleAllergenPreferencesChange = (preferences: { [allergenId: number]: boolean }) => {
+    setAllergenPreferences(preferences);
+  };
+
+  const getItemAllergenWarnings = (item: MenuItem) => {
+    if (!item.allergens || item.allergens.length === 0) return null;
+    
+    const userAllergens = Object.keys(allergenPreferences)
+      .filter(key => allergenPreferences[Number(key)])
+      .map(Number);
+    
+    const dangerousAllergens = item.allergens.filter(allergen => 
+      userAllergens.includes(allergen.id)
+    );
+    
+    return dangerousAllergens;
+  };
+
+  const getAllergenIcon = (code: string) => {
+    const icons: { [key: string]: string } = {
+      'GLUTEN': '🌾',
+      'CRUST': '🦐',
+      'EGG': '🥚',
+      'FISH': '🐟',
+      'PEANUT': '🥜',
+      'SOY': '🫘',
+      'MILK': '🥛',
+      'NUTS': '🌰',
+      'CELERY': '🥬',
+      'MUSTARD': '🟡',
+      'SESAME': '🟤',
+      'SULPHITES': '⚗️',
+      'LUPIN': '🟣',
+      'MOLLUSCS': '🐚'
+    };
+    return icons[code] || '⚠️';
   };
 
   const handleCreateMenu = () => {
@@ -185,9 +245,13 @@ const ModernMenus: React.FC = () => {
   };
 
   const handleViewItemDetails = (item: MenuItem) => {
-    // TODO: Implémenter la vue détaillée de l'item
-    console.log('Voir détails:', item);
-    alert(`Détails de: ${item.name}\nDescription: ${item.description}\nPrix: ${formatPrice(item.priceCents)}`);
+    setSelectedItem(item);
+    setShowItemDetails(true);
+  };
+
+  const handleCloseItemDetails = () => {
+    setSelectedItem(null);
+    setShowItemDetails(false);
   };
 
   if (loading) {
@@ -216,7 +280,7 @@ const ModernMenus: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Sélecteur de restaurant */}
+      {/* Sélecteur de restaurant et gestion des allergènes */}
       <motion.div 
         className="restaurant-selector"
         initial={{ opacity: 0, y: 20 }}
@@ -242,13 +306,32 @@ const ModernMenus: React.FC = () => {
           </select>
         </div>
         
-        <button 
-          className="btn btn-primary btn-sm"
-          onClick={handleCreateMenu}
-        >
-          <Plus className="w-4 h-4" />
-          Nouveau menu
-        </button>
+        <div className="selector-actions">
+          <AllergenManager 
+            onPreferencesChange={handleAllergenPreferencesChange}
+            className="allergen-manager-main"
+          />
+          
+          <button 
+            className="btn btn-primary btn-sm"
+            onClick={handleCreateMenu}
+          >
+            <Plus className="w-4 h-4" />
+            Nouveau menu
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Filtre de menus */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+      >
+        <MenuFilter 
+          items={filteredMenuItems}
+          onFilteredItems={setFilteredMenuItems}
+        />
       </motion.div>
 
       <div className="menus-content">
@@ -302,16 +385,30 @@ const ModernMenus: React.FC = () => {
                   {item.allergens && item.allergens.length > 0 && (
                     <div className="allergens-section">
                       <div className="allergens-label">
-                        <span className="allergens-icon">⚠️</span>
+                        <AlertTriangle className="w-4 h-4" />
                         Allergènes :
                       </div>
                       <div className="allergens-list">
                         {item.allergens.map((allergen) => (
-                          <span key={allergen.id} className="allergen-badge">
-                            {allergen.label}
+                          <span 
+                            key={allergen.id} 
+                            className={`allergen-badge ${getItemAllergenWarnings(item)?.some(a => a.id === allergen.id) ? 'allergen-dangerous' : ''}`}
+                            title={allergen.label}
+                          >
+                            {getAllergenIcon(allergen.code)} {allergen.label}
                           </span>
                         ))}
                       </div>
+                      
+                      {/* Alerte pour les allergènes dangereux */}
+                      {getItemAllergenWarnings(item) && getItemAllergenWarnings(item)!.length > 0 && (
+                        <div className="allergen-warning">
+                          <Shield className="w-4 h-4" />
+                          <span>
+                            ⚠️ Attention : Ce plat contient des allergènes auxquels vous êtes allergique !
+                          </span>
+                        </div>
+                      )}
                     </div>
                   )}
 
@@ -397,6 +494,15 @@ const ModernMenus: React.FC = () => {
           menuId={selectedMenu.id}
         />
       )}
+
+      {/* Modal de détails des items */}
+      <MenuItemDetails
+        item={selectedItem}
+        isOpen={showItemDetails}
+        onClose={handleCloseItemDetails}
+        restaurantName={restaurants.find(r => r.id === selectedRestaurant)?.name}
+        allergenPreferences={allergenPreferences}
+      />
     </div>
   );
 };

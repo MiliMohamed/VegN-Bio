@@ -1,0 +1,381 @@
+/* Styles pour le filtre de menus */
+
+.menu-filter {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.filter-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.search-bar {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar svg {
+  position: absolute;
+  left: 0.75rem;
+  color: #6b7280;
+  z-index: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.clear-search-btn:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.filter-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  color: #4b5563;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.filter-toggle-btn:hover {
+  background: #f1f5f9;
+  border-color: #d1d5db;
+}
+
+.filter-toggle-btn.has-filters {
+  background: #dbeafe;
+  border-color: #3b82f6;
+  color: #1e40af;
+}
+
+.filter-count {
+  background: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.allergen-manager-inline {
+  flex-shrink: 0;
+}
+
+.filters-panel {
+  overflow: hidden;
+  border-top: 1px solid #e5e7eb;
+}
+
+.filters-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.quick-filters {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.quick-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: white;
+  color: #6b7280;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-filter-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.quick-filter-btn.active {
+  background: #dcfce7;
+  border-color: #22c55e;
+  color: #166534;
+}
+
+.price-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.price-range-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.price-range-input {
+  flex: 1;
+  height: 0.5rem;
+  background: #e5e7eb;
+  border-radius: 0.25rem;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.price-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: #667eea;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.price-range-input::-moz-range-thumb {
+  width: 1.25rem;
+  height: 1.25rem;
+  background: #667eea;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sort-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sort-options {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.sort-select,
+.sort-order-select {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sort-select:focus,
+.sort-order-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-header {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  .search-bar {
+    order: 1;
+  }
+
+  .filter-toggle-btn,
+  .allergen-manager-inline {
+    order: 2;
+    justify-content: center;
+  }
+
+  .quick-filters {
+    justify-content: center;
+  }
+
+  .sort-options {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .filter-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-header {
+    padding: 1rem;
+  }
+
+  .filters-content {
+    padding: 1rem;
+  }
+
+  .quick-filters {
+    flex-direction: column;
+  }
+
+  .quick-filter-btn {
+    justify-content: center;
+  }
+}
+
+/* Animations */
+.filter-toggle-btn,
+.quick-filter-btn,
+.sort-select,
+.sort-order-select {
+  transition: all 0.2s ease;
+}
+
+.filter-toggle-btn:hover,
+.quick-filter-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* États de chargement */
+.menu-filter.loading .search-input {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.menu-filter.loading .filter-toggle-btn {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Thème sombre */
+@media (prefers-color-scheme: dark) {
+  .menu-filter {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  .search-input {
+    background: #374151;
+    border-color: #4b5563;
+    color: white;
+  }
+
+  .search-input:focus {
+    border-color: #667eea;
+    background: #374151;
+  }
+
+  .filter-toggle-btn {
+    background: #374151;
+    border-color: #4b5563;
+    color: #d1d5db;
+  }
+
+  .filter-toggle-btn:hover {
+    background: #4b5563;
+  }
+
+  .quick-filter-btn {
+    background: #374151;
+    border-color: #4b5563;
+    color: #d1d5db;
+  }
+
+  .quick-filter-btn:hover {
+    background: #4b5563;
+  }
+
+  .quick-filter-btn.active {
+    background: #065f46;
+    border-color: #10b981;
+    color: #d1fae5;
+  }
+
+  .sort-select,
+  .sort-order-select {
+    background: #374151;
+    border-color: #4b5563;
+    color: #d1d5db;
+  }
+
+  .filter-label {
+    color: #d1d5db;
+  }
+}

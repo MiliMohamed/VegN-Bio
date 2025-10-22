@@ -145,6 +145,34 @@ export const allergenService = {
   getAll: () => api.get('/allergens'),
   getById: (id: string) => api.get(`/allergens/${id}`),
   search: (name: string) => api.get(`/allergens/search?name=${encodeURIComponent(name)}`),
+  getByCode: (code: string) => api.get(`/allergens/${code}`),
+};
+
+// Service pour les items de menu
+export const menuItemService = {
+  create: (data: any) => api.post('/menu-items', data),
+  getByMenu: (menuId: number) => api.get(`/menu-items/menu/${menuId}`),
+  search: (name: string) => api.get(`/menu-items/search?name=${name}`),
+  filter: (params: {
+    name?: string;
+    isVegan?: boolean;
+    minPrice?: number;
+    maxPrice?: number;
+    excludeAllergenIds?: number[];
+  }) => {
+    const searchParams = new URLSearchParams();
+    if (params.name) searchParams.append('name', params.name);
+    if (params.isVegan !== undefined) searchParams.append('isVegan', params.isVegan.toString());
+    if (params.minPrice !== undefined) searchParams.append('minPrice', params.minPrice.toString());
+    if (params.maxPrice !== undefined) searchParams.append('maxPrice', params.maxPrice.toString());
+    if (params.excludeAllergenIds) {
+      params.excludeAllergenIds.forEach(id => searchParams.append('excludeAllergenIds', id.toString()));
+    }
+    return api.get(`/menu-items/filter?${searchParams.toString()}`);
+  },
+  getById: (id: number) => api.get(`/menu-items/${id}`),
+  update: (id: number, data: any) => api.put(`/menu-items/${id}`, data),
+  delete: (id: number) => api.delete(`/menu-items/${id}`),
 };
 
 // Service pour les consultations vétérinaires (Chatbot)
@@ -196,6 +224,7 @@ export const ticketLineService = {
   deleteTicketLine: (id: number) => api.delete(`/ticket-lines/${id}`),
   getTicketLinesByTicket: (ticketId: number) => api.get(`/ticket-lines/ticket/${ticketId}`),
 };
+
 
 // Service pour les rapports d'erreur
 export const errorReportService = {
