@@ -26,26 +26,26 @@ const ModernLandingPage: React.FC = () => {
   const features = [
     {
       icon: <Utensils className="w-8 h-8" />,
-      title: 'Menus Saisonniers',
-      description: 'Découvrez nos plats végétariens et biologiques préparés avec des ingrédients frais et locaux.',
+      title: 'Menus Végétariens & Bio',
+      description: 'Nos menus sont obligatoirement végétariens, construits à partir de produits biologiques achetés auprès de producteurs franciliens.',
       color: 'text-green-500'
     },
     {
       icon: <Calendar className="w-8 h-8" />,
-      title: 'Événements',
-      description: 'Participez à nos conférences, ateliers culinaires et événements sur l\'alimentation durable.',
+      title: 'Menus Changeants',
+      description: 'Nos menus changent fréquemment, en fonction des propositions des producteurs locaux pour une fraîcheur optimale.',
       color: 'text-blue-500'
     },
     {
-      icon: <MapPin className="w-8 h-8" />,
-      title: '3 Restaurants',
-      description: 'Retrouvez-nous dans nos trois établissements à Paris : République, Bastille et Nation.',
+      icon: <Users className="w-8 h-8" />,
+      title: 'Programme de Fidélisation',
+      description: 'Les clients peuvent contribuer au développement de la chaîne en s\'inscrivant à notre programme de fidélisation.',
       color: 'text-purple-500'
     },
     {
-      icon: <MessageCircle className="w-8 h-8" />,
-      title: 'Assistant IA',
-      description: 'Notre chatbot intelligent vous aide à choisir vos plats selon vos préférences et allergies.',
+      icon: <Heart className="w-8 h-8" />,
+      title: 'Services Événementiels',
+      description: 'Nous proposons toute une série de services pour vos événements : anniversaires, conférences, fêtes, séminaires.',
       color: 'text-orange-500'
     }
   ];
@@ -53,32 +53,39 @@ const ModernLandingPage: React.FC = () => {
   const testimonials = [
     {
       name: 'Marie Dubois',
-      role: 'Cliente fidèle',
-      content: 'Les plats sont délicieux et respectent parfaitement mes convictions végétariennes. L\'ambiance est chaleureuse et le service impeccable.',
+      role: 'Cliente fidèle depuis 2016',
+      content: 'Je suis cliente de Veg\'n Bio depuis leur ouverture ! La qualité des produits bio et l\'engagement envers les producteurs locaux me convainquent à chaque visite.',
       rating: 5,
       avatar: 'MD'
     },
     {
       name: 'Jean Martin',
       role: 'Entrepreneur',
-      content: 'J\'organise régulièrement des déjeuners d\'affaires ici. L\'espace est parfait et la qualité des produits exceptionnelle.',
+      content: 'J\'organise régulièrement des séminaires dans leurs restaurants. L\'espace est parfait, le service impeccable et mes clients adorent la cuisine végétarienne.',
       rating: 5,
       avatar: 'JM'
     },
     {
       name: 'Sophie Laurent',
       role: 'Nutritionniste',
-      content: 'En tant que professionnelle de la nutrition, je recommande vivement VegN Bio. L\'équilibre nutritionnel est parfait.',
+      content: 'En tant que professionnelle de la nutrition, je recommande vivement Veg\'n Bio. L\'équilibre nutritionnel et la qualité bio sont exceptionnels.',
       rating: 5,
       avatar: 'SL'
+    },
+    {
+      name: 'Pierre Moreau',
+      role: 'Producteur local',
+      content: 'C\'est un plaisir de travailler avec Veg\'n Bio. Ils valorisent vraiment nos produits et créent une vraie relation de confiance avec les producteurs.',
+      rating: 5,
+      avatar: 'PM'
     }
   ];
 
   const stats = [
-    { number: '3', label: 'Restaurants', icon: <MapPin className="w-6 h-6" /> },
-    { number: '156', label: 'Clients satisfaits', icon: <Users className="w-6 h-6" /> },
-    { number: '4.8', label: 'Note moyenne', icon: <Star className="w-6 h-6" /> },
-    { number: '12', label: 'Années d\'expérience', icon: <Leaf className="w-6 h-6" /> }
+    { number: '5', label: 'Restaurants', icon: <MapPin className="w-6 h-6" /> },
+    { number: '500+', label: 'Clients fidèles', icon: <Users className="w-6 h-6" /> },
+    { number: '4.9', label: 'Note moyenne', icon: <Star className="w-6 h-6" /> },
+    { number: '10', label: 'Années d\'expérience', icon: <Leaf className="w-6 h-6" /> }
   ];
 
   return (
@@ -216,9 +223,9 @@ const ModernLandingPage: React.FC = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="section-title">Pourquoi choisir VegN Bio ?</h2>
+            <h2 className="section-title">Nos Engagements</h2>
             <p className="section-subtitle">
-              Découvrez les avantages qui font de nous votre choix numéro 1 pour une alimentation saine et responsable.
+              Découvrez les valeurs qui guident Veg'n Bio depuis 2014 pour une alimentation saine et responsable.
             </p>
           </motion.div>
           
@@ -301,6 +308,96 @@ const ModernLandingPage: React.FC = () => {
         </div>
       </section>
 
+      {/* About Section */}
+      <section id="about" className="about-section">
+        <div className="about-container">
+          <motion.div 
+            className="section-header"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="section-title">À propos de Veg'n Bio</h2>
+            <p className="section-subtitle">
+              Notre histoire et nos valeurs depuis 2014
+            </p>
+          </motion.div>
+          
+          <div className="about-content">
+            <motion.div 
+              className="about-text"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <div className="about-story">
+                <h3>Notre Histoire</h3>
+                <p>
+                  Créée en 2014, la chaîne Veg'n Bio est une entreprise de restaurants végétariens et biologiques 
+                  installés dans la capitale. La société a bâti son image autour de concepts simples :
+                </p>
+                <ul className="about-features">
+                  <li><CheckCircle className="w-5 h-5" /> Les menus sont obligatoirement végétariens</li>
+                  <li><CheckCircle className="w-5 h-5" /> Ils sont construits à partir de produits biologiques achetés auprès de producteurs franciliens</li>
+                  <li><CheckCircle className="w-5 h-5" /> Ils changent fréquemment, en fonction des propositions des producteurs</li>
+                  <li><CheckCircle className="w-5 h-5" /> Les clients peuvent contribuer au développement de la chaîne en s'inscrivant à un programme de fidélisation</li>
+                  <li><CheckCircle className="w-5 h-5" /> La société propose toute une série de services à ses clients tout au long de l'année</li>
+                </ul>
+              </div>
+            </motion.div>
+            
+            <motion.div 
+              className="about-services"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <h3>Services Proposés</h3>
+              <div className="services-grid">
+                <div className="service-item">
+                  <Calendar className="w-6 h-6" />
+                  <div>
+                    <h4>Réservation de salles</h4>
+                    <p>Réservation de certaines salles de restaurants ou de restaurants entiers pour le déjeuner ou pour la soirée</p>
+                  </div>
+                </div>
+                <div className="service-item">
+                  <ShoppingCart className="w-6 h-6" />
+                  <div>
+                    <h4>Plateaux repas</h4>
+                    <p>Plateaux repas livrés à domicile</p>
+                  </div>
+                </div>
+                <div className="service-item">
+                  <Heart className="w-6 h-6" />
+                  <div>
+                    <h4>Anniversaires d'enfants</h4>
+                    <p>Organisation d'anniversaires d'enfants en après-midi</p>
+                  </div>
+                </div>
+                <div className="service-item">
+                  <Star className="w-6 h-6" />
+                  <div>
+                    <h4>Événements & animations</h4>
+                    <p>Invitations à des événements et à des animations</p>
+                  </div>
+                </div>
+                <div className="service-item">
+                  <Users className="w-6 h-6" />
+                  <div>
+                    <h4>Rencontres producteurs</h4>
+                    <p>Rencontres avec les producteurs alimentaires</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="cta-section">
         <div className="cta-container">
@@ -311,9 +408,9 @@ const ModernLandingPage: React.FC = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="cta-title">Prêt à commencer votre aventure culinaire ?</h2>
+            <h2 className="cta-title">Rejoignez la communauté Veg'n Bio</h2>
             <p className="cta-subtitle">
-              Rejoignez la communauté VegN Bio et découvrez une nouvelle façon de manger sainement.
+              Découvrez une nouvelle façon de manger sainement et rejoignez notre programme de fidélisation.
             </p>
             <div className="cta-actions">
               <Link to="/register" className="btn btn-primary btn-lg">
