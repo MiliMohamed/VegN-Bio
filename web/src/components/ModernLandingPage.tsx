@@ -99,9 +99,7 @@ const ModernLandingPage: React.FC = () => {
           </Link>
           
           <div className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
-            <Link to="#features" className="nav-link">Fonctionnalités</Link>
-            <Link to="#testimonials" className="nav-link">Témoignages</Link>
-            <Link to="#about" className="nav-link">À propos</Link>
+      
             <Link to="/login" className="nav-link">Connexion</Link>
             <Link to="/register" className="btn btn-primary">
               Créer un compte
@@ -138,10 +136,7 @@ const ModernLandingPage: React.FC = () => {
                 Commencer maintenant
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <button className="btn btn-secondary btn-lg">
-                <Play className="w-5 h-5" />
-                Voir la vidéo
-              </button>
+          
             </div>
           </motion.div>
           
