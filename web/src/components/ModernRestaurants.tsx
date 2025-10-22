@@ -215,10 +215,7 @@ const ModernRestaurants: React.FC = () => {
               className="search-input"
             />
           </div>
-          <button className="filter-btn">
-            <Filter className="w-5 h-5" />
-            Filtres
-          </button>
+        
         </div>
       </motion.div>
 

@@ -5,6 +5,26 @@
   margin-left: auto;
 }
 
+/* Affichage du restaurant sélectionné */
+.restaurant-info {
+  margin-bottom: 1rem;
+}
+
+.restaurant-display {
+  padding: 0.75rem;
+  background: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  color: #0c4a6e;
+}
+
+.error-text {
+  color: #dc2626;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
 /* Sélecteur de restaurant avec actions */
 .selector-actions {
   display: flex;

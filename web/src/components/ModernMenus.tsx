@@ -121,13 +121,22 @@ const ModernMenus: React.FC = () => {
         const restaurantsRes = await restaurantService.getAll();
         setRestaurants(restaurantsRes.data);
         
-        // Charger les menus du restaurant sélectionné
-        const response = await menuService.getMenusByRestaurant(selectedRestaurant);
-        setMenus(response.data);
+        // Si aucun restaurant n'est sélectionné, sélectionner le premier par défaut
+        if (!selectedRestaurant && restaurantsRes.data.length > 0) {
+          setSelectedRestaurant(restaurantsRes.data[0].id);
+          console.log('Restaurant par défaut sélectionné:', restaurantsRes.data[0]);
+        }
         
-        // Extraire tous les items de menu pour le filtrage
-        const allMenuItems = response.data.flatMap((menu: Menu) => menu.menuItems || []);
-        setFilteredMenuItems(allMenuItems);
+        // Charger les menus du restaurant sélectionné seulement si un restaurant est sélectionné
+        if (selectedRestaurant) {
+          console.log('Chargement des menus pour le restaurant:', selectedRestaurant);
+          const response = await menuService.getMenusByRestaurant(selectedRestaurant);
+          setMenus(response.data);
+          
+          // Extraire tous les items de menu pour le filtrage
+          const allMenuItems = response.data.flatMap((menu: Menu) => menu.menuItems || []);
+          setFilteredMenuItems(allMenuItems);
+        }
       } catch (error) {
         console.error('Erreur lors du chargement des données:', error);
       } finally {
@@ -188,6 +197,14 @@ const ModernMenus: React.FC = () => {
 
   const handleCreateMenu = () => {
     console.log('Création d\'un menu pour le restaurant:', selectedRestaurant);
+    console.log('Restaurant sélectionné:', restaurants.find(r => r.id === selectedRestaurant));
+    
+    // Vérifier que le restaurant est bien sélectionné
+    if (!selectedRestaurant) {
+      alert('Veuillez sélectionner un restaurant avant de créer un menu.');
+      return;
+    }
+    
     setShowMenuForm(true);
   };
 
@@ -371,13 +388,7 @@ const ModernMenus: React.FC = () => {
             </button>
           )}
           
-          <button 
-            className="btn btn-secondary btn-sm"
-            onClick={() => setShowTester(!showTester)}
-          >
-            <Shield className="w-4 h-4" />
-            {showTester ? 'Masquer' : 'Afficher'} Testeur
-          </button>
+      
         </div>
       </motion.div>
 
@@ -560,6 +571,7 @@ const ModernMenus: React.FC = () => {
         onClose={() => setShowMenuForm(false)}
         onSuccess={handleMenuSuccess}
         restaurantId={selectedRestaurant}
+        restaurantName={restaurants.find(r => r.id === selectedRestaurant)?.name}
       />
 
       {selectedMenu && (
