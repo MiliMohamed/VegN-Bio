@@ -1,0 +1,206 @@
+{
+  "app": {
+    "name": "VEG'N BIO",
+    "version": "1.0.0",
+    "environment": "production"
+  },
+  "api": {
+    "baseUrl": "http://localhost:8080/api",
+    "timeout": 30000,
+    "retryAttempts": 3
+  },
+  "restaurants": [
+    {
+      "id": 1,
+      "name": "VEG'N BIO BASTILLE",
+      "code": "BAS",
+      "address": "Place de la Bastille, 11e arrondissement, Paris",
+      "phone": "+33 1 42 00 00 01",
+      "coordinates": {
+        "latitude": 48.8534,
+        "longitude": 2.3686
+      },
+      "features": [
+        "Wi-Fi très haut débit",
+        "Plateaux membres",
+        "2 salles de réunion réservables",
+        "100 places de restaurant",
+        "1 imprimante"
+      ],
+      "hours": {
+        "monday": "9h-24h",
+        "tuesday": "9h-24h",
+        "wednesday": "9h-24h",
+        "thursday": "9h-24h",
+        "friday": "9h-1h du matin",
+        "saturday": "9h-5h du matin",
+        "sunday": "11h-24h"
+      }
+    },
+    {
+      "id": 2,
+      "name": "VEG'N BIO REPUBLIQUE",
+      "code": "REP",
+      "address": "Place de la République, 3e arrondissement, Paris",
+      "phone": "+33 1 42 00 00 02",
+      "coordinates": {
+        "latitude": 48.8676,
+        "longitude": 2.3631
+      },
+      "features": [
+        "Wi-Fi très haut débit",
+        "4 salles de réunion réservables",
+        "150 places de restaurant",
+        "1 imprimante",
+        "Plateaux repas livrables sur demande"
+      ],
+      "hours": {
+        "monday": "9h-24h",
+        "tuesday": "9h-24h",
+        "wednesday": "9h-24h",
+        "thursday": "9h-24h",
+        "friday": "9h-1h du matin",
+        "saturday": "9h-5h du matin",
+        "sunday": "11h-24h"
+      }
+    },
+    {
+      "id": 3,
+      "name": "VEG'N BIO NATION",
+      "code": "NAT",
+      "address": "Place de la Nation, 11e arrondissement, Paris",
+      "phone": "+33 1 42 00 00 03",
+      "coordinates": {
+        "latitude": 48.8484,
+        "longitude": 2.3958
+      },
+      "features": [
+        "Wi-Fi très haut débit",
+        "Plateaux membres",
+        "1 salle de réunion réservable",
+        "80 places de restaurant",
+        "1 imprimante",
+        "Plateaux repas livrables sur demande",
+        "Conférences et animations tous les mardi après-midi"
+      ],
+      "hours": {
+        "monday": "9h-24h",
+        "tuesday": "9h-24h",
+        "wednesday": "9h-24h",
+        "thursday": "9h-24h",
+        "friday": "9h-1h du matin",
+        "saturday": "9h-5h du matin",
+        "sunday": "11h-24h"
+      }
+    },
+    {
+      "id": 4,
+      "name": "VEG'N BIO PLACE D'ITALIE/MONTPARNASSE/IVRY",
+      "code": "ITA",
+      "address": "Place d'Italie/Montparnasse/Ivry, 13e/14e/94, Paris/Ivry-sur-Seine",
+      "phone": "+33 1 42 00 00 04",
+      "coordinates": {
+        "latitude": 48.8316,
+        "longitude": 2.3556
+      },
+      "features": [
+        "Wi-Fi très haut débit",
+        "Plateaux membres",
+        "2 salles de réunion réservables",
+        "70 places de restaurant",
+        "1 imprimante",
+        "Plateaux repas livrables sur demande"
+      ],
+      "hours": {
+        "monday": "9h-23h",
+        "tuesday": "9h-23h",
+        "wednesday": "9h-23h",
+        "thursday": "9h-23h",
+        "friday": "9h-1h du matin",
+        "saturday": "9h-5h du matin",
+        "sunday": "11h-23h"
+      }
+    },
+    {
+      "id": 5,
+      "name": "VEG'N BIO BEAUBOURG",
+      "code": "BOU",
+      "address": "Place Georges Pompidou, 4e arrondissement, Paris",
+      "phone": "+33 1 42 00 00 05",
+      "coordinates": {
+        "latitude": 48.8606,
+        "longitude": 2.3522
+      },
+      "features": [
+        "Wi-Fi très haut débit",
+        "Plateaux membres",
+        "2 salles de réunion réservables",
+        "70 places de restaurant",
+        "1 imprimante",
+        "Plateaux repas livrables sur demande"
+      ],
+      "hours": {
+        "monday": "9h-23h",
+        "tuesday": "9h-23h",
+        "wednesday": "9h-23h",
+        "thursday": "9h-23h",
+        "friday": "9h-1h du matin",
+        "saturday": "9h-5h du matin",
+        "sunday": "11h-23h"
+      }
+    }
+  ],
+  "allergens": [
+    { "code": "GLUTEN", "label": "Céréales contenant du gluten" },
+    { "code": "CRUST", "label": "Crustacés" },
+    { "code": "EGG", "label": "Œufs" },
+    { "code": "FISH", "label": "Poissons" },
+    { "code": "PEANUT", "label": "Arachides" },
+    { "code": "SOY", "label": "Soja" },
+    { "code": "MILK", "label": "Lait" },
+    { "code": "NUTS", "label": "Fruits à coque" },
+    { "code": "CELERY", "label": "Céleri" },
+    { "code": "MUSTARD", "label": "Moutarde" },
+    { "code": "SESAME", "label": "Sésame" },
+    { "code": "SULPHITES", "label": "Sulfites" },
+    { "code": "LUPIN", "label": "Lupin" },
+    { "code": "MOLLUSCS", "label": "Mollusques" }
+  ],
+  "testAccounts": [
+    {
+      "email": "admin@vegnbio.fr",
+      "password": "TestVegN2024!",
+      "role": "ADMIN",
+      "name": "Administrateur VEGN BIO"
+    },
+    {
+      "email": "restaurateur@vegnbio.fr",
+      "password": "TestVegN2024!",
+      "role": "RESTAURATEUR",
+      "name": "Gérant Restaurant"
+    },
+    {
+      "email": "client@vegnbio.fr",
+      "password": "TestVegN2024!",
+      "role": "CLIENT",
+      "name": "Client Test"
+    }
+  ],
+  "features": {
+    "menuViewing": true,
+    "eventBooking": true,
+    "allergenReporting": true,
+    "roomReservation": true,
+    "deliveryOrdering": true,
+    "pushNotifications": true,
+    "offlineMode": true
+  },
+  "ui": {
+    "theme": "vegn-bio",
+    "primaryColor": "#4CAF50",
+    "secondaryColor": "#8BC34A",
+    "accentColor": "#FFC107",
+    "fontFamily": "Roboto",
+    "language": "fr"
+  }
+}
