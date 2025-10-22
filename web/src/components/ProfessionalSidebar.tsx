@@ -88,7 +88,8 @@ const ProfessionalSidebar: React.FC = () => {
       badge: '5',
       badgeColor: 'warning'
     },
-    {
+    // Marketplace seulement visible pour les fournisseurs
+    ...(user?.role === 'FOURNISSEUR' ? [{
       id: 'marketplace',
       label: 'Marketplace',
       icon: ShoppingBag,
@@ -113,7 +114,7 @@ const ProfessionalSidebar: React.FC = () => {
           path: '/app/marketplace/orders'
         }
       ]
-    },
+    }] : []),
     {
       id: 'reviews',
       label: 'Avis & Retours',
@@ -254,7 +255,6 @@ const ProfessionalSidebar: React.FC = () => {
     switch (role) {
       case 'ADMIN': return '#ef4444';
       case 'RESTAURATEUR': return '#3b82f6';
-      case 'FOURNISSEUR': return '#f59e0b';
       case 'CLIENT': return '#22c55e';
       default: return '#64748b';
     }
@@ -264,7 +264,6 @@ const ProfessionalSidebar: React.FC = () => {
     switch (role) {
       case 'ADMIN': return 'Administrateur';
       case 'RESTAURATEUR': return 'Restaurateur';
-      case 'FOURNISSEUR': return 'Fournisseur';
       case 'CLIENT': return 'Client';
       default: return 'Utilisateur';
     }

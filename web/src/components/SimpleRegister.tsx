@@ -94,7 +94,6 @@ const SimpleRegister: React.FC = () => {
   const roleOptions = [
     { value: 'CLIENT', label: 'Client', description: 'Découvrir et commander des plats végétaux' },
     { value: 'RESTAURATEUR', label: 'Restaurateur', description: 'Gérer votre restaurant et vos menus' },
-    { value: 'FOURNISSEUR', label: 'Fournisseur', description: 'Proposer vos produits biologiques' },
     { value: 'ADMIN', label: 'Administrateur', description: 'Gérer la plateforme VegN-Bio' }
   ];
 

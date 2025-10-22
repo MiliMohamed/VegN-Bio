@@ -188,7 +188,6 @@ const ModernRegister: React.FC = () => {
               >
                 <option value="CLIENT">Client</option>
                 <option value="RESTAURATEUR">Restaurateur</option>
-                <option value="FOURNISSEUR">Fournisseur</option>
               </select>
             </div>
 

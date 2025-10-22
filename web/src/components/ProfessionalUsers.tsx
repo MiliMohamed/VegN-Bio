@@ -32,7 +32,7 @@ interface UserData {
   id: number;
   email: string;
   fullName: string;
-  role: 'ADMIN' | 'RESTAURATEUR' | 'FOURNISSEUR' | 'CLIENT';
+  role: 'ADMIN' | 'RESTAURATEUR' | 'CLIENT';
   createdAt: string;
   lastLogin?: string;
   isActive: boolean;
@@ -153,7 +153,6 @@ const ProfessionalUsers: React.FC = () => {
     switch (role) {
       case 'ADMIN': return Crown;
       case 'RESTAURATEUR': return Building2;
-      case 'FOURNISSEUR': return ShoppingBag;
       case 'CLIENT': return User;
       default: return User;
     }
@@ -163,7 +162,6 @@ const ProfessionalUsers: React.FC = () => {
     switch (role) {
       case 'ADMIN': return '#ef4444';
       case 'RESTAURATEUR': return '#3b82f6';
-      case 'FOURNISSEUR': return '#f59e0b';
       case 'CLIENT': return '#22c55e';
       default: return '#64748b';
     }
@@ -173,7 +171,6 @@ const ProfessionalUsers: React.FC = () => {
     switch (role) {
       case 'ADMIN': return 'Administrateur';
       case 'RESTAURATEUR': return 'Restaurateur';
-      case 'FOURNISSEUR': return 'Fournisseur';
       case 'CLIENT': return 'Client';
       default: return 'Utilisateur';
     }
@@ -305,7 +302,6 @@ const ProfessionalUsers: React.FC = () => {
             <option value="">Tous les rôles</option>
             <option value="ADMIN">Administrateurs</option>
             <option value="RESTAURATEUR">Restaurateurs</option>
-            <option value="FOURNISSEUR">Fournisseurs</option>
             <option value="CLIENT">Clients</option>
           </select>
           <select

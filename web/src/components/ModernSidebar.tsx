@@ -18,10 +18,12 @@ import {
   UserPlus
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const ModernSidebar: React.FC = () => {
   const location = useLocation();
   const { actualTheme } = useTheme();
+  const { user } = useAuth();
 
   const menuItems = [
     {
@@ -96,12 +98,13 @@ const ModernSidebar: React.FC = () => {
       label: 'Mes Réservations',
       description: 'Vos réservations'
     },
-    {
+    // Marketplace seulement visible pour les fournisseurs
+    ...(user?.role === 'FOURNISSEUR' ? [{
       path: '/app/marketplace',
       icon: <ShoppingCart className="w-5 h-5" />,
       label: 'Marketplace',
       description: 'Fournisseurs bio'
-    },
+    }] : []),
     {
       path: '/app/reviews',
       icon: <Star className="w-5 h-5" />,

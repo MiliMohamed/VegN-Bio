@@ -11,9 +11,11 @@ import {
   Star,
   MapPin,
   Phone,
-  Mail
+  Mail,
+  Lock
 } from 'lucide-react';
 import { marketplaceService } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 
 interface Supplier {
   id: number;
@@ -32,10 +34,53 @@ interface Offer {
 }
 
 const ModernMarketplace: React.FC = () => {
+  const { user } = useAuth();
   const [offers, setOffers] = React.useState<Offer[]>([]);
   const [suppliers, setSuppliers] = React.useState<Supplier[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [activeTab, setActiveTab] = React.useState<'offers' | 'suppliers'>('offers');
+
+  // Vérifier si l'utilisateur est un fournisseur
+  if (user?.role !== 'FOURNISSEUR') {
+    return (
+      <div className="modern-marketplace">
+        <div className="marketplace-header">
+          <div className="header-content">
+            <div className="header-icon">
+              <Lock className="w-8 h-8" />
+            </div>
+            <div className="header-text">
+              <h1 className="page-title">Accès Restreint</h1>
+              <p className="page-description">
+                Cette section est réservée aux fournisseurs partenaires.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="access-denied-message">
+          <div className="access-denied-content">
+            <Lock className="w-16 h-16 text-gray-400 mb-4" />
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+              Marketplace Fournisseurs
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Pour accéder au marketplace des fournisseurs bio, vous devez avoir un compte fournisseur.
+            </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="font-semibold text-blue-800 mb-2">Comment devenir fournisseur ?</h3>
+              <ul className="text-blue-700 text-sm space-y-1">
+                <li>• Contactez notre équipe commerciale</li>
+                <li>• Fournissez vos certifications bio</li>
+                <li>• Soumettez votre catalogue de produits</li>
+                <li>• Obtenez votre accès fournisseur</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   React.useEffect(() => {
     const fetchData = async () => {

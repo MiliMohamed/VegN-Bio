@@ -26,7 +26,7 @@ interface User {
 const ModernUsers: React.FC = () => {
   const [users, setUsers] = React.useState<User[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [filter, setFilter] = React.useState<'all' | 'CLIENT' | 'RESTAURATEUR' | 'FOURNISSEUR' | 'ADMIN'>('all');
+  const [filter, setFilter] = React.useState<'all' | 'CLIENT' | 'RESTAURATEUR' | 'ADMIN'>('all');
 
   React.useEffect(() => {
     const fetchUsers = async () => {
@@ -55,7 +55,6 @@ const ModernUsers: React.FC = () => {
     const colors: { [key: string]: string } = {
       'ADMIN': 'danger',
       'RESTAURATEUR': 'primary',
-      'FOURNISSEUR': 'success',
       'CLIENT': 'info'
     };
     return colors[role] || 'secondary';
@@ -65,7 +64,6 @@ const ModernUsers: React.FC = () => {
     const texts: { [key: string]: string } = {
       'ADMIN': 'Administrateur',
       'RESTAURATEUR': 'Restaurateur',
-      'FOURNISSEUR': 'Fournisseur',
       'CLIENT': 'Client'
     };
     return texts[role] || role;
@@ -80,7 +78,6 @@ const ModernUsers: React.FC = () => {
     total: users.length,
     clients: users.filter(u => u.role === 'CLIENT').length,
     restaurateurs: users.filter(u => u.role === 'RESTAURATEUR').length,
-    fournisseurs: users.filter(u => u.role === 'FOURNISSEUR').length,
     admins: users.filter(u => u.role === 'ADMIN').length
   };
 
@@ -185,13 +182,6 @@ const ModernUsers: React.FC = () => {
           >
             <Shield className="w-4 h-4" />
             Restaurateurs ({userStats.restaurateurs})
-          </button>
-          <button
-            className={`filter-tab ${filter === 'FOURNISSEUR' ? 'active' : ''}`}
-            onClick={() => setFilter('FOURNISSEUR')}
-          >
-            <Mail className="w-4 h-4" />
-            Fournisseurs ({userStats.fournisseurs})
           </button>
           <button
             className={`filter-tab ${filter === 'ADMIN' ? 'active' : ''}`}

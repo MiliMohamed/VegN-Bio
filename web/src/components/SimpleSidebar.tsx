@@ -24,7 +24,7 @@ const SimpleSidebar: React.FC = () => {
       path: '/app/dashboard', 
       label: 'Tableau de bord', 
       icon: Home, 
-      roles: ['ADMIN', 'RESTAURATEUR', 'CLIENT', 'FOURNISSEUR'] 
+      roles: ['ADMIN', 'RESTAURATEUR', 'CLIENT'] 
     },
     { 
       path: '/app/restaurants', 
@@ -48,7 +48,7 @@ const SimpleSidebar: React.FC = () => {
       path: '/app/marketplace', 
       label: 'Marketplace', 
       icon: ShoppingBag, 
-      roles: ['ADMIN', 'RESTAURATEUR', 'CLIENT', 'FOURNISSEUR'] 
+      roles: ['ADMIN', 'RESTAURATEUR', 'CLIENT'] 
     },
     { 
       path: '/app/reviews', 
@@ -84,7 +84,7 @@ const SimpleSidebar: React.FC = () => {
       path: '/app/settings', 
       label: 'Paramètres', 
       icon: Settings, 
-      roles: ['ADMIN', 'RESTAURATEUR', 'CLIENT', 'FOURNISSEUR'] 
+      roles: ['ADMIN', 'RESTAURATEUR', 'CLIENT'] 
     }
   ];
 
@@ -98,7 +98,6 @@ const SimpleSidebar: React.FC = () => {
       case 'ADMIN': return 'danger';
       case 'RESTAURATEUR': return 'warning';
       case 'CLIENT': return 'primary';
-      case 'FOURNISSEUR': return 'info';
       default: return 'secondary';
     }
   };
@@ -108,7 +107,6 @@ const SimpleSidebar: React.FC = () => {
       case 'ADMIN': return 'Administrateur';
       case 'RESTAURATEUR': return 'Restaurateur';
       case 'CLIENT': return 'Client';
-      case 'FOURNISSEUR': return 'Fournisseur';
       default: return 'Utilisateur';
     }
   };

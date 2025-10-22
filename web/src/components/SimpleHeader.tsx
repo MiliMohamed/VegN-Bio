@@ -24,15 +24,13 @@ const SimpleHeader: React.FC = () => {
   const userRoleLabels = {
     ADMIN: 'Administrateur',
     RESTAURATEUR: 'Restaurateur',
-    CLIENT: 'Client',
-    FOURNISSEUR: 'Fournisseur'
+    CLIENT: 'Client'
   };
 
   const userRoleColors = {
     ADMIN: 'danger',
     RESTAURATEUR: 'warning',
-    CLIENT: 'primary',
-    FOURNISSEUR: 'info'
+    CLIENT: 'primary'
   };
 
   return (

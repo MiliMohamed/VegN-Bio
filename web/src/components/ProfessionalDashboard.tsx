@@ -178,7 +178,6 @@ const ProfessionalDashboard: React.FC = () => {
       case 'ADMIN': return 'Administrateur';
       case 'RESTAURATEUR': return 'Chef Restaurateur';
       case 'CLIENT': return 'Cher Client';
-      case 'FOURNISSEUR': return 'Partenaire Fournisseur';
       default: return 'Utilisateur';
     }
   };
@@ -297,13 +296,6 @@ const ProfessionalDashboard: React.FC = () => {
       icon: Star,
       color: 'info',
       action: '/app/reviews'
-    },
-    {
-      title: 'Marketplace',
-      description: 'Gérer les produits fournisseurs',
-      icon: ShoppingBag,
-      color: 'secondary',
-      action: '/app/marketplace'
     },
     {
       title: 'Rapports',

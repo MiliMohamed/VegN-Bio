@@ -118,7 +118,6 @@ const ProfessionalHeader: React.FC = () => {
     switch (role) {
       case 'ADMIN': return '#ef4444';
       case 'RESTAURATEUR': return '#3b82f6';
-      case 'FOURNISSEUR': return '#f59e0b';
       case 'CLIENT': return '#22c55e';
       default: return '#64748b';
     }
@@ -128,7 +127,6 @@ const ProfessionalHeader: React.FC = () => {
     switch (role) {
       case 'ADMIN': return 'Administrateur';
       case 'RESTAURATEUR': return 'Restaurateur';
-      case 'FOURNISSEUR': return 'Fournisseur';
       case 'CLIENT': return 'Client';
       default: return 'Utilisateur';
     }
