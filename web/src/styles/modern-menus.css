@@ -119,7 +119,7 @@
 /* Carte de menu */
 .menu-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-primary);
+  border: 2px solid var(--border-primary);
   border-radius: var(--radius-xl);
   overflow: hidden;
   transition: all var(--transition-normal);
@@ -130,7 +130,8 @@
 .menu-card:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-xl);
-  border-color: var(--primary-color);
+  border-color: var(--secondary-color);
+  box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.1), 0 8px 10px -6px rgba(79, 70, 229, 0.1);
 }
 
 .menu-card::before {
@@ -139,8 +140,9 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  height: 6px;
+  background: linear-gradient(90deg, var(--secondary-color), var(--primary-color), var(--accent-color));
+  box-shadow: var(--shadow-sm);
 }
 
 /* Header de la carte de menu */
@@ -254,23 +256,28 @@
 }
 
 .menu-item-badge {
-  padding: 2px var(--spacing-xs);
+  padding: 4px var(--spacing-sm);
   background: var(--success-bg);
   color: var(--success-color);
-  border-radius: var(--radius-sm);
-  font-size: 0.625rem;
-  font-weight: 500;
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--success-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .menu-item-badge.vegan {
   background: var(--success-bg);
   color: var(--success-color);
+  border-color: var(--success-border);
 }
 
 .menu-item-badge.gluten-free {
   background: var(--info-bg);
   color: var(--info-color);
+  border-color: var(--info-border);
 }
 
 /* Actions du menu */
