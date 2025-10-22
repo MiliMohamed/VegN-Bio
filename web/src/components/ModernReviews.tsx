@@ -12,14 +12,10 @@ import {
   Calendar,
   Plus,
   Edit,
-  Trash2,
-  Moon,
-  Sun,
-  Settings
+  Trash2
 } from 'lucide-react';
 import { feedbackService } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
 import ReviewForm from './ReviewForm';
 import '../styles/modern-theme-system.css';
 import '../styles/modern-reviews.css';
@@ -37,7 +33,6 @@ interface Review {
 
 const ModernReviews: React.FC = () => {
   const { user } = useAuth();
-  const { actualTheme, toggleTheme } = useTheme();
   const [reviews, setReviews] = React.useState<Review[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [filter, setFilter] = React.useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
@@ -138,16 +133,7 @@ const ModernReviews: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="reviews-header-controls">
-            <h1 className="reviews-page-title">Avis Clients</h1>
-            <button 
-              className="theme-toggle"
-              onClick={toggleTheme}
-              title={`Basculer vers le mode ${actualTheme === 'light' ? 'sombre' : 'clair'}`}
-            >
-              {actualTheme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-            </button>
-          </div>
+          <h1 className="reviews-page-title">Avis Clients</h1>
           <p className="reviews-page-subtitle">
             Gérez les retours et évaluations de vos clients
           </p>

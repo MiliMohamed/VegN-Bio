@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
 import { 
   MapPin, 
   Phone, 
@@ -18,10 +17,7 @@ import {
   Search,
   Filter,
   CheckCircle,
-  Utensils,
-  Moon,
-  Sun,
-  Settings
+  Utensils
 } from 'lucide-react';
 import { restaurantService } from '../services/api';
 import '../styles/modern-theme-system.css';
@@ -38,7 +34,6 @@ interface Restaurant {
 
 const ModernRestaurants: React.FC = () => {
   const { user } = useAuth();
-  const { actualTheme, toggleTheme } = useTheme();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -195,16 +190,7 @@ const ModernRestaurants: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="header-controls">
-            <h1 className="page-title">Nos Restaurants</h1>
-            <button 
-              className="theme-toggle"
-              onClick={toggleTheme}
-              title={`Basculer vers le mode ${actualTheme === 'light' ? 'sombre' : 'clair'}`}
-            >
-              {actualTheme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-            </button>
-          </div>
+          <h1 className="page-title">Nos Restaurants</h1>
           <p className="page-subtitle">
             Découvrez nos 5 restaurants VegN Bio dans Paris
           </p>

@@ -25,50 +25,32 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    return savedTheme || 'system';
+    // Forcer le mode clair uniquement
+    return 'light';
   });
 
   const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    const updateActualTheme = () => {
-      if (theme === 'system') {
-        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        setActualTheme(systemTheme);
-      } else {
-        setActualTheme(theme);
-      }
-    };
-
-    updateActualTheme();
-
-    // Écouter les changements de préférence système
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = () => {
-      if (theme === 'system') {
-        updateActualTheme();
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    // Toujours utiliser le mode clair
+    setActualTheme('light');
   }, [theme]);
 
   useEffect(() => {
-    // Appliquer le thème au document
-    document.documentElement.setAttribute('data-theme', actualTheme);
-    document.body.className = actualTheme === 'dark' ? 'dark-theme' : 'light-theme';
+    // Appliquer le thème clair au document
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.body.className = 'light-theme';
   }, [actualTheme]);
 
   const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem('theme', newTheme);
+    // Forcer le mode clair même si on essaie de changer
+    setThemeState('light');
+    localStorage.setItem('theme', 'light');
   };
 
   const toggleTheme = () => {
-    const newTheme = actualTheme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
+    // Ne rien faire, garder le mode clair
+    setTheme('light');
   };
 
   const value: ThemeContextType = {
