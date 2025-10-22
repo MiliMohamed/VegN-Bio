@@ -11,6 +11,7 @@ import {
   Clock
 } from 'lucide-react';
 import { useNotificationHelpers } from './NotificationProvider';
+import ModernModal, { ConfirmModal, FormModal, InfoModal } from './ModernModal';
 
 interface ActionButtonProps {
   type: 'create' | 'edit' | 'delete' | 'view' | 'more';
@@ -34,6 +35,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   tooltip
 }) => {
   const { success, error, warning, info } = useNotificationHelpers();
+  const [showModal, setShowModal] = useState(false);
 
   const getIcon = () => {
     switch (type) {
@@ -87,7 +89,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
     if (!onClick) {
       switch (type) {
         case 'create':
-          success('Action Créer', 'Fonctionnalité de création en cours de développement');
+          setShowModal(true);
           break;
         case 'edit':
           info('Action Modifier', 'Fonctionnalité de modification en cours de développement');
@@ -108,20 +110,41 @@ const ActionButton: React.FC<ActionButtonProps> = ({
     onClick();
   };
 
+  const handleModalConfirm = () => {
+    setShowModal(false);
+    success('Action Créer', 'Fonctionnalité de création en cours de développement');
+  };
+
   return (
-    <button
-      className={`btn ${getVariantClass()} ${getSizeClass()} ${loading ? 'opacity-50' : ''}`}
-      onClick={handleClick}
-      disabled={disabled || loading}
-      title={tooltip}
-    >
-      {loading ? (
-        <div className="loading-spinner" />
-      ) : (
-        getIcon()
+    <>
+      <button
+        className={`btn ${getVariantClass()} ${getSizeClass()} ${loading ? 'opacity-50' : ''}`}
+        onClick={handleClick}
+        disabled={disabled || loading}
+        title={tooltip}
+      >
+        {loading ? (
+          <div className="loading-spinner" />
+        ) : (
+          getIcon()
+        )}
+        {children}
+      </button>
+
+      {/* Modal pour les actions de création */}
+      {type === 'create' && (
+        <ConfirmModal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          onConfirm={handleModalConfirm}
+          title="Confirmer la création"
+          message="Êtes-vous sûr de vouloir créer un nouvel élément ? Cette action peut être annulée plus tard."
+          confirmText="Créer"
+          cancelText="Annuler"
+          type="info"
+        />
       )}
-      {children}
-    </button>
+    </>
   );
 };
 

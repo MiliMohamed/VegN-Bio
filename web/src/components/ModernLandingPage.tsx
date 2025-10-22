@@ -2,148 +2,322 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  Leaf, 
-  Users, 
-  Clock, 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Star,
+  Leaf,
   ArrowRight,
-  Menu,
-  X,
-  Heart,
+  CheckCircle,
+  Star,
+  Users,
+  MapPin,
   Utensils,
   Calendar,
-  Truck
+  MessageCircle,
+  Heart,
+  ShoppingCart,
+  Play,
+  Menu,
+  X,
+  ChevronDown
 } from 'lucide-react';
-import '../styles/modern-landing.css';
 
 const ModernLandingPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
 
-  const restaurants = [
+  const features = [
     {
-      id: 1,
-      name: "VEG'N BIO BASTILLE",
-      address: "Place de la Bastille, 75011 Paris",
-      phone: "+33 1 23 45 67 01",
-      features: ["Wi-Fi très haut débit", "Plateaux membres", "2 salles de réunion", "100 places"],
-      hours: "Lun-Jeu: 9h-24h, Ven: 9h-1h, Sam: 9h-5h, Dim: 11h-24h"
+      icon: <Utensils className="w-8 h-8" />,
+      title: 'Menus Saisonniers',
+      description: 'Découvrez nos plats végétariens et biologiques préparés avec des ingrédients frais et locaux.',
+      color: 'text-green-500'
     },
     {
-      id: 2,
-      name: "VEG'N BIO REPUBLIQUE",
-      address: "Place de la République, 75003 Paris",
-      phone: "+33 1 23 45 67 02",
-      features: ["Wi-Fi très haut débit", "4 salles de réunion", "150 places", "Plateaux livrables"],
-      hours: "Lun-Jeu: 9h-24h, Ven: 9h-1h, Sam: 9h-5h, Dim: 11h-24h"
+      icon: <Calendar className="w-8 h-8" />,
+      title: 'Événements',
+      description: 'Participez à nos conférences, ateliers culinaires et événements sur l\'alimentation durable.',
+      color: 'text-blue-500'
     },
     {
-      id: 3,
-      name: "VEG'N BIO NATION",
-      address: "Place de la Nation, 75011 Paris",
-      phone: "+33 1 23 45 67 03",
-      features: ["Wi-Fi très haut débit", "1 salle de réunion", "80 places", "Conférences mardi"],
-      hours: "Lun-Jeu: 9h-24h, Ven: 9h-1h, Sam: 9h-5h, Dim: 11h-24h"
+      icon: <MapPin className="w-8 h-8" />,
+      title: '3 Restaurants',
+      description: 'Retrouvez-nous dans nos trois établissements à Paris : République, Bastille et Nation.',
+      color: 'text-purple-500'
     },
     {
-      id: 4,
-      name: "VEG'N BIO PLACE D'ITALIE",
-      address: "Place d'Italie, 75013 Paris",
-      phone: "+33 1 23 45 67 04",
-      features: ["Wi-Fi très haut débit", "2 salles de réunion", "70 places", "Plateaux livrables"],
-      hours: "Lun-Jeu: 9h-23h, Ven: 9h-1h, Sam: 9h-5h, Dim: 11h-23h"
-    },
-    {
-      id: 5,
-      name: "VEG'N BIO BEAUBOURG",
-      address: "Centre Pompidou, 75004 Paris",
-      phone: "+33 1 23 45 67 05",
-      features: ["Wi-Fi très haut débit", "2 salles de réunion", "70 places", "Plateaux livrables"],
-      hours: "Lun-Jeu: 9h-23h, Ven: 9h-1h, Sam: 9h-5h, Dim: 11h-23h"
+      icon: <MessageCircle className="w-8 h-8" />,
+      title: 'Assistant IA',
+      description: 'Notre chatbot intelligent vous aide à choisir vos plats selon vos préférences et allergies.',
+      color: 'text-orange-500'
     }
   ];
 
-  const services = [
+  const testimonials = [
     {
-      icon: <Calendar className="w-8 h-8" />,
-      title: "Réservation de salles",
-      description: "Réservez nos salles de réunion pour vos déjeuners et soirées"
+      name: 'Marie Dubois',
+      role: 'Cliente fidèle',
+      content: 'Les plats sont délicieux et respectent parfaitement mes convictions végétariennes. L\'ambiance est chaleureuse et le service impeccable.',
+      rating: 5,
+      avatar: 'MD'
     },
     {
-      icon: <Truck className="w-8 h-8" />,
-      title: "Livraison plateaux",
-      description: "Plateaux repas livrés à domicile ou au bureau"
+      name: 'Jean Martin',
+      role: 'Entrepreneur',
+      content: 'J\'organise régulièrement des déjeuners d\'affaires ici. L\'espace est parfait et la qualité des produits exceptionnelle.',
+      rating: 5,
+      avatar: 'JM'
     },
     {
-      icon: <Heart className="w-8 h-8" />,
-      title: "Anniversaires enfants",
-      description: "Organisation d'anniversaires pour enfants en après-midi"
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Événements exclusifs",
-      description: "Invitations à des événements, conférences et animations"
-    },
-    {
-      icon: <Utensils className="w-8 h-8" />,
-      title: "Rencontres producteurs",
-      description: "Rencontres avec nos producteurs partenaires franciliens"
+      name: 'Sophie Laurent',
+      role: 'Nutritionniste',
+      content: 'En tant que professionnelle de la nutrition, je recommande vivement VegN Bio. L\'équilibre nutritionnel est parfait.',
+      rating: 5,
+      avatar: 'SL'
     }
+  ];
+
+  const stats = [
+    { number: '3', label: 'Restaurants', icon: <MapPin className="w-6 h-6" /> },
+    { number: '156', label: 'Clients satisfaits', icon: <Users className="w-6 h-6" /> },
+    { number: '4.8', label: 'Note moyenne', icon: <Star className="w-6 h-6" /> },
+    { number: '12', label: 'Années d\'expérience', icon: <Leaf className="w-6 h-6" /> }
   ];
 
   return (
     <div className="modern-landing">
-      {/* Header */}
-      <header className="modern-landing-header">
-        <div className="container">
-          <div className="header-content">
-            <div className="logo">
-              <Leaf className="logo-icon" />
-              <span className="logo-text">VEG'N BIO</span>
-            </div>
-            
-            <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
-              <a href="#restaurants" className="nav-link">Nos Restaurants</a>
-              <a href="#services" className="nav-link">Services</a>
-              <a href="#about" className="nav-link">À Propos</a>
-              <Link to="/login" className="nav-link">Connexion</Link>
-              <Link to="/register" className="nav-link btn-primary">S'inscrire</Link>
-            </nav>
-            
-            <button 
-              className="menu-toggle"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+      {/* Navigation */}
+      <nav className="landing-nav">
+        <div className="nav-container">
+          <Link to="/" className="nav-logo">
+            <Leaf className="w-8 h-8" />
+            <span>VEG'N BIO</span>
+          </Link>
+          
+          <div className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
+            <Link to="#features" className="nav-link">Fonctionnalités</Link>
+            <Link to="#testimonials" className="nav-link">Témoignages</Link>
+            <Link to="#about" className="nav-link">À propos</Link>
+            <Link to="/login" className="nav-link">Connexion</Link>
+            <Link to="/register" className="btn btn-primary">
+              Créer un compte
+            </Link>
           </div>
+          
+          <button 
+            className="nav-toggle"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
-      </header>
+      </nav>
 
       {/* Hero Section */}
-      <section className="hero">
-        <div className="hero-background">
-          <div className="hero-overlay"></div>
-        </div>
-        <div className="container">
+      <section className="hero-section">
+        <div className="hero-container">
           <motion.div 
             className="hero-content"
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
             <h1 className="hero-title">
-              Bienvenue chez <span className="highlight">VEG'N BIO</span>
+              Bienvenue chez <span className="text-green-500">VegN Bio</span>
             </h1>
             <p className="hero-subtitle">
-              Chaîne de restaurants végétariens et biologiques au cœur de Paris depuis 2014. 
-              Une alimentation saine, locale et respectueuse de l'environnement.
+              Découvrez une nouvelle façon de manger sainement avec nos restaurants végétariens et biologiques. 
+              Des plats délicieux, des ingrédients frais et une approche respectueuse de l'environnement.
             </p>
             <div className="hero-actions">
               <Link to="/register" className="btn btn-primary btn-lg">
-                Découvrir nos restaurants
+                Commencer maintenant
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <button className="btn btn-secondary btn-lg">
+                <Play className="w-5 h-5" />
+                Voir la vidéo
+              </button>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="hero-image"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className="hero-card">
+              <div className="card-header">
+                <div className="card-avatar">
+                  <Leaf className="w-6 h-6" />
+                </div>
+                <div className="card-info">
+                  <div className="card-title">Menu du jour</div>
+                  <div className="card-subtitle">République</div>
+                </div>
+                <div className="card-status">
+                  <div className="status-dot"></div>
+                  Ouvert
+                </div>
+              </div>
+              <div className="card-content">
+                <div className="menu-item">
+                  <div className="item-name">Salade de quinoa bio</div>
+                  <div className="item-price">12€</div>
+                </div>
+                <div className="menu-item">
+                  <div className="item-name">Curry de légumes</div>
+                  <div className="item-price">14€</div>
+                </div>
+                <div className="menu-item">
+                  <div className="item-name">Tarte aux légumes</div>
+                  <div className="item-price">11€</div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+        
+        {/* Scroll Indicator */}
+        <motion.div 
+          className="scroll-indicator"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <ChevronDown className="w-6 h-6" />
+        </motion.div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="stats-section">
+        <div className="stats-container">
+          {stats.map((stat, index) => (
+            <motion.div 
+              key={stat.label}
+              className="stat-item"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <div className="stat-icon">{stat.icon}</div>
+              <div className="stat-number">{stat.number}</div>
+              <div className="stat-label">{stat.label}</div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="features-section">
+        <div className="features-container">
+          <motion.div 
+            className="section-header"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="section-title">Pourquoi choisir VegN Bio ?</h2>
+            <p className="section-subtitle">
+              Découvrez les avantages qui font de nous votre choix numéro 1 pour une alimentation saine et responsable.
+            </p>
+          </motion.div>
+          
+          <div className="features-grid">
+            {features.map((feature, index) => (
+              <motion.div 
+                key={feature.title}
+                className="feature-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5 }}
+              >
+                <div className={`feature-icon ${feature.color}`}>
+                  {feature.icon}
+                </div>
+                <h3 className="feature-title">{feature.title}</h3>
+                <p className="feature-description">{feature.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section id="testimonials" className="testimonials-section">
+        <div className="testimonials-container">
+          <motion.div 
+            className="section-header"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="section-title">Ce que disent nos clients</h2>
+            <p className="section-subtitle">
+              Découvrez les témoignages de nos clients satisfaits qui ont choisi VegN Bio.
+            </p>
+          </motion.div>
+          
+          <div className="testimonials-slider">
+            {testimonials.map((testimonial, index) => (
+              <motion.div 
+                key={testimonial.name}
+                className={`testimonial-card ${activeTestimonial === index ? 'active' : ''}`}
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <div className="testimonial-content">
+                  <div className="testimonial-rating">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 fill-current text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="testimonial-text">"{testimonial.content}"</p>
+                  <div className="testimonial-author">
+                    <div className="author-avatar">{testimonial.avatar}</div>
+                    <div className="author-info">
+                      <div className="author-name">{testimonial.name}</div>
+                      <div className="author-role">{testimonial.role}</div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
+          <div className="testimonial-controls">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                className={`control-dot ${activeTestimonial === index ? 'active' : ''}`}
+                onClick={() => setActiveTestimonial(index)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="cta-section">
+        <div className="cta-container">
+          <motion.div 
+            className="cta-content"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="cta-title">Prêt à commencer votre aventure culinaire ?</h2>
+            <p className="cta-subtitle">
+              Rejoignez la communauté VegN Bio et découvrez une nouvelle façon de manger sainement.
+            </p>
+            <div className="cta-actions">
+              <Link to="/register" className="btn btn-primary btn-lg">
+                Créer mon compte
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <Link to="/login" className="btn btn-secondary btn-lg">
@@ -154,207 +328,60 @@ const ModernLandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Restaurants Section */}
-      <section id="restaurants" className="restaurants-section">
-        <div className="container">
-          <motion.div 
-            className="section-header"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="section-title">Nos Restaurants</h2>
-            <p className="section-subtitle">
-              5 restaurants Veg'N Bio dans Paris pour vous accueillir
-            </p>
-          </motion.div>
-
-          <div className="restaurants-grid">
-            {restaurants.map((restaurant, index) => (
-              <motion.div 
-                key={restaurant.id}
-                className="restaurant-card"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="restaurant-header">
-                  <h3 className="restaurant-name">{restaurant.name}</h3>
-                  <div className="restaurant-location">
-                    <MapPin className="w-4 h-4" />
-                    <span>{restaurant.address}</span>
-                  </div>
-                </div>
-                
-                <div className="restaurant-features">
-                  {restaurant.features.map((feature, idx) => (
-                    <div key={idx} className="feature-item">
-                      <Star className="w-4 h-4" />
-                      <span>{feature}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="restaurant-info">
-                  <div className="info-item">
-                    <Phone className="w-4 h-4" />
-                    <span>{restaurant.phone}</span>
-                  </div>
-                  <div className="info-item">
-                    <Clock className="w-4 h-4" />
-                    <span>{restaurant.hours}</span>
-                  </div>
-                </div>
-                
-                <div className="restaurant-actions">
-                  <Link to="/register" className="btn btn-primary btn-sm">
-                    Réserver
-                  </Link>
-                  <Link to="/login" className="btn btn-outline btn-sm">
-                    Voir le menu
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section id="services" className="services-section">
-        <div className="container">
-          <motion.div 
-            className="section-header"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="section-title">Nos Services</h2>
-            <p className="section-subtitle">
-              Des services adaptés à tous vos besoins
-            </p>
-          </motion.div>
-
-          <div className="services-grid">
-            {services.map((service, index) => (
-              <motion.div 
-                key={index}
-                className="service-card"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="service-icon">
-                  {service.icon}
-                </div>
-                <h3 className="service-title">{service.title}</h3>
-                <p className="service-description">{service.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="about-section">
-        <div className="container">
-          <div className="about-content">
-            <motion.div 
-              className="about-text"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="section-title">Notre Histoire</h2>
-              <p className="about-description">
-                Créée en 2014, Veg'N Bio est une chaîne de restaurants végétariens et biologiques 
-                installés au cœur de la capitale. Depuis ses débuts, l'entreprise s'engage à promouvoir 
-                une alimentation saine, locale et respectueuse de l'environnement.
-              </p>
-              <p className="about-description">
-                Nos menus sont entièrement végétariens et composés de produits biologiques issus de 
-                producteurs franciliens. Ils changent régulièrement au gré des saisons et des propositions 
-                de nos partenaires agricoles.
-              </p>
-              <div className="about-stats">
-                <div className="stat">
-                  <div className="stat-number">2014</div>
-                  <div className="stat-label">Année de création</div>
-                </div>
-                <div className="stat">
-                  <div className="stat-number">5</div>
-                  <div className="stat-label">Restaurants</div>
-                </div>
-                <div className="stat">
-                  <div className="stat-number">100%</div>
-                  <div className="stat-label">Bio & Végétarien</div>
-                </div>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              className="about-image"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <div className="image-placeholder">
-                <Utensils className="w-24 h-24" />
-                <p>Image du restaurant</p>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
-      <footer className="modern-footer">
-        <div className="container">
+      <footer className="landing-footer">
+        <div className="footer-container">
           <div className="footer-content">
-            <div className="footer-section">
-              <div className="footer-logo">
-                <Leaf className="logo-icon" />
-                <span className="logo-text">VEG'N BIO</span>
-              </div>
+            <div className="footer-brand">
+              <Link to="/" className="footer-logo">
+                <Leaf className="w-6 h-6" />
+                <span>VEG'N BIO</span>
+              </Link>
               <p className="footer-description">
-                Chaîne de restaurants végétariens et biologiques au cœur de Paris
+                Restaurants végétariens et biologiques depuis 2014. 
+                Une approche respectueuse de l'environnement et de votre santé.
               </p>
             </div>
             
-            <div className="footer-section">
-              <h4 className="footer-title">Contact</h4>
-              <div className="footer-contact">
-                <div className="contact-item">
-                  <Mail className="w-4 h-4" />
-                  <span>contact@vegnbio.fr</span>
-                </div>
-                <div className="contact-item">
-                  <Phone className="w-4 h-4" />
-                  <span>+33 1 23 45 67 00</span>
-                </div>
+            <div className="footer-links">
+              <div className="link-group">
+                <h4 className="link-title">Restaurants</h4>
+                <Link to="#" className="footer-link">République</Link>
+                <Link to="#" className="footer-link">Bastille</Link>
+                <Link to="#" className="footer-link">Nation</Link>
               </div>
-            </div>
-            
-            <div className="footer-section">
-              <h4 className="footer-title">Liens utiles</h4>
-              <div className="footer-links">
-                <Link to="/login" className="footer-link">Connexion</Link>
-                <Link to="/register" className="footer-link">Inscription</Link>
-                <a href="#restaurants" className="footer-link">Nos restaurants</a>
-                <a href="#services" className="footer-link">Services</a>
+              
+              <div className="link-group">
+                <h4 className="link-title">Services</h4>
+                <Link to="#" className="footer-link">Menus</Link>
+                <Link to="#" className="footer-link">Événements</Link>
+                <Link to="#" className="footer-link">Réservations</Link>
+              </div>
+              
+              <div className="link-group">
+                <h4 className="link-title">Support</h4>
+                <Link to="#" className="footer-link">Contact</Link>
+                <Link to="#" className="footer-link">FAQ</Link>
+                <Link to="#" className="footer-link">Aide</Link>
               </div>
             </div>
           </div>
           
           <div className="footer-bottom">
-            <p>&copy; 2024 Veg'N Bio. Tous droits réservés.</p>
+            <p className="footer-copyright">
+              © 2024 VegN Bio. Tous droits réservés.
+            </p>
+            <div className="footer-social">
+              <Link to="#" className="social-link">
+                <Heart className="w-5 h-5" />
+              </Link>
+              <Link to="#" className="social-link">
+                <ShoppingCart className="w-5 h-5" />
+              </Link>
+              <Link to="#" className="social-link">
+                <MessageCircle className="w-5 h-5" />
+              </Link>
+            </div>
           </div>
         </div>
       </footer>

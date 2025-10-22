@@ -1,5 +1,20 @@
 /* ===== MODERN UNIFIED STYLES FOR VEGN-BIO ===== */
 
+/* Import Modern Button and Modal System */
+@import './modern-buttons-modals.css';
+
+/* Import Modern Navigation System */
+@import './modern-navigation.css';
+
+/* Import Modern Table System */
+@import './modern-table.css';
+
+/* Import Modern Dashboard System */
+@import './modern-dashboard.css';
+
+/* Import Modern Landing Page System */
+@import './modern-landing.css';
+
 /* CSS Variables for consistent theming */
 :root {
   /* Primary Colors */
