@@ -24,6 +24,8 @@ import ModernSettings from './components/ModernSettings';
 import ModernHeader from './components/ModernHeader';
 import ModernSidebar from './components/ModernSidebar';
 import ProtectedRoute from './components/ProtectedRoute';
+import './styles/modern-unified.css';
+import './styles/dark-mode.css';
 import './styles/modern-app.css';
 import './styles/modern-landing.css';
 import './styles/veterinary-chatbot.css';

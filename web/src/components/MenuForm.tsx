@@ -44,6 +44,8 @@ const MenuForm: React.FC<MenuFormProps> = ({ isOpen, onClose, onSuccess, restaur
     setLoading(true);
     setError('');
 
+    console.log('Données du menu à créer:', formData);
+
     try {
       const menuData = {
         ...formData,
@@ -51,7 +53,10 @@ const MenuForm: React.FC<MenuFormProps> = ({ isOpen, onClose, onSuccess, restaur
         activeTo: formData.activeTo || new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
       };
 
-      await menuService.create(menuData);
+      console.log('Données finales envoyées:', menuData);
+      const response = await menuService.create(menuData);
+      console.log('Réponse du serveur:', response);
+      
       onSuccess();
       onClose();
       setFormData({
@@ -61,6 +66,7 @@ const MenuForm: React.FC<MenuFormProps> = ({ isOpen, onClose, onSuccess, restaur
         restaurantId: restaurantId
       });
     } catch (error: any) {
+      console.error('Erreur lors de la création du menu:', error);
       setError(error.response?.data?.message || 'Erreur lors de la création du menu');
     } finally {
       setLoading(false);

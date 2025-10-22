@@ -163,6 +163,30 @@ body {
   gap: 1rem;
 }
 
+.theme-toggle-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--white);
+  border: 2px solid var(--medium-gray);
+  border-radius: 12px;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-btn:hover {
+  background: var(--primary-green);
+  border-color: var(--primary-green);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
 .favorites-btn {
   position: relative;
   display: flex;
@@ -1063,4 +1087,116 @@ body {
   .modal-actions .btn {
     width: 100%;
   }
+}
+
+/* ===== DARK MODE STYLES ===== */
+[data-theme="dark"] {
+  --white: #1e293b;
+  --light-gray: #334155;
+  --medium-gray: #475569;
+  --dark-gray: #64748b;
+  --text-dark: #e2e8f0;
+  --text-light: #94a3b8;
+  --primary-green: #22c55e;
+  --accent-green: #16a34a;
+  --background: #0f172a;
+  --surface: #1e293b;
+  --border: #334155;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .modern-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme="dark"] .modern-header-title {
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .theme-toggle-btn {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover {
+  background: var(--primary-green);
+  border-color: var(--primary-green);
+  color: var(--white);
+}
+
+[data-theme="dark"] .favorites-btn,
+[data-theme="dark"] .cart-btn,
+[data-theme="dark"] .notification-btn {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .favorites-btn:hover,
+[data-theme="dark"] .cart-btn:hover,
+[data-theme="dark"] .notification-btn:hover {
+  background: var(--primary-green);
+  border-color: var(--primary-green);
+  color: var(--white);
+}
+
+[data-theme="dark"] .modern-user-menu {
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .user-dropdown {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+}
+
+[data-theme="dark"] .dropdown-item {
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .dropdown-item:hover {
+  background: var(--light-gray);
+}
+
+[data-theme="dark"] .dropdown-divider {
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .notifications-dropdown {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+}
+
+[data-theme="dark"] .notifications-header h3 {
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .notification-item {
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .notification-title {
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .notification-message {
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .notification-time {
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .close-notifications {
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .close-notifications:hover {
+  background: var(--light-gray);
+  color: var(--text-dark);
 }

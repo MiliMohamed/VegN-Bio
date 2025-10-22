@@ -8,11 +8,14 @@ import {
   LogOut,
   User,
   ShoppingCart,
-  Heart
+  Heart,
+  Moon,
+  Sun
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 const ModernHeader: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,6 +23,7 @@ const ModernHeader: React.FC = () => {
   const { user, logout } = useAuth();
   const { getTotalItems } = useCart();
   const { getFavoritesCount } = useFavorites();
+  const { actualTheme, toggleTheme } = useTheme();
   const location = useLocation();
 
   const getPageTitle = () => {
@@ -84,6 +88,14 @@ const ModernHeader: React.FC = () => {
       </div>
       
       <div className="modern-header-actions">
+        <button 
+          className="theme-toggle-btn"
+          onClick={toggleTheme}
+          title={`Basculer vers le mode ${actualTheme === 'light' ? 'sombre' : 'clair'}`}
+        >
+          {actualTheme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+        </button>
+        
         <Link to="/app/favorites" className="favorites-btn">
           <Heart className="w-5 h-5" />
           <span className="favorites-badge">{getFavoritesCount()}</span>

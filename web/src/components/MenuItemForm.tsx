@@ -44,13 +44,18 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({ isOpen, onClose, onSuccess,
     setLoading(true);
     setError('');
 
+    console.log('Données du plat à créer:', formData);
+
     try {
       const itemData = {
         ...formData,
         priceCents: Math.round(parseFloat(formData.priceCents) * 100)
       };
 
-      await menuService.createMenuItem(itemData);
+      console.log('Données finales envoyées:', itemData);
+      const response = await menuService.createMenuItem(itemData);
+      console.log('Réponse du serveur:', response);
+      
       onSuccess();
       onClose();
       setFormData({
@@ -61,6 +66,7 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({ isOpen, onClose, onSuccess,
         menuId: menuId
       });
     } catch (error: any) {
+      console.error('Erreur lors de la création du plat:', error);
       setError(error.response?.data?.message || 'Erreur lors de la création du plat');
     } finally {
       setLoading(false);

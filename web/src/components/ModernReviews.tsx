@@ -9,9 +9,15 @@ import {
   XCircle,
   Clock,
   User,
-  Calendar
+  Calendar,
+  Plus,
+  Edit,
+  Trash2
 } from 'lucide-react';
 import { feedbackService } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
+import ReviewForm from './ReviewForm';
+import '../styles/review-form.css';
 
 interface Review {
   id: number;
@@ -25,24 +31,53 @@ interface Review {
 }
 
 const ModernReviews: React.FC = () => {
+  const { user } = useAuth();
   const [reviews, setReviews] = React.useState<Review[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [filter, setFilter] = React.useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
+  const [showReviewForm, setShowReviewForm] = React.useState(false);
+  const [editingReview, setEditingReview] = React.useState<Review | null>(null);
+
+  const handleReviewSuccess = () => {
+    fetchReviews();
+    setShowReviewForm(false);
+    setEditingReview(null);
+  };
+
+  const handleEditReview = (review: Review) => {
+    setEditingReview(review);
+    setShowReviewForm(true);
+  };
+
+  const handleDeleteReview = async (reviewId: number) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')) {
+      try {
+        await feedbackService.deleteReview(reviewId);
+        setReviews(reviews.filter(review => review.id !== reviewId));
+      } catch (error) {
+        console.error('Erreur lors de la suppression:', error);
+      }
+    }
+  };
+
+  const canEditReview = (review: Review) => {
+    return user?.id === review.user?.id || user?.role === 'ADMIN';
+  };
 
   React.useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const response = await feedbackService.getReviews();
-        setReviews(response.data);
-      } catch (error) {
-        console.error('Erreur lors du chargement des avis:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchReviews();
   }, []);
+
+  const fetchReviews = async () => {
+    try {
+      const response = await feedbackService.getReviews();
+      setReviews(response.data);
+    } catch (error) {
+      console.error('Erreur lors du chargement des avis:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('fr-FR', {
@@ -97,10 +132,21 @@ const ModernReviews: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="page-title">Avis Clients</h1>
-          <p className="page-subtitle">
-            Gérez les retours et évaluations de vos clients
-          </p>
+          <div className="header-content">
+            <div className="header-text">
+              <h1 className="page-title">Avis Clients</h1>
+              <p className="page-subtitle">
+                Gérez les retours et évaluations de vos clients
+              </p>
+            </div>
+            <button 
+              className="btn btn-primary"
+              onClick={() => setShowReviewForm(true)}
+            >
+              <Plus className="w-4 h-4" />
+              Écrire un avis
+            </button>
+          </div>
         </motion.div>
       </div>
 
@@ -238,14 +284,36 @@ const ModernReviews: React.FC = () => {
             </div>
 
             <div className="review-actions">
-              <button className="btn btn-success btn-sm">
-                <CheckCircle className="w-4 h-4" />
-                Approuver
-              </button>
-              <button className="btn btn-danger btn-sm">
-                <XCircle className="w-4 h-4" />
-                Rejeter
-              </button>
+              {canEditReview(review) && (
+                <>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => handleEditReview(review)}
+                  >
+                    <Edit className="w-4 h-4" />
+                    Modifier
+                  </button>
+                  <button 
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDeleteReview(review.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Supprimer
+                  </button>
+                </>
+              )}
+              {user?.role === 'ADMIN' && (
+                <>
+                  <button className="btn btn-success btn-sm">
+                    <CheckCircle className="w-4 h-4" />
+                    Approuver
+                  </button>
+                  <button className="btn btn-danger btn-sm">
+                    <XCircle className="w-4 h-4" />
+                    Rejeter
+                  </button>
+                </>
+              )}
               <button className="btn btn-secondary btn-sm">
                 <MessageCircle className="w-4 h-4" />
                 Répondre
@@ -267,6 +335,17 @@ const ModernReviews: React.FC = () => {
           <p>Aucun avis client pour le moment</p>
         </motion.div>
       )}
+
+      {/* Review Form Modal */}
+      <ReviewForm
+        isOpen={showReviewForm}
+        onClose={() => {
+          setShowReviewForm(false);
+          setEditingReview(null);
+        }}
+        onSuccess={handleReviewSuccess}
+        restaurantId={1}
+      />
     </div>
   );
 };

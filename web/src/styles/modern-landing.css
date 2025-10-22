@@ -48,6 +48,27 @@
   gap: 2rem;
 }
 
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+  transform: scale(1.05);
+}
+
 .nav-link {
   color: #374151;
   text-decoration: none;
@@ -941,4 +962,152 @@
   .footer-logo {
     color: #000;
   }
+}
+
+/* ===== DARK MODE STYLES FOR LANDING PAGE ===== */
+[data-theme="dark"] .modern-landing {
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+}
+
+[data-theme="dark"] .landing-nav {
+  background: rgba(30, 41, 59, 0.95);
+  border-bottom-color: rgba(51, 65, 85, 0.5);
+}
+
+[data-theme="dark"] .nav-logo {
+  color: #22c55e;
+}
+
+[data-theme="dark"] .theme-toggle-btn {
+  border-color: #475569;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
+
+[data-theme="dark"] .nav-link {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .nav-link:hover {
+  color: #22c55e;
+}
+
+[data-theme="dark"] .hero-section {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+[data-theme="dark"] .hero-title {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .hero-subtitle {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .hero-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .hero-card h3 {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .hero-card p {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .section-header h2 {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .section-header p {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .feature-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .feature-card h3 {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .feature-card p {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .testimonial-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .testimonial-text {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .testimonial-author {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .stat-item {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .stat-value {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .stat-label {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .service-item {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .service-item h4 {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .service-item p {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .footer {
+  background: #0f172a;
+  border-top-color: #334155;
+}
+
+[data-theme="dark"] .footer-content {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .footer-logo {
+  color: #22c55e;
+}
+
+[data-theme="dark"] .footer-section h3 {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .footer-section a {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .footer-section a:hover {
+  color: #22c55e;
+}
+
+[data-theme="dark"] .footer-bottom {
+  border-top-color: #334155;
+  color: #94a3b8;
 }

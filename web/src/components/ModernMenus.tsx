@@ -25,10 +25,12 @@ import MenuItemForm from './MenuItemForm';
 import MenuFilter from './MenuFilter';
 import AllergenManager from './AllergenManager';
 import MenuItemDetails from './MenuItemDetails';
+import MenuTester from './MenuTester';
 import '../styles/menu-improvements.css';
 import '../styles/allergen-manager.css';
 import '../styles/menu-filter.css';
 import '../styles/menu-item-details.css';
+import '../styles/menu-tester.css';
 
 interface Allergen {
   id: number;
@@ -68,6 +70,7 @@ const ModernMenus: React.FC = () => {
   const [allergenPreferences, setAllergenPreferences] = useState<{ [allergenId: number]: boolean }>({});
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [showItemDetails, setShowItemDetails] = useState(false);
+  const [showTester, setShowTester] = useState(false);
 
   // Fonctions de vérification des permissions
   const canCreateMenu = () => {
@@ -168,6 +171,7 @@ const ModernMenus: React.FC = () => {
   };
 
   const handleCreateMenu = () => {
+    console.log('Création d\'un menu pour le restaurant:', selectedRestaurant);
     setShowMenuForm(true);
   };
 
@@ -185,6 +189,7 @@ const ModernMenus: React.FC = () => {
   };
 
   const handleAddMenuItem = (menu: Menu) => {
+    console.log('Ajout d\'un plat au menu:', menu.id);
     setSelectedMenu(menu);
     setShowMenuItemForm(true);
   };
@@ -349,8 +354,27 @@ const ModernMenus: React.FC = () => {
               Nouveau menu
             </button>
           )}
+          
+          <button 
+            className="btn btn-secondary btn-sm"
+            onClick={() => setShowTester(!showTester)}
+          >
+            <Shield className="w-4 h-4" />
+            {showTester ? 'Masquer' : 'Afficher'} Testeur
+          </button>
         </div>
       </motion.div>
+
+      {/* Testeur de menus */}
+      {showTester && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.25 }}
+        >
+          <MenuTester />
+        </motion.div>
+      )}
 
       {/* Filtre de menus */}
       <motion.div

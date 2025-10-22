@@ -19,6 +19,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { restaurantService, eventService, feedbackService } from '../services/api';
+import { useTheme } from '../contexts/ThemeContext';
 import ModernTable from './ModernTable';
 import FloatingActionButton from './FloatingActionButton';
 
@@ -56,6 +57,7 @@ const ModernDashboard: React.FC = () => {
   });
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'recent' | 'analytics'>('overview');
+  const { actualTheme } = useTheme();
 
   useEffect(() => {
     const fetchDashboardData = async () => {

@@ -15,6 +15,13 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
 
+/* Dark mode styles for navigation */
+[data-theme="dark"] .modern-navigation {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border-right-color: #334155;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
 .modern-navigation.collapsed {
   width: 80px;
 }

@@ -16,12 +16,16 @@ import {
   Play,
   Menu,
   X,
-  ChevronDown
+  ChevronDown,
+  Moon,
+  Sun
 } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 const ModernLandingPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const { actualTheme, toggleTheme } = useTheme();
 
   const features = [
     {
@@ -99,7 +103,13 @@ const ModernLandingPage: React.FC = () => {
           </Link>
           
           <div className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
-      
+            <button 
+              className="theme-toggle-btn"
+              onClick={toggleTheme}
+              title={`Basculer vers le mode ${actualTheme === 'light' ? 'sombre' : 'clair'}`}
+            >
+              {actualTheme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            </button>
             <Link to="/login" className="nav-link">Connexion</Link>
             <Link to="/register" className="btn btn-primary">
               Créer un compte

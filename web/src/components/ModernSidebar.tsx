@@ -15,9 +15,11 @@ import {
   Settings,
   User
 } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 const ModernSidebar: React.FC = () => {
   const location = useLocation();
+  const { actualTheme } = useTheme();
 
   const menuItems = [
     {
