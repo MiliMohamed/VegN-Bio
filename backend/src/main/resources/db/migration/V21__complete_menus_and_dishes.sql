@@ -196,7 +196,8 @@ INSERT INTO menu_item_allergens (menu_item_id, allergen_id)
 SELECT mi.id, a.id 
 FROM menu_items mi, allergens a
 WHERE mi.name LIKE '%sésame%' OR mi.description LIKE '%sésame%'
-AND a.code = 'SESAME';
+AND a.code = 'SESAME'
+ON CONFLICT (menu_item_id, allergen_id) DO NOTHING;
 
 -- Allergènes pour les plats contenant du gluten
 INSERT INTO menu_item_allergens (menu_item_id, allergen_id)
@@ -205,21 +206,24 @@ FROM menu_items mi, allergens a
 WHERE mi.name LIKE '%Pain%' OR mi.name LIKE '%Wrap%' OR mi.name LIKE '%Burger%' 
    OR mi.name LIKE '%Pizza%' OR mi.name LIKE '%Pasta%' OR mi.name LIKE '%Risotto%'
    OR mi.name LIKE '%Sandwich%' OR mi.name LIKE '%Panini%'
-AND a.code = 'GLUTEN';
+AND a.code = 'GLUTEN'
+ON CONFLICT (menu_item_id, allergen_id) DO NOTHING;
 
 -- Allergènes pour les plats contenant du soja
 INSERT INTO menu_item_allergens (menu_item_id, allergen_id)
 SELECT mi.id, a.id 
 FROM menu_items mi, allergens a
 WHERE mi.name LIKE '%Tofu%' OR mi.name LIKE '%Seitan%' OR mi.description LIKE '%soja%'
-AND a.code = 'SOY';
+AND a.code = 'SOY'
+ON CONFLICT (menu_item_id, allergen_id) DO NOTHING;
 
 -- Allergènes pour les plats contenant des fruits à coque
 INSERT INTO menu_item_allergens (menu_item_id, allergen_id)
 SELECT mi.id, a.id 
 FROM menu_items mi, allergens a
 WHERE mi.description LIKE '%noix%' OR mi.description LIKE '%amandes%' OR mi.description LIKE '%pistaches%'
-AND a.code = 'NUTS';
+AND a.code = 'NUTS'
+ON CONFLICT (menu_item_id, allergen_id) DO NOTHING;
 
 -- Message de confirmation
 DO $$
