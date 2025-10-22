@@ -217,19 +217,19 @@ const ModernLogin: React.FC = () => {
             <div className="info-features">
               <div className="feature-item">
                 <CheckCircle className="w-5 h-5" />
-                <span>Gestion des menus saisonniers</span>
+                <span style={{ color: '#22c55e' }}>Gestion des menus saisonniers</span>
               </div>
               <div className="feature-item">
                 <CheckCircle className="w-5 h-5" />
-                <span>Réservation de salles de réunion</span>
+                <span style={{ color: '#22c55e' }}>Réservation de salles de réunion</span>
               </div>
               <div className="feature-item">
                 <CheckCircle className="w-5 h-5" />
-                <span>Organisation d'événements</span>
+                <span style={{ color: '#22c55e' }}>Organisation d'événements</span>
               </div>
               <div className="feature-item">
                 <CheckCircle className="w-5 h-5" />
-                <span>Suivi des avis clients</span>
+                <span style={{ color: '#22c55e' }}>Suivi des avis clients</span>
               </div>
             </div>
           </div>
