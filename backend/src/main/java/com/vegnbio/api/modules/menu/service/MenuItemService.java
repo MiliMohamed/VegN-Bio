@@ -46,11 +46,27 @@ public class MenuItemService {
     }
     
     @Transactional(readOnly = true)
-    public List<MenuItemDto> getMenuItemsByMenu(Long menuId) {
-        return menuItemRepository.findByMenuId(menuId)
-                .stream()
-                .map(this::mapToDto)
-                .toList();
+    public List<MenuItemDto> getAllMenuItems() {
+        try {
+            List<MenuItem> menuItems = menuItemRepository.findAll();
+            return menuItems.stream()
+                    .map(this::mapToDto)
+                    .toList();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching all menu items: " + e.getMessage(), e);
+        }
+    }
+    
+    @Transactional(readOnly = true)
+    public List<MenuItemDto> getMenuItemsByRestaurantCode(String restaurantCode) {
+        try {
+            List<MenuItem> menuItems = menuItemRepository.findByRestaurantCode(restaurantCode);
+            return menuItems.stream()
+                    .map(this::mapToDto)
+                    .toList();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching menu items for restaurant " + restaurantCode + ": " + e.getMessage(), e);
+        }
     }
     
     @Transactional(readOnly = true)
