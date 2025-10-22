@@ -78,12 +78,7 @@ const ModernHeader: React.FC = () => {
   return (
     <header className="modern-header">
       <div className="header-left">
-        <button 
-          className="menu-toggle"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+    
         <h1 className="modern-header-title">{getPageTitle()}</h1>
       </div>
       

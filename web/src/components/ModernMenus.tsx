@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { 
   Utensils, 
   Plus, 
@@ -15,7 +16,20 @@ import {
   Heart,
   Info,
   AlertTriangle,
-  Shield
+  Shield,
+  Moon,
+  Sun,
+  Settings,
+  Filter,
+  Search,
+  Leaf,
+  Zap,
+  Coffee,
+  Calendar,
+  ChevronDown,
+  ChevronUp,
+  Save,
+  X
 } from 'lucide-react';
 import { menuService, restaurantService } from '../services/api';
 import { useCart } from '../contexts/CartContext';
@@ -26,7 +40,8 @@ import MenuFilter from './MenuFilter';
 import AllergenManager from './AllergenManager';
 import MenuItemDetails from './MenuItemDetails';
 import MenuTester from './MenuTester';
-import '../styles/menu-improvements.css';
+import '../styles/modern-theme-system.css';
+import '../styles/modern-menus.css';
 import '../styles/allergen-manager.css';
 import '../styles/menu-filter.css';
 import '../styles/menu-item-details.css';
@@ -57,6 +72,7 @@ interface Menu {
 
 const ModernMenus: React.FC = () => {
   const { user } = useAuth();
+  const { actualTheme, toggleTheme } = useTheme();
   const { addToCart } = useCart();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const [menus, setMenus] = React.useState<Menu[]>([]);

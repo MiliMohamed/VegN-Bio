@@ -24,11 +24,14 @@ import ModernSettings from './components/ModernSettings';
 import ModernHeader from './components/ModernHeader';
 import ModernSidebar from './components/ModernSidebar';
 import ProtectedRoute from './components/ProtectedRoute';
+import UIImprovementsDemo from './components/UIImprovementsDemo';
 import './styles/modern-unified.css';
 import './styles/dark-mode.css';
 import './styles/modern-app.css';
 import './styles/modern-landing.css';
 import './styles/veterinary-chatbot.css';
+import './styles/modern-theme-system.css';
+import './styles/ui-demo.css';
 
 function App() {
   return (
@@ -63,6 +66,7 @@ function App() {
                         <Route path="/favorites" element={<ModernFavorites />} />
                         <Route path="/profile" element={<ModernProfile />} />
                         <Route path="/settings" element={<ModernSettings />} />
+                        <Route path="/ui-demo" element={<UIImprovementsDemo />} />
                         <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
                       </Routes>
                     </div>

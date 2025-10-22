@@ -12,12 +12,17 @@ import {
   Calendar,
   Plus,
   Edit,
-  Trash2
+  Trash2,
+  Moon,
+  Sun,
+  Settings
 } from 'lucide-react';
 import { feedbackService } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import ReviewForm from './ReviewForm';
-import '../styles/review-form.css';
+import '../styles/modern-theme-system.css';
+import '../styles/modern-reviews.css';
 
 interface Review {
   id: number;
@@ -32,6 +37,7 @@ interface Review {
 
 const ModernReviews: React.FC = () => {
   const { user } = useAuth();
+  const { actualTheme, toggleTheme } = useTheme();
   const [reviews, setReviews] = React.useState<Review[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [filter, setFilter] = React.useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
@@ -132,13 +138,20 @@ const ModernReviews: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="header-content">
-            <div className="header-text">
-              <h1 className="page-title">Avis Clients</h1>
-              <p className="page-subtitle">
-                Gérez les retours et évaluations de vos clients
-              </p>
-            </div>
+          <div className="reviews-header-controls">
+            <h1 className="reviews-page-title">Avis Clients</h1>
+            <button 
+              className="theme-toggle"
+              onClick={toggleTheme}
+              title={`Basculer vers le mode ${actualTheme === 'light' ? 'sombre' : 'clair'}`}
+            >
+              {actualTheme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            </button>
+          </div>
+          <p className="reviews-page-subtitle">
+            Gérez les retours et évaluations de vos clients
+          </p>
+          <div className="reviews-controls">
             <button 
               className="btn btn-primary"
               onClick={() => setShowReviewForm(true)}
