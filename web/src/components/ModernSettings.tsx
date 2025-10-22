@@ -22,6 +22,7 @@ import {
 import { useTheme } from '../contexts/ThemeContext';
 import AllergenManager from './AllergenManager';
 import '../styles/settings-styles.css';
+
 import '../styles/allergen-manager.css';
 
 const ModernSettings: React.FC = () => {
