@@ -126,10 +126,6 @@ export const feedbackService = {
 export const eventService = {
   getAll: () => api.get('/events'),
   getById: (id: number) => api.get(`/events/${id}`),
-  create: (eventData: any) => api.post('/events', eventData),
-  update: (id: number, eventData: any) => api.put(`/events/${id}`, eventData),
-  delete: (id: number) => api.delete(`/events/${id}`),
-  cancel: (id: number) => api.patch(`/events/${id}/cancel`),
   getByRestaurant: (restaurantId: number, from?: string, to?: string) => {
     const params = new URLSearchParams();
     params.append('restaurantId', restaurantId.toString());
@@ -141,6 +137,10 @@ export const eventService = {
     const params = from ? `?from=${from}` : '';
     return api.get(`/events${params}`);
   },
+  create: (eventData: any) => api.post('/events', eventData),
+  update: (id: number, eventData: any) => api.put(`/events/${id}`, eventData),
+  delete: (id: number) => api.delete(`/events/${id}`),
+  cancel: (id: number) => api.patch(`/events/${id}/cancel`),
 };
 
 // Service pour les réservations d'événements
