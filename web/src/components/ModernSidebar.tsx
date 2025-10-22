@@ -12,7 +12,8 @@ import {
   UserCheck,
   Leaf,
   Heart,
-  Settings
+  Settings,
+  User
 } from 'lucide-react';
 
 const ModernSidebar: React.FC = () => {

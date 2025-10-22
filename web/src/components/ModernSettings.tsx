@@ -61,7 +61,7 @@ const ModernSettings: React.FC = () => {
   };
 
   const handleReset = () => {
-    if (confirm('Êtes-vous sûr de vouloir réinitialiser tous les paramètres ?')) {
+    if (window.confirm('Êtes-vous sûr de vouloir réinitialiser tous les paramètres ?')) {
       // TODO: Implémenter la réinitialisation
       alert('Paramètres réinitialisés !');
     }
