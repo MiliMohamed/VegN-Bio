@@ -14,8 +14,9 @@ import {
   Clock,
   AlertCircle
 } from 'lucide-react';
-import { TableRowActions, ConfirmModal } from './ActionButton';
+import { TableRowActions } from './ActionButton';
 import { useNotificationHelpers } from './NotificationProvider';
+import ModernModal from './ModernModal';
 
 interface Column {
   key: string;
@@ -316,16 +317,33 @@ const ModernTable: React.FC<ModernTableProps> = ({
       </div>
 
       {/* Delete Confirmation Modal */}
-      <ConfirmModal
+      <ModernModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        onConfirm={handleDeleteConfirm}
         title="Confirmer la suppression"
-        message={`Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.`}
-        confirmText="Supprimer"
-        cancelText="Annuler"
+        size="sm"
         type="error"
-      />
+      >
+        <div className="confirm-modal-content">
+          <p className="confirm-message">
+            Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.
+          </p>
+          <div className="modal-footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowDeleteModal(false)}
+            >
+              Annuler
+            </button>
+            <button
+              className="btn btn-danger"
+              onClick={handleDeleteConfirm}
+            >
+              Supprimer
+            </button>
+          </div>
+        </div>
+      </ModernModal>
     </div>
   );
 };

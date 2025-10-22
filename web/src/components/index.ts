@@ -2,7 +2,7 @@
 
 // Core Components
 export { default as ModernModal } from './ModernModal';
-export { ConfirmModal, FormModal, InfoModal } from './ModernModal';
+export { FormModal, InfoModal } from './ModernModal';
 
 export { default as ActionButton } from './ActionButton';
 export { 

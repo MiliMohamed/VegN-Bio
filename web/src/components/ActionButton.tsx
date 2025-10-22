@@ -11,7 +11,7 @@ import {
   Clock
 } from 'lucide-react';
 import { useNotificationHelpers } from './NotificationProvider';
-import ModernModal, { ConfirmModal, FormModal, InfoModal } from './ModernModal';
+import ModernModal from './ModernModal';
 
 interface ActionButtonProps {
   type: 'create' | 'edit' | 'delete' | 'view' | 'more';
@@ -133,16 +133,33 @@ const ActionButton: React.FC<ActionButtonProps> = ({
 
       {/* Modal pour les actions de création */}
       {type === 'create' && (
-        <ConfirmModal
+        <ModernModal
           isOpen={showModal}
           onClose={() => setShowModal(false)}
-          onConfirm={handleModalConfirm}
           title="Confirmer la création"
-          message="Êtes-vous sûr de vouloir créer un nouvel élément ? Cette action peut être annulée plus tard."
-          confirmText="Créer"
-          cancelText="Annuler"
+          size="sm"
           type="info"
-        />
+        >
+          <div className="confirm-modal-content">
+            <p className="confirm-message">
+              Êtes-vous sûr de vouloir créer un nouvel élément ? Cette action peut être annulée plus tard.
+            </p>
+            <div className="modal-footer">
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowModal(false)}
+              >
+                Annuler
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={handleModalConfirm}
+              >
+                Créer
+              </button>
+            </div>
+          </div>
+        </ModernModal>
       )}
     </>
   );
