@@ -40,6 +40,31 @@ const ModernMarketplace: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
   const [activeTab, setActiveTab] = React.useState<'offers' | 'suppliers'>('offers');
 
+  React.useEffect(() => {
+    // Ne charger les données que si l'utilisateur est un fournisseur
+    if (user?.role !== 'FOURNISSEUR') {
+      setLoading(false);
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        const [offersRes, suppliersRes] = await Promise.all([
+          marketplaceService.getOffers(),
+          marketplaceService.getAllSuppliers()
+        ]);
+        setOffers(offersRes.data);
+        setSuppliers(suppliersRes.data);
+      } catch (error) {
+        console.error('Erreur lors du chargement des données:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [user?.role]);
+
   // Vérifier si l'utilisateur est un fournisseur
   if (user?.role !== 'FOURNISSEUR') {
     return (
@@ -81,25 +106,6 @@ const ModernMarketplace: React.FC = () => {
       </div>
     );
   }
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [offersRes, suppliersRes] = await Promise.all([
-          marketplaceService.getOffers(),
-          marketplaceService.getAllSuppliers()
-        ]);
-        setOffers(offersRes.data);
-        setSuppliers(suppliersRes.data);
-      } catch (error) {
-        console.error('Erreur lors du chargement des données:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const formatPrice = (priceCents: number) => {
     return (priceCents / 100).toFixed(2) + ' €';

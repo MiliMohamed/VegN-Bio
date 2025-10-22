@@ -143,16 +143,6 @@ const ModernUsers: React.FC = () => {
               <div className="stat-label">Restaurateurs</div>
             </div>
           </div>
-          
-          <div className="stat-card">
-            <div className="stat-icon">
-              <Mail className="w-6 h-6" />
-            </div>
-            <div className="stat-content">
-              <div className="stat-value">{userStats.fournisseurs}</div>
-              <div className="stat-label">Fournisseurs</div>
-            </div>
-          </div>
         </motion.div>
       </div>
 
