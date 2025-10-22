@@ -3,12 +3,15 @@ package com.vegnbio.api.modules.menu.service;
 import com.vegnbio.api.modules.menu.dto.CreateMenuRequest;
 import com.vegnbio.api.modules.menu.dto.MenuDto;
 import com.vegnbio.api.modules.menu.entity.Menu;
+import com.vegnbio.api.modules.menu.entity.MenuItem;
 import com.vegnbio.api.modules.menu.repo.MenuRepository;
+import com.vegnbio.api.modules.menu.repo.MenuItemRepository;
 import com.vegnbio.api.modules.restaurant.entity.Restaurant;
 import com.vegnbio.api.modules.restaurant.repo.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.Hibernate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.List;
 public class MenuService {
     
     private final MenuRepository menuRepository;
+    private final MenuItemRepository menuItemRepository;
     private final RestaurantRepository restaurantRepository;
     
     public MenuDto createMenu(CreateMenuRequest request) {
@@ -57,6 +61,16 @@ public class MenuService {
             List<Menu> menus = menuRepository.findByRestaurant(restaurant);
             System.out.println("Found " + menus.size() + " menus for restaurant " + restaurantId);
             
+            // Charger les allergènes pour chaque menu séparément pour éviter MultipleBagFetchException
+            for (Menu menu : menus) {
+                if (menu.getMenuItems() != null) {
+                    for (MenuItem menuItem : menu.getMenuItems()) {
+                        // Initialiser la collection d'allergènes
+                        Hibernate.initialize(menuItem.getAllergens());
+                    }
+                }
+            }
+            
             return menus.stream()
                     .map(this::mapToDto)
                     .toList();
@@ -87,8 +101,19 @@ public class MenuService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RuntimeException("Restaurant not found"));
         
-        return menuRepository.findByRestaurantAndDate(restaurant, date)
-                .stream()
+        List<Menu> menus = menuRepository.findByRestaurantAndDate(restaurant, date);
+        
+        // Charger les allergènes pour chaque menu séparément pour éviter MultipleBagFetchException
+        for (Menu menu : menus) {
+            if (menu.getMenuItems() != null) {
+                for (MenuItem menuItem : menu.getMenuItems()) {
+                    // Initialiser la collection d'allergènes
+                    Hibernate.initialize(menuItem.getAllergens());
+                }
+            }
+        }
+        
+        return menus.stream()
                 .map(this::mapToDto)
                 .toList();
     }
