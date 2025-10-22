@@ -145,8 +145,8 @@ INSERT INTO bookings (event_id, customer_name, customer_phone, pax, status) VALU
 ((SELECT id FROM events WHERE title='Animation Culinaire'), 'Jean Martin', '+33 6 87 65 43 21', 1, 'PENDING'),
 ((SELECT id FROM events WHERE title='Réunion Salle 1' AND restaurant_id=(SELECT id FROM restaurants WHERE code='BAS')), 'Sophie Bernard', '+33 6 11 22 33 44', 3, 'CONFIRMED');
 
--- Rapports d'exemple
-INSERT INTO reports (user_id, context, message, created_at) VALUES
-((SELECT id FROM users WHERE email='client@vegnbio.fr'), 'Allergène', 'Le plat Burger Tofu Bio contient du sésame mais ce n''est pas mentionné clairement', CURRENT_TIMESTAMP),
-((SELECT id FROM users WHERE email='restaurateur@vegnbio.fr'), 'Menu', 'Besoin d''ajouter plus d''options sans gluten au menu', CURRENT_TIMESTAMP),
-((SELECT id FROM users WHERE email='admin@vegnbio.fr'), 'Système', 'Amélioration de l''interface de réservation des salles', CURRENT_TIMESTAMP);
+-- Rapports d'exemple (utiliser la table error_reports qui existe en production)
+INSERT INTO error_reports (error_type, error_message, user_id, timestamp) VALUES
+('Allergène', 'Le plat Burger Tofu Bio contient du sésame mais ce n''est pas mentionné clairement', 'client@vegnbio.fr', CURRENT_TIMESTAMP),
+('Menu', 'Besoin d''ajouter plus d''options sans gluten au menu', 'restaurateur@vegnbio.fr', CURRENT_TIMESTAMP),
+('Système', 'Amélioration de l''interface de réservation des salles', 'admin@vegnbio.fr', CURRENT_TIMESTAMP);
