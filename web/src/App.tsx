@@ -25,6 +25,8 @@ import ModernHeader from './components/ModernHeader';
 import ModernSidebar from './components/ModernSidebar';
 import ProtectedRoute from './components/ProtectedRoute';
 import './styles/modern-app.css';
+import './styles/modern-landing.css';
+import './styles/modern-buttons-modals.css';
 
 function App() {
   return (
