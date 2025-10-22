@@ -35,7 +35,9 @@ const ModernHeader: React.FC = () => {
       '/app/chatbot': 'Assistant IA',
       '/app/users': 'Utilisateurs',
       '/app/cart': 'Mon Panier',
-      '/app/favorites': 'Mes Favoris'
+      '/app/favorites': 'Mes Favoris',
+      '/app/profile': 'Mon Profil',
+      '/app/settings': 'Paramètres'
     };
     return titles[path] || 'VegN Bio';
   };
@@ -101,8 +103,8 @@ const ModernHeader: React.FC = () => {
         </button>
         
         <div className="modern-user-menu">
-          <div className="modern-user-avatar">
-            <User className="w-5 h-5" />
+          <div className="user-avatar">
+            <User className="w-6 h-6" />
           </div>
           <div className="user-info">
             <div className="user-name">{user?.name || 'Utilisateur'}</div>
@@ -111,15 +113,16 @@ const ModernHeader: React.FC = () => {
           <div className="user-dropdown">
             <Link to="/app/profile" className="dropdown-item">
               <User className="w-4 h-4" />
-              Profil
+              <span>Profil</span>
             </Link>
             <Link to="/app/settings" className="dropdown-item">
               <Settings className="w-4 h-4" />
-              Paramètres
+              <span>Paramètres</span>
             </Link>
-            <button onClick={handleLogout} className="dropdown-item">
+            <div className="dropdown-divider"></div>
+            <button onClick={handleLogout} className="dropdown-item logout">
               <LogOut className="w-4 h-4" />
-              Déconnexion
+              <span>Déconnexion</span>
             </button>
           </div>
         </div>

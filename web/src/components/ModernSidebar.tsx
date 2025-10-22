@@ -11,7 +11,8 @@ import {
   MessageCircle,
   UserCheck,
   Leaf,
-  Heart
+  Heart,
+  Settings
 } from 'lucide-react';
 
 const ModernSidebar: React.FC = () => {
@@ -47,6 +48,18 @@ const ModernSidebar: React.FC = () => {
       icon: <Heart className="w-5 h-5" />,
       label: 'Mes Favoris',
       description: 'Plats préférés'
+    },
+    {
+      path: '/app/profile',
+      icon: <User className="w-5 h-5" />,
+      label: 'Mon Profil',
+      description: 'Informations personnelles'
+    },
+    {
+      path: '/app/settings',
+      icon: <Settings className="w-5 h-5" />,
+      label: 'Paramètres',
+      description: 'Préférences et thème'
     },
     {
       path: '/app/rooms',

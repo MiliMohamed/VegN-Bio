@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 import { FavoritesProvider } from './contexts/FavoritesContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { NotificationProvider } from './components/NotificationProvider';
 import ModernLandingPage from './components/ModernLandingPage';
 import ModernLogin from './components/ModernLogin';
@@ -18,6 +19,8 @@ import ModernChatbot from './components/ModernChatbot';
 import ModernUsers from './components/ModernUsers';
 import ModernCart from './components/ModernCart';
 import ModernFavorites from './components/ModernFavorites';
+import ModernProfile from './components/ModernProfile';
+import ModernSettings from './components/ModernSettings';
 import ModernHeader from './components/ModernHeader';
 import ModernSidebar from './components/ModernSidebar';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -26,10 +29,11 @@ import './styles/modern-app.css';
 function App() {
   return (
     <NotificationProvider>
-      <AuthProvider>
-        <CartProvider>
-          <FavoritesProvider>
-            <Router>
+      <ThemeProvider>
+        <AuthProvider>
+          <CartProvider>
+            <FavoritesProvider>
+              <Router>
           <div className="App">
             <Routes>
               <Route path="/" element={<ModernLandingPage />} />
@@ -53,6 +57,8 @@ function App() {
                         <Route path="/users" element={<ModernUsers />} />
                         <Route path="/cart" element={<ModernCart />} />
                         <Route path="/favorites" element={<ModernFavorites />} />
+                        <Route path="/profile" element={<ModernProfile />} />
+                        <Route path="/settings" element={<ModernSettings />} />
                         <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
                       </Routes>
                     </div>
@@ -65,7 +71,8 @@ function App() {
         </FavoritesProvider>
       </CartProvider>
     </AuthProvider>
-  </NotificationProvider>
+  </ThemeProvider>
+</NotificationProvider>
   );
 }
 

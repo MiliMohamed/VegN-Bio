@@ -379,30 +379,115 @@ body {
 }
 
 .modern-user-menu {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 1rem;
-  background: var(--light-gray);
-  border-radius: var(--border-radius);
+  background: var(--white);
+  border: 2px solid var(--medium-gray);
+  border-radius: 12px;
   cursor: pointer;
   transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
 .modern-user-menu:hover {
-  background: var(--medium-gray);
+  background: var(--pale-green);
+  border-color: var(--accent-green);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
-.modern-user-avatar {
+.user-avatar {
   width: 40px;
   height: 40px;
-  background: var(--accent-green);
+  background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--white);
+  box-shadow: 0 2px 8px rgba(45, 80, 22, 0.3);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.user-name {
+  font-size: 0.9rem;
   font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--medium-gray);
+  z-index: 1000;
+  margin-top: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.modern-user-menu:hover .user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: var(--transition);
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.dropdown-item:hover {
+  background: var(--pale-green);
+  color: var(--primary-green);
+}
+
+.dropdown-item.logout {
+  color: var(--red);
+}
+
+.dropdown-item.logout:hover {
+  background: #fef2f2;
+  color: var(--red);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--medium-gray);
+  margin: 0.5rem 0;
 }
 
 /* Cartes modernes */
