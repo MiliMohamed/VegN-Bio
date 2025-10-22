@@ -58,6 +58,18 @@ public class MenuItemService {
     }
     
     @Transactional(readOnly = true)
+    public List<MenuItemDto> getMenuItemsByMenu(Long menuId) {
+        try {
+            List<MenuItem> menuItems = menuItemRepository.findByMenuId(menuId);
+            return menuItems.stream()
+                    .map(this::mapToDto)
+                    .toList();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching menu items for menu " + menuId + ": " + e.getMessage(), e);
+        }
+    }
+    
+    @Transactional(readOnly = true)
     public List<MenuItemDto> getMenuItemsByRestaurantCode(String restaurantCode) {
         try {
             List<MenuItem> menuItems = menuItemRepository.findByRestaurantCode(restaurantCode);

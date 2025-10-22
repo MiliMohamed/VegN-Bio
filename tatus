@@ -1,0 +1,26 @@
+[1mdiff --git a/backend/src/main/java/com/vegnbio/api/modules/menu/service/MenuService.java b/backend/src/main/java/com/vegnbio/api/modules/menu/service/MenuService.java[m
+[1mindex 527d19b..3c9a609 100644[m
+[1m--- a/backend/src/main/java/com/vegnbio/api/modules/menu/service/MenuService.java[m
+[1m+++ b/backend/src/main/java/com/vegnbio/api/modules/menu/service/MenuService.java[m
+[36m@@ -48,6 +48,21 @@[m [mpublic class MenuService {[m
+         }[m
+     }[m
+     [m
+[32m+[m[32m    @Transactional(readOnly = true)[m
+[32m+[m[32m    public List<MenuDto> getMenusByRestaurant(Long restaurantId) {[m
+[32m+[m[32m        try {[m
+[32m+[m[32m            Restaurant restaurant = restaurantRepository.findById(restaurantId)[m
+[32m+[m[32m                    .orElseThrow(() -> new RuntimeException("Restaurant not found"));[m
+[32m+[m[41m            [m
+[32m+[m[32m            List<Menu> menus = menuRepository.findByRestaurant(restaurant);[m
+[32m+[m[32m            return menus.stream()[m
+[32m+[m[32m                    .map(this::mapToDto)[m
+[32m+[m[32m                    .toList();[m
+[32m+[m[32m        } catch (Exception e) {[m
+[32m+[m[32m            throw new RuntimeException("Error fetching menus for restaurant " + restaurantId + ": " + e.getMessage(), e);[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[41m    [m
+     @Transactional(readOnly = true)[m
+     public List<MenuDto> getMenusByRestaurantCode(String restaurantCode) {[m
+         try {[m
