@@ -22,7 +22,8 @@ INSERT INTO restaurants (name, code, address, city, phone) VALUES
 INSERT INTO users (email, password_hash, role, full_name) VALUES
 ('admin@vegnbio.fr', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ADMIN', 'Administrateur VEGN BIO'),
 ('restaurateur@vegnbio.fr', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'RESTAURATEUR', 'Gérant Restaurant'),
-('client@vegnbio.fr', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'CLIENT', 'Client Test');
+('client@vegnbio.fr', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'CLIENT', 'Client Test')
+ON CONFLICT (email) DO NOTHING;
 
 -- Menus pour chaque restaurant avec des plats variés
 -- VEG'N BIO BASTILLE
