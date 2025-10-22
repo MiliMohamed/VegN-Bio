@@ -60,7 +60,7 @@ const ModernSidebar: React.FC = () => {
       path: '/app/settings',
       icon: <Settings className="w-5 h-5" />,
       label: 'Paramètres',
-      description: 'Préférences et thème'
+      description: 'Préférences et allergies'
     },
     {
       path: '/app/rooms',

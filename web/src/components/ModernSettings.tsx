@@ -16,10 +16,13 @@ import {
   Volume2,
   VolumeX,
   Wifi,
-  WifiOff
+  WifiOff,
+  AlertTriangle
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import AllergenManager from './AllergenManager';
 import '../styles/settings-styles.css';
+import '../styles/allergen-manager.css';
 
 const ModernSettings: React.FC = () => {
   const { theme, actualTheme, setTheme, toggleTheme } = useTheme();
@@ -155,6 +158,47 @@ const ModernSettings: React.FC = () => {
               >
                 {actualTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Gestion des Allergènes */}
+        <motion.div
+          className="settings-section"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+        >
+          <div className="section-header">
+            <AlertTriangle className="w-5 h-5" />
+            <h2>Gestion des Allergènes</h2>
+          </div>
+          
+          <div className="settings-card">
+            <div className="setting-item">
+              <div className="setting-info">
+                <h3>Allergies Alimentaires</h3>
+                <p>Configurez vos allergies pour filtrer automatiquement les plats dangereux</p>
+              </div>
+              <AllergenManager 
+                onPreferencesChange={(preferences) => {
+                  console.log('Préférences d\'allergènes mises à jour:', preferences);
+                }}
+                className="allergen-manager-settings"
+              />
+            </div>
+            
+            <div className="allergen-info-box">
+              <div className="info-header">
+                <Shield className="w-4 h-4" />
+                <h4>Pourquoi configurer mes allergies ?</h4>
+              </div>
+              <ul className="info-list">
+                <li>🔍 <strong>Filtrage automatique</strong> : Les plats contenant vos allergènes sont automatiquement exclus</li>
+                <li>⚠️ <strong>Alertes de sécurité</strong> : Mise en évidence des plats potentiellement dangereux</li>
+                <li>💾 <strong>Sauvegarde persistante</strong> : Vos préférences sont sauvegardées automatiquement</li>
+                <li>📱 <strong>Disponible partout</strong> : Configuration accessible depuis tous vos appareils</li>
+              </ul>
             </div>
           </div>
         </motion.div>

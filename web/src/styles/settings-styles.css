@@ -1,4 +1,74 @@
 /* Styles pour les paramètres */
+
+/* Section de gestion des allergènes */
+.allergen-manager-settings {
+  margin-top: 1rem;
+}
+
+.allergen-info-box {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 0.75rem;
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: #0369a1;
+}
+
+.info-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-list li {
+  padding: 0.5rem 0;
+  color: #0c4a6e;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-bottom: 1px solid #bae6fd;
+}
+
+.info-list li:last-child {
+  border-bottom: none;
+}
+
+.info-list li strong {
+  color: #075985;
+}
+
+/* Thème sombre pour la section allergènes */
+@media (prefers-color-scheme: dark) {
+  .allergen-info-box {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    border-color: #3b82f6;
+  }
+  
+  .info-header {
+    color: #93c5fd;
+  }
+  
+  .info-list li {
+    color: #dbeafe;
+    border-color: #3b82f6;
+  }
+  
+  .info-list li strong {
+    color: #bfdbfe;
+  }
+}
 .modern-settings {
   max-width: 1200px;
   margin: 0 auto;

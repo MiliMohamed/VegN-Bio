@@ -77,10 +77,6 @@ const ModernDashboard: React.FC = () => {
     fetchDashboardData();
   }, []);
 
-  const handleQuickAction = (action: any) => {
-    // Navigation vers la page correspondante
-    window.location.href = action.action;
-  };
 
   const statCards = [
     {
@@ -156,36 +152,6 @@ const ModernDashboard: React.FC = () => {
     }
   ];
 
-  const quickActions = [
-    {
-      title: 'Ajouter un événement',
-      description: 'Créer un nouvel événement ou animation',
-      icon: <Calendar className="w-8 h-8" />,
-      color: 'success',
-      action: '/app/events'
-    },
-    {
-      title: 'Gérer les menus',
-      description: 'Modifier les cartes des restaurants',
-      icon: <Utensils className="w-8 h-8" />,
-      color: 'primary',
-      action: '/app/menus'
-    },
-    {
-      title: 'Voir les avis',
-      description: 'Consulter les retours clients',
-      icon: <Star className="w-8 h-8" />,
-      color: 'warning',
-      action: '/app/reviews'
-    },
-    {
-      title: 'Réservations',
-      description: 'Gérer les réservations de salles',
-      icon: <Clock className="w-8 h-8" />,
-      color: 'info',
-      action: '/app/rooms'
-    }
-  ];
 
   if (loading) {
     return (
@@ -285,47 +251,6 @@ const ModernDashboard: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Actions rapides */}
-        <motion.div 
-          className="dashboard-section"
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          <div className="section-header">
-            <h2 className="section-title">Actions rapides</h2>
-            <p className="section-subtitle">Accès direct aux fonctionnalités principales</p>
-          </div>
-          
-          <div className="quick-actions-grid">
-            {quickActions.map((action, index) => (
-              <motion.a
-                key={action.title}
-                href={action.action}
-                className={`quick-action-card action-${action.color}`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.7 + index * 0.1 }}
-                whileHover={{ y: -5, scale: 1.02 }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleQuickAction(action);
-                }}
-              >
-                <div className="action-icon">
-                  {action.icon}
-                </div>
-                <div className="action-content">
-                  <h3 className="action-title">{action.title}</h3>
-                  <p className="action-description">{action.description}</p>
-                </div>
-                <div className="action-arrow">
-                  →
-                </div>
-              </motion.a>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </div>
   );
