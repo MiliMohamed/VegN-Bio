@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { menuService, restaurantService } from '../services/api';
 import { useCart } from '../contexts/CartContext';
+import { useFavorites } from '../contexts/FavoritesContext';
 import MenuForm from './MenuForm';
 import MenuItemForm from './MenuItemForm';
 import '../styles/menu-improvements.css';
@@ -45,6 +46,7 @@ interface Menu {
 
 const ModernMenus: React.FC = () => {
   const { addToCart } = useCart();
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const [menus, setMenus] = React.useState<Menu[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [selectedRestaurant, setSelectedRestaurant] = React.useState<number>(1);
@@ -162,9 +164,24 @@ const ModernMenus: React.FC = () => {
   };
 
   const handleAddToFavorites = (item: MenuItem) => {
-    // TODO: Implémenter l'ajout aux favoris
-    console.log('Ajouter aux favoris:', item);
-    alert(`Ajouté aux favoris: ${item.name}`);
+    const selectedRestaurantData = restaurants.find(r => r.id === selectedRestaurant);
+    
+    if (isFavorite(item.id)) {
+      removeFromFavorites(item.id);
+      alert(`Retiré des favoris: ${item.name}`);
+    } else {
+      addToFavorites({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        priceCents: item.priceCents,
+        isVegan: item.isVegan,
+        allergens: item.allergens,
+        restaurantId: selectedRestaurant,
+        restaurantName: selectedRestaurantData?.name || 'Restaurant'
+      });
+      alert(`Ajouté aux favoris: ${item.name}`);
+    }
   };
 
   const handleViewItemDetails = (item: MenuItem) => {
@@ -310,12 +327,12 @@ const ModernMenus: React.FC = () => {
                       Panier
                     </button>
                     <button 
-                      className="btn btn-warning btn-xs"
+                      className={`btn btn-warning btn-xs ${isFavorite(item.id) ? 'btn-favorite-active' : ''}`}
                       onClick={() => handleAddToFavorites(item)}
-                      title="Ajouter aux favoris"
+                      title={isFavorite(item.id) ? "Retirer des favoris" : "Ajouter aux favoris"}
                     >
-                      <Heart className="w-3 h-3" />
-                      Favoris
+                      <Heart className={`w-3 h-3 ${isFavorite(item.id) ? 'fill-current' : ''}`} />
+                      {isFavorite(item.id) ? 'Favori' : 'Favoris'}
                     </button>
                     <button 
                       className="btn btn-info btn-xs"

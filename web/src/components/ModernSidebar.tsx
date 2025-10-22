@@ -42,6 +42,12 @@ const ModernSidebar: React.FC = () => {
       description: 'Mes commandes'
     },
     {
+      path: '/app/favorites',
+      icon: <Heart className="w-5 h-5" />,
+      label: 'Mes Favoris',
+      description: 'Plats préférés'
+    },
+    {
       path: '/app/rooms',
       icon: <Calendar className="w-5 h-5" />,
       label: 'Salles de réunion',

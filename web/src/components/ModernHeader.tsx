@@ -7,15 +7,19 @@ import {
   Settings, 
   LogOut,
   User,
-  ShoppingCart
+  ShoppingCart,
+  Heart
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
+import { useFavorites } from '../contexts/FavoritesContext';
 
 const ModernHeader: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const { user, logout } = useAuth();
   const { getTotalItems } = useCart();
+  const { getFavoritesCount } = useFavorites();
   const location = useLocation();
 
   const getPageTitle = () => {
@@ -30,7 +34,8 @@ const ModernHeader: React.FC = () => {
       '/app/reviews': 'Avis clients',
       '/app/chatbot': 'Assistant IA',
       '/app/users': 'Utilisateurs',
-      '/app/cart': 'Mon Panier'
+      '/app/cart': 'Mon Panier',
+      '/app/favorites': 'Mes Favoris'
     };
     return titles[path] || 'VegN Bio';
   };
@@ -38,6 +43,31 @@ const ModernHeader: React.FC = () => {
   const handleLogout = () => {
     logout();
   };
+
+  // Données de test pour les notifications
+  const notifications = [
+    {
+      id: 1,
+      title: 'Nouveau menu disponible',
+      message: 'Le menu printemps est maintenant disponible au restaurant République',
+      time: 'Il y a 2 heures',
+      type: 'info'
+    },
+    {
+      id: 2,
+      title: 'Réservation confirmée',
+      message: 'Votre réservation de salle pour demain à 14h est confirmée',
+      time: 'Il y a 4 heures',
+      type: 'success'
+    },
+    {
+      id: 3,
+      title: 'Promotion spéciale',
+      message: '20% de réduction sur tous les plats végétaliens ce weekend',
+      time: 'Il y a 1 jour',
+      type: 'promo'
+    }
+  ];
 
   return (
     <header className="modern-header">
@@ -52,14 +82,22 @@ const ModernHeader: React.FC = () => {
       </div>
       
       <div className="modern-header-actions">
+        <Link to="/app/favorites" className="favorites-btn">
+          <Heart className="w-5 h-5" />
+          <span className="favorites-badge">{getFavoritesCount()}</span>
+        </Link>
+        
         <Link to="/app/cart" className="cart-btn">
           <ShoppingCart className="w-5 h-5" />
           <span className="cart-badge">{getTotalItems()}</span>
         </Link>
         
-        <button className="notification-btn">
+        <button 
+          className="notification-btn"
+          onClick={() => setShowNotifications(!showNotifications)}
+        >
           <Bell className="w-5 h-5" />
-          <span className="notification-badge">3</span>
+          <span className="notification-badge">{notifications.length}</span>
         </button>
         
         <div className="modern-user-menu">
@@ -86,6 +124,37 @@ const ModernHeader: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Dropdown des notifications */}
+      {showNotifications && (
+        <div className="notifications-dropdown">
+          <div className="notifications-header">
+            <h3>Notifications</h3>
+            <button 
+              className="close-notifications"
+              onClick={() => setShowNotifications(false)}
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="notifications-list">
+            {notifications.map((notification) => (
+              <div key={notification.id} className={`notification-item ${notification.type}`}>
+                <div className="notification-content">
+                  <h4 className="notification-title">{notification.title}</h4>
+                  <p className="notification-message">{notification.message}</p>
+                  <span className="notification-time">{notification.time}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="notifications-footer">
+            <button className="btn btn-primary btn-sm">
+              Voir toutes les notifications
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

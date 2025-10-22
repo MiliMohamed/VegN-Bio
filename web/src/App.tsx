@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
+import { FavoritesProvider } from './contexts/FavoritesContext';
 import { NotificationProvider } from './components/NotificationProvider';
 import ModernLandingPage from './components/ModernLandingPage';
 import ModernLogin from './components/ModernLogin';
@@ -16,6 +17,7 @@ import ModernReviews from './components/ModernReviews';
 import ModernChatbot from './components/ModernChatbot';
 import ModernUsers from './components/ModernUsers';
 import ModernCart from './components/ModernCart';
+import ModernFavorites from './components/ModernFavorites';
 import ModernHeader from './components/ModernHeader';
 import ModernSidebar from './components/ModernSidebar';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -26,7 +28,8 @@ function App() {
     <NotificationProvider>
       <AuthProvider>
         <CartProvider>
-          <Router>
+          <FavoritesProvider>
+            <Router>
           <div className="App">
             <Routes>
               <Route path="/" element={<ModernLandingPage />} />
@@ -49,6 +52,7 @@ function App() {
                         <Route path="/chatbot" element={<ModernChatbot />} />
                         <Route path="/users" element={<ModernUsers />} />
                         <Route path="/cart" element={<ModernCart />} />
+                        <Route path="/favorites" element={<ModernFavorites />} />
                         <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
                       </Routes>
                     </div>
@@ -58,9 +62,10 @@ function App() {
             </Routes>
           </div>
           </Router>
-        </CartProvider>
-      </AuthProvider>
-    </NotificationProvider>
+        </FavoritesProvider>
+      </CartProvider>
+    </AuthProvider>
+  </NotificationProvider>
   );
 }
 
