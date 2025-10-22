@@ -1,7 +1,7 @@
 package com.vegnbio.api.modules.data.service;
 
-import com.vegnbio.api.modules.user.entity.User;
-import com.vegnbio.api.modules.user.repo.UserRepository;
+import com.vegnbio.api.modules.auth.entity.User;
+import com.vegnbio.api.modules.auth.repo.UserRepository;
 import com.vegnbio.api.modules.restaurant.entity.Restaurant;
 import com.vegnbio.api.modules.restaurant.repo.RestaurantRepository;
 import com.vegnbio.api.modules.menu.entity.Menu;
@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -107,136 +108,76 @@ public class DataInitializationService {
         List<User> users = Arrays.asList(
             // Administrateurs
             User.builder()
-                .username("admin")
                 .email("admin@vegnbio.fr")
-                .password(passwordEncoder.encode("admin123"))
+                .passwordHash(passwordEncoder.encode("admin123"))
                 .fullName("Administrateur Principal")
-                .role("ADMIN")
-                .phone("01 23 45 67 89")
-                .address("123 Rue de la Paix, 75001 Paris")
-                .city("Paris")
-                .postalCode("75001")
-                .isActive(true)
+                .role(User.Role.ADMIN)
                 .build(),
             
             User.builder()
-                .username("admin2")
                 .email("admin2@vegnbio.fr")
-                .password(passwordEncoder.encode("admin123"))
+                .passwordHash(passwordEncoder.encode("admin123"))
                 .fullName("Marie Dubois")
-                .role("ADMIN")
-                .phone("01 23 45 67 90")
-                .address("456 Avenue des Champs, 75008 Paris")
-                .city("Paris")
-                .postalCode("75008")
-                .isActive(true)
+                .role(User.Role.ADMIN)
                 .build(),
             
             // Restaurateurs
             User.builder()
-                .username("chef_bastille")
                 .email("chef@bastille.vegnbio.fr")
-                .password(passwordEncoder.encode("chef123"))
+                .passwordHash(passwordEncoder.encode("chef123"))
                 .fullName("Jean-Pierre Martin")
-                .role("RESTAURATEUR")
-                .phone("01 23 45 67 91")
-                .address("789 Place de la Bastille, 75011 Paris")
-                .city("Paris")
-                .postalCode("75011")
-                .isActive(true)
+                .role(User.Role.RESTAURATEUR)
                 .build(),
             
             User.builder()
-                .username("chef_republique")
                 .email("chef@republique.vegnbio.fr")
-                .password(passwordEncoder.encode("chef123"))
+                .passwordHash(passwordEncoder.encode("chef123"))
                 .fullName("Sophie Laurent")
-                .role("RESTAURATEUR")
-                .phone("01 23 45 67 92")
-                .address("321 Place de la République, 75003 Paris")
-                .city("Paris")
-                .postalCode("75003")
-                .isActive(true)
+                .role(User.Role.RESTAURATEUR)
                 .build(),
             
             User.builder()
-                .username("chef_nation")
                 .email("chef@nation.vegnbio.fr")
-                .password(passwordEncoder.encode("chef123"))
+                .passwordHash(passwordEncoder.encode("chef123"))
                 .fullName("Pierre Moreau")
-                .role("RESTAURATEUR")
-                .phone("01 23 45 67 93")
-                .address("654 Place de la Nation, 75012 Paris")
-                .city("Paris")
-                .postalCode("75012")
-                .isActive(true)
+                .role(User.Role.RESTAURATEUR)
                 .build(),
             
             // Clients
             User.builder()
-                .username("client1")
                 .email("marie.dubois@email.com")
-                .password(passwordEncoder.encode("client123"))
+                .passwordHash(passwordEncoder.encode("client123"))
                 .fullName("Marie Dubois")
-                .role("CLIENT")
-                .phone("01 23 45 67 94")
-                .address("987 Rue de Rivoli, 75001 Paris")
-                .city("Paris")
-                .postalCode("75001")
-                .isActive(true)
+                .role(User.Role.CLIENT)
                 .build(),
             
             User.builder()
-                .username("client2")
                 .email("jean.martin@email.com")
-                .password(passwordEncoder.encode("client123"))
+                .passwordHash(passwordEncoder.encode("client123"))
                 .fullName("Jean Martin")
-                .role("CLIENT")
-                .phone("01 23 45 67 95")
-                .address("147 Rue de la Paix, 75002 Paris")
-                .city("Paris")
-                .postalCode("75002")
-                .isActive(true)
+                .role(User.Role.CLIENT)
                 .build(),
             
             User.builder()
-                .username("client3")
                 .email("sophie.laurent@email.com")
-                .password(passwordEncoder.encode("client123"))
+                .passwordHash(passwordEncoder.encode("client123"))
                 .fullName("Sophie Laurent")
-                .role("CLIENT")
-                .phone("01 23 45 67 96")
-                .address("258 Avenue des Champs, 75008 Paris")
-                .city("Paris")
-                .postalCode("75008")
-                .isActive(true)
+                .role(User.Role.CLIENT)
                 .build(),
             
             // Fournisseurs
             User.builder()
-                .username("fournisseur1")
                 .email("contact@biofrance.fr")
-                .password(passwordEncoder.encode("fournisseur123"))
+                .passwordHash(passwordEncoder.encode("fournisseur123"))
                 .fullName("Bio France")
-                .role("FOURNISSEUR")
-                .phone("01 23 45 67 97")
-                .address("369 Rue de la Ferme, 75015 Paris")
-                .city("Paris")
-                .postalCode("75015")
-                .isActive(true)
+                .role(User.Role.FOURNISSEUR)
                 .build(),
             
             User.builder()
-                .username("fournisseur2")
                 .email("contact@legumesbio.fr")
-                .password(passwordEncoder.encode("fournisseur123"))
+                .passwordHash(passwordEncoder.encode("fournisseur123"))
                 .fullName("Légumes Bio Paris")
-                .role("FOURNISSEUR")
-                .phone("01 23 45 67 98")
-                .address("741 Avenue des Producteurs, 75016 Paris")
-                .city("Paris")
-                .postalCode("75016")
-                .isActive(true)
+                .role(User.Role.FOURNISSEUR)
                 .build()
         );
         
@@ -256,12 +197,10 @@ public class DataInitializationService {
                 .code("BAS")
                 .address("Place de la Bastille")
                 .city("Paris")
-                .postalCode("75011")
                 .phone("01 43 25 67 89")
                 .email("bastille@vegnbio.fr")
-                .capacity(80)
-                .description("Notre restaurant phare situé sur la célèbre Place de la Bastille")
-                .isActive(true)
+                .restaurantCapacity(80)
+                .specialEvents("Notre restaurant phare situé sur la célèbre Place de la Bastille")
                 .build(),
             
             Restaurant.builder()
@@ -269,12 +208,10 @@ public class DataInitializationService {
                 .code("REP")
                 .address("Place de la République")
                 .city("Paris")
-                .postalCode("75003")
                 .phone("01 43 25 67 90")
                 .email("republique@vegnbio.fr")
-                .capacity(60)
-                .description("Restaurant moderne au cœur de la Place de la République")
-                .isActive(true)
+                .restaurantCapacity(60)
+                .specialEvents("Restaurant moderne au cœur de la Place de la République")
                 .build(),
             
             Restaurant.builder()
@@ -282,12 +219,10 @@ public class DataInitializationService {
                 .code("NAT")
                 .address("Place de la Nation")
                 .city("Paris")
-                .postalCode("75012")
                 .phone("01 43 25 67 91")
                 .email("nation@vegnbio.fr")
-                .capacity(70)
-                .description("Espace convivial sur la Place de la Nation")
-                .isActive(true)
+                .restaurantCapacity(70)
+                .specialEvents("Espace convivial sur la Place de la Nation")
                 .build(),
             
             Restaurant.builder()
@@ -295,12 +230,10 @@ public class DataInitializationService {
                 .code("ITA")
                 .address("Place d'Italie")
                 .city("Paris")
-                .postalCode("75013")
                 .phone("01 43 25 67 92")
                 .email("italie@vegnbio.fr")
-                .capacity(65)
-                .description("Restaurant italien végétarien sur la Place d'Italie")
-                .isActive(true)
+                .restaurantCapacity(65)
+                .specialEvents("Restaurant italien végétarien sur la Place d'Italie")
                 .build(),
             
             Restaurant.builder()
@@ -308,12 +241,10 @@ public class DataInitializationService {
                 .code("BOU")
                 .address("Place de la Bourse")
                 .city("Paris")
-                .postalCode("75002")
                 .phone("01 43 25 67 93")
                 .email("bourse@vegnbio.fr")
-                .capacity(55)
-                .description("Restaurant d'affaires près de la Place de la Bourse")
-                .isActive(true)
+                .restaurantCapacity(55)
+                .specialEvents("Restaurant d'affaires près de la Place de la Bourse")
                 .build()
         );
         
@@ -328,7 +259,7 @@ public class DataInitializationService {
         log.info("🍽️ Création des menus...");
         
         List<Restaurant> restaurants = restaurantRepository.findAll();
-        List<Menu> menus = Arrays.asList();
+        List<Menu> menus = new ArrayList<>();
         
         for (Restaurant restaurant : restaurants) {
             // Menu principal
@@ -385,7 +316,7 @@ public class DataInitializationService {
             {"Quiche Lorraine Végétarienne", "Quiche aux légumes et fromage végétal", "1090", "true"}
         };
         
-        List<MenuItem> menuItems = Arrays.asList();
+        List<MenuItem> menuItems = new ArrayList<>();
         
         for (Menu menu : menus) {
             for (String[] plat : platsData) {
@@ -413,14 +344,14 @@ public class DataInitializationService {
         log.info("📅 Création des événements...");
         
         List<Restaurant> restaurants = restaurantRepository.findAll();
-        List<Event> events = Arrays.asList();
+        List<Event> events = new ArrayList<>();
         
         String[][] eventsData = {
-            {"Atelier Cuisine Végétarienne", "Apprenez à cuisiner des plats végétariens délicieux", "2024-02-15", "14:00", "16:00", "25"},
-            {"Conférence Nutrition", "Les bienfaits de l'alimentation végétarienne", "2024-02-20", "18:00", "20:00", "50"},
-            {"Dégustation Produits Bio", "Découvrez nos nouveaux produits biologiques", "2024-02-25", "15:00", "17:00", "30"},
-            {"Soirée Producteurs", "Rencontrez nos producteurs locaux", "2024-03-01", "19:00", "21:00", "40"},
-            {"Atelier Pâtisserie Végétale", "Apprenez à faire des desserts sans œufs", "2024-03-05", "10:00", "12:00", "20"}
+            {"Atelier Cuisine Végétarienne", "Apprenez à cuisiner des plats végétariens délicieux", "2024-02-15T14:00", "2024-02-15T16:00", "25"},
+            {"Conférence Nutrition", "Les bienfaits de l'alimentation végétarienne", "2024-02-20T18:00", "2024-02-20T20:00", "50"},
+            {"Dégustation Produits Bio", "Découvrez nos nouveaux produits biologiques", "2024-02-25T15:00", "2024-02-25T17:00", "30"},
+            {"Soirée Producteurs", "Rencontrez nos producteurs locaux", "2024-03-01T19:00", "2024-03-01T21:00", "40"},
+            {"Atelier Pâtisserie Végétale", "Apprenez à faire des desserts sans œufs", "2024-03-05T10:00", "2024-03-05T12:00", "20"}
         };
         
         for (Restaurant restaurant : restaurants) {
@@ -429,11 +360,9 @@ public class DataInitializationService {
                     .restaurant(restaurant)
                     .title(eventData[0])
                     .description(eventData[1])
-                    .eventDate(LocalDate.parse(eventData[2]))
-                    .startTime(LocalTime.parse(eventData[3]))
-                    .endTime(LocalTime.parse(eventData[4]))
-                    .maxParticipants(Integer.parseInt(eventData[5]))
-                    .isActive(true)
+                    .dateStart(LocalDateTime.parse(eventData[2]))
+                    .dateEnd(LocalDateTime.parse(eventData[3]))
+                    .capacity(Integer.parseInt(eventData[4]))
                     .build();
                 
                 events.add(event);
@@ -450,11 +379,11 @@ public class DataInitializationService {
     private void createReservations() {
         log.info("📋 Création des réservations...");
         
-        List<User> clients = userRepository.findByRole("CLIENT");
+        List<User> clients = userRepository.findByRole(User.Role.CLIENT);
         List<Restaurant> restaurants = restaurantRepository.findAll();
         List<Event> events = eventRepository.findAll();
         
-        List<Reservation> reservations = Arrays.asList();
+        List<Reservation> reservations = new ArrayList<>();
         
         // Réservations de tables
         for (int i = 0; i < 10; i++) {
@@ -467,7 +396,7 @@ public class DataInitializationService {
                 .reservationDate(LocalDate.now().plusDays(i + 1))
                 .reservationTime(LocalTime.of(12 + (i % 6), 0))
                 .numberOfPeople(2 + (i % 4))
-                .status("CONFIRMED")
+                .status(Reservation.ReservationStatus.CONFIRMED)
                 .notes("Réservation automatique")
                 .build();
             
@@ -483,10 +412,10 @@ public class DataInitializationService {
                 .user(client)
                 .restaurant(event.getRestaurant())
                 .event(event)
-                .reservationDate(event.getEventDate())
-                .reservationTime(event.getStartTime())
+                .reservationDate(event.getDateStart().toLocalDate())
+                .reservationTime(event.getDateStart().toLocalTime())
                 .numberOfPeople(1 + (i % 3))
-                .status("CONFIRMED")
+                .status(Reservation.ReservationStatus.CONFIRMED)
                 .notes("Réservation événement")
                 .build();
             

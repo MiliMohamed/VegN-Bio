@@ -15,7 +15,7 @@ import ModernRooms from './components/ModernRooms';
 import ModernEvents from './components/ModernEvents';
 import ModernMarketplace from './components/ModernMarketplace';
 import ModernReviews from './components/ModernReviews';
-import ModernChatbot from './components/ModernChatbot';
+import VeterinaryChatbot from './components/VeterinaryChatbot';
 import ModernUsers from './components/ModernUsers';
 import ModernCart from './components/ModernCart';
 import ModernFavorites from './components/ModernFavorites';
@@ -26,7 +26,7 @@ import ModernSidebar from './components/ModernSidebar';
 import ProtectedRoute from './components/ProtectedRoute';
 import './styles/modern-app.css';
 import './styles/modern-landing.css';
-import './styles/modern-buttons-modals.css';
+import './styles/veterinary-chatbot.css';
 
 function App() {
   return (
@@ -55,7 +55,7 @@ function App() {
                         <Route path="/events" element={<ModernEvents />} />
                         <Route path="/marketplace" element={<ModernMarketplace />} />
                         <Route path="/reviews" element={<ModernReviews />} />
-                        <Route path="/chatbot" element={<ModernChatbot />} />
+                        <Route path="/chatbot" element={<VeterinaryChatbot />} />
                         <Route path="/users" element={<ModernUsers />} />
                         <Route path="/cart" element={<ModernCart />} />
                         <Route path="/favorites" element={<ModernFavorites />} />

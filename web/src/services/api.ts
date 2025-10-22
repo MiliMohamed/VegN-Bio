@@ -182,6 +182,25 @@ export const veterinaryService = {
   getConsultation: (id: number) => api.get(`/veterinary/consultations/${id}`),
   updateConsultation: (id: number, consultationData: any) => api.put(`/veterinary/consultations/${id}`, consultationData),
   deleteConsultation: (id: number) => api.delete(`/veterinary/consultations/${id}`),
+  
+  // Services pour le diagnostic vétérinaire
+  createDiagnosis: (diagnosisData: any) => api.post('/veterinary/diagnoses', diagnosisData),
+  getSupportedBreeds: () => api.get('/veterinary/breeds'),
+  getCommonSymptoms: (breed?: string) => {
+    const params = breed ? `?breed=${encodeURIComponent(breed)}` : '';
+    return api.get(`/veterinary/symptoms${params}`);
+  },
+  getDiagnosisHistory: (userId?: string) => {
+    const params = userId ? `?userId=${userId}` : '';
+    return api.get(`/veterinary/diagnoses${params}`);
+  },
+  getEmergencySymptoms: () => api.get('/veterinary/symptoms/emergency'),
+  getPreventiveRecommendations: (breed: string) => api.get(`/veterinary/preventive/${breed}`),
+  getFeedingRecommendations: (breed: string) => api.get(`/veterinary/feeding/${breed}`),
+  getBehavioralRecommendations: (breed: string, symptoms: string[]) => 
+    api.post(`/veterinary/behavioral/${breed}`, { symptoms }),
+  saveConsultationFeedback: (consultationId: number, feedback: any) => 
+    api.post(`/veterinary/consultations/${consultationId}/feedback`, feedback),
 };
 
 // Service pour les diagnostics vétérinaires
