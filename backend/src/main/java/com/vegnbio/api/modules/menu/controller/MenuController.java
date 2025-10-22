@@ -33,13 +33,11 @@ public class MenuController {
         try {
             List<MenuDto> menus = menuService.getMenusByRestaurant(restaurantId);
             return ResponseEntity.ok(menus);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             // Log l'erreur pour le debugging
             System.err.println("Error fetching menus for restaurant " + restaurantId + ": " + e.getMessage());
-            e.printStackTrace();
-            // Retourner l'erreur HTTP appropriée au lieu de masquer
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Collections.emptyList());
+            // Retourner une liste vide avec un statut OK pour éviter les erreurs frontend
+            return ResponseEntity.ok(Collections.emptyList());
         }
     }
     

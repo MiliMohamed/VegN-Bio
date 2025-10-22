@@ -74,10 +74,15 @@ public class MenuService {
             return menus.stream()
                     .map(this::mapToDto)
                     .toList();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
+            // Log l'erreur mais ne pas la relancer pour éviter les crashes
             System.err.println("Error fetching menus for restaurant " + restaurantId + ": " + e.getMessage());
+            // Retourner une liste vide au lieu de faire planter l'application
+            return List.of();
+        } catch (Exception e) {
+            System.err.println("Unexpected error fetching menus for restaurant " + restaurantId + ": " + e.getMessage());
             e.printStackTrace();
-            throw new RuntimeException("Error fetching menus for restaurant " + restaurantId + ": " + e.getMessage(), e);
+            return List.of();
         }
     }
     

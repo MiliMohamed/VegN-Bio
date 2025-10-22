@@ -50,7 +50,7 @@ const testRestaurants = [
 // Données de test pour les menus
 const testMenus = [
   {
-    restaurantId: 1,
+    restaurantId: 68,
     title: "Menu Printemps Bio",
     activeFrom: "2024-03-01",
     activeTo: "2024-05-31",
@@ -112,7 +112,7 @@ const testMenus = [
 // Données de test pour les événements
 const testEvents = [
   {
-    restaurantId: 1,
+    restaurantId: 68,
     title: "Atelier Cuisine Végétarienne",
     description: "Apprenez à cuisiner des plats végétariens délicieux et équilibrés",
     dateStart: "2024-04-15T14:00:00",

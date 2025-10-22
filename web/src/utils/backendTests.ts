@@ -81,8 +81,8 @@ export const testRestaurantEndpoints = async () => {
       test: () => makeRequest(`${API_BASE_URL}/restaurants`)
     },
     {
-      name: 'GET /restaurants/1',
-      test: () => makeRequest(`${API_BASE_URL}/restaurants/1`)
+      name: 'GET /restaurants/68',
+      test: () => makeRequest(`${API_BASE_URL}/restaurants/68`)
     },
     {
       name: 'POST /restaurants',
@@ -116,19 +116,19 @@ export const testMenuEndpoints = async () => {
   
   const tests = [
     {
-      name: 'GET /menus/restaurant/1',
-      test: () => makeRequest(`${API_BASE_URL}/menus/restaurant/1`)
+      name: 'GET /menus/restaurant/68',
+      test: () => makeRequest(`${API_BASE_URL}/menus/restaurant/68`)
     },
     {
-      name: 'GET /menus/restaurant/1/active',
-      test: () => makeRequest(`${API_BASE_URL}/menus/restaurant/1/active`)
+      name: 'GET /menus/restaurant/68/active',
+      test: () => makeRequest(`${API_BASE_URL}/menus/restaurant/68/active`)
     },
     {
       name: 'POST /menus',
       test: () => makeRequest(`${API_BASE_URL}/menus`, {
         method: 'POST',
         body: JSON.stringify({
-          restaurantId: 1,
+          restaurantId: 68,
           title: 'Test Menu',
           activeFrom: '2024-01-01',
           activeTo: '2024-12-31'
@@ -196,15 +196,15 @@ export const testEventEndpoints = async () => {
       test: () => makeRequest(`${API_BASE_URL}/events`)
     },
     {
-      name: 'GET /events?restaurantId=1',
-      test: () => makeRequest(`${API_BASE_URL}/events?restaurantId=1`)
+      name: 'GET /events?restaurantId=68',
+      test: () => makeRequest(`${API_BASE_URL}/events?restaurantId=68`)
     },
     {
       name: 'POST /events',
       test: () => makeRequest(`${API_BASE_URL}/events`, {
         method: 'POST',
         body: JSON.stringify({
-          restaurantId: 1,
+          restaurantId: 68,
           title: 'Test Event',
           description: 'Test Description',
           dateStart: '2024-12-31T18:00:00',

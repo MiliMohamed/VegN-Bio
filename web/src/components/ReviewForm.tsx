@@ -32,7 +32,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const [formData, setFormData] = useState({
     rating: 0,
     comment: '',
-    restaurantId: restaurantId || 1,
+    restaurantId: restaurantId || 68,
     menuItemId: menuItemId || null
   });
   const [loading, setLoading] = useState(false);
@@ -83,7 +83,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       setFormData({
         rating: 0,
         comment: '',
-        restaurantId: restaurantId || 1,
+        restaurantId: restaurantId || 68,
         menuItemId: menuItemId || null
       });
     } catch (error: any) {

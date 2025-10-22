@@ -343,7 +343,7 @@ const ModernReviews: React.FC = () => {
           setEditingReview(null);
         }}
         onSuccess={handleReviewSuccess}
-        restaurantId={1}
+        restaurantId={68}
       />
     </div>
   );

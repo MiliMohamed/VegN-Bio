@@ -101,7 +101,7 @@ export const marketplaceService = {
 
 export const feedbackService = {
   // Reviews
-  getReviews: () => api.get('/reviews/restaurant/1'), // Utilise le restaurant 1 par défaut
+  getReviews: () => api.get('/reviews/restaurant/68'), // Utilise le restaurant 68 par défaut
   getReviewsByRestaurant: (restaurantId: number) => api.get(`/reviews/restaurant/${restaurantId}`),
   getAllReviewsByRestaurant: (restaurantId: number) => api.get(`/reviews/restaurant/${restaurantId}/all`),
   getPendingReviews: () => api.get('/reviews/pending'),

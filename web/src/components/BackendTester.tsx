@@ -111,8 +111,8 @@ const BackendTester: React.FC = () => {
         test: () => makeRequest(`${API_BASE_URL}/restaurants`)
       },
       {
-        name: 'GET /restaurants/1',
-        test: () => makeRequest(`${API_BASE_URL}/restaurants/1`)
+        name: 'GET /restaurants/68',
+        test: () => makeRequest(`${API_BASE_URL}/restaurants/68`)
       }
     ];
     
@@ -129,12 +129,12 @@ const BackendTester: React.FC = () => {
   const testMenuEndpoints = async (): Promise<TestResult[]> => {
     const tests = [
       {
-        name: 'GET /menus/restaurant/1',
-        test: () => makeRequest(`${API_BASE_URL}/menus/restaurant/1`)
+        name: 'GET /menus/restaurant/68',
+        test: () => makeRequest(`${API_BASE_URL}/menus/restaurant/68`)
       },
       {
-        name: 'GET /menus/restaurant/1/active',
-        test: () => makeRequest(`${API_BASE_URL}/menus/restaurant/1/active`)
+        name: 'GET /menus/restaurant/68/active',
+        test: () => makeRequest(`${API_BASE_URL}/menus/restaurant/68/active`)
       }
     ];
     
@@ -155,8 +155,8 @@ const BackendTester: React.FC = () => {
         test: () => makeRequest(`${API_BASE_URL}/events`)
       },
       {
-        name: 'GET /events?restaurantId=1',
-        test: () => makeRequest(`${API_BASE_URL}/events?restaurantId=1`)
+        name: 'GET /events?restaurantId=68',
+        test: () => makeRequest(`${API_BASE_URL}/events?restaurantId=68`)
       }
     ];
     

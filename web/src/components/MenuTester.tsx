@@ -37,7 +37,7 @@ const MenuTester: React.FC = () => {
         title: 'Menu Test ' + new Date().toLocaleTimeString(),
         activeFrom: new Date().toISOString().split('T')[0],
         activeTo: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        restaurantId: 1
+        restaurantId: 68
       };
 
       console.log('Test création menu avec:', testMenuData);
@@ -204,7 +204,7 @@ const MenuTester: React.FC = () => {
           setShowMenuForm(false);
           addTestResult('Formulaire Menu', true, 'Menu créé via formulaire');
         }}
-        restaurantId={1}
+        restaurantId={68}
       />
 
       <MenuItemForm
