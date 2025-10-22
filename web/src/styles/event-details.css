@@ -1,0 +1,85 @@
+/* Styles pour les détails d'événement */
+.event-details-modal {
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.event-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.event-details-content .event-status {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.event-details-content .event-info-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.event-details-content .info-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+.event-details-content .info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.event-details-content .info-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.event-details-content .info-value {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.event-details-content .event-description {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.event-details-content .description-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.event-details-content .description-text {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.event-details-content .event-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .event-details-content .event-actions {
+    flex-direction: column;
+  }
+}

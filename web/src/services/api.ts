@@ -77,15 +77,6 @@ export const menuService = {
   deleteMenuItem: (id: number) => api.delete(`/menu-items/${id}`),
 };
 
-export const eventService = {
-  getAll: () => api.get('/events'),
-  getById: (id: number) => api.get(`/events/${id}`),
-  create: (eventData: any) => api.post('/events', eventData),
-  update: (id: number, eventData: any) => api.put(`/events/${id}`, eventData),
-  delete: (id: number) => api.delete(`/events/${id}`),
-  cancel: (id: number) => api.patch(`/events/${id}/cancel`),
-};
-
 export const marketplaceService = {
   // Offers
   getOffers: (search?: string) => {

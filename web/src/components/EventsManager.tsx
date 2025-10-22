@@ -496,6 +496,8 @@ const EventsManager: React.FC = () => {
         }}
         onSuccess={handleBookingSuccess}
         event={selectedEvent}
+        restaurantId={selectedRestaurant}
+        events={[]}
       />
 
       <EventDetails

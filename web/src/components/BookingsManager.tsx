@@ -461,7 +461,7 @@ const BookingsManager: React.FC = () => {
           setShowBookingDetails(false);
           setSelectedBooking(null);
         }}
-        event={selectedBooking ? getEventForBooking(selectedBooking) : null}
+        event={selectedBooking ? getEventForBooking(selectedBooking) || null : null}
         canManage={canManageBookings()}
         onUpdateStatus={handleUpdateBookingStatus}
         onDelete={handleDeleteBooking}

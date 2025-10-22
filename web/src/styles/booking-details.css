@@ -1,0 +1,120 @@
+/* Styles pour les détails de réservation */
+.booking-details-modal {
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.booking-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.booking-details-content .booking-status {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.booking-details-content .booking-info-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.booking-details-content .info-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+.booking-details-content .info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.booking-details-content .info-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.booking-details-content .info-value {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.booking-details-content .event-info-card {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.booking-details-content .event-info-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.booking-details-content .event-info-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.booking-details-content .event-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.booking-details-content .event-datetime {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.booking-details-content .event-type {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.booking-details-content .event-description {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+.booking-details-content .booking-actions {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.booking-details-content .actions-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.booking-details-content .actions-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .booking-details-content .actions-buttons {
+    flex-direction: column;
+  }
+}
