@@ -1,4 +1,4 @@
--- Migration V3: Ajouter des menus avec les vrais IDs de restaurants
+-- Migration V24: Ajouter des menus avec les vrais IDs de restaurants
 -- Basé sur les restaurants existants : 68, 69, 70, 71, 72
 
 -- Menu pour VEG'N BIO BASTILLE (ID: 68)
