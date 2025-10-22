@@ -73,9 +73,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     try {
       const reviewData = {
         ...formData,
-        userId: user?.id,
-        userName: user?.name || 'Utilisateur anonyme',
-        userEmail: user?.email || 'anonyme@example.com'
+        userEmail: user?.email || 'anonyme@example.com',
+        userName: user?.name || 'Utilisateur anonyme'
       };
 
       await feedbackService.createReview(reviewData);

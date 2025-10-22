@@ -61,7 +61,7 @@ const ModernReviews: React.FC = () => {
   };
 
   const canEditReview = (review: Review) => {
-    return user?.id === review.user?.id || user?.role === 'ADMIN';
+    return user?.email === review.user?.email || user?.role === 'ADMIN';
   };
 
   React.useEffect(() => {
