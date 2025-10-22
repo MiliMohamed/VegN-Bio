@@ -13,7 +13,9 @@ import {
   Leaf,
   Heart,
   Settings,
-  User
+  User,
+  CalendarDays,
+  UserPlus
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -75,6 +77,18 @@ const ModernSidebar: React.FC = () => {
       icon: <Users className="w-5 h-5" />,
       label: 'Événements',
       description: 'Animations & conférences'
+    },
+    {
+      path: '/app/events-manager',
+      icon: <CalendarDays className="w-5 h-5" />,
+      label: 'Gestion Événements',
+      description: 'Créer & organiser'
+    },
+    {
+      path: '/app/bookings-manager',
+      icon: <UserPlus className="w-5 h-5" />,
+      label: 'Gestion Réservations',
+      description: 'Suivi des réservations'
     },
     {
       path: '/app/marketplace',

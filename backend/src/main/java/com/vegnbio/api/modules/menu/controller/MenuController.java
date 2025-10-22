@@ -5,11 +5,13 @@ import com.vegnbio.api.modules.menu.dto.MenuDto;
 import com.vegnbio.api.modules.menu.service.MenuService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -35,8 +37,9 @@ public class MenuController {
             // Log l'erreur pour le debugging
             System.err.println("Error fetching menus for restaurant " + restaurantId + ": " + e.getMessage());
             e.printStackTrace();
-            // Retourner une liste vide plutôt qu'une erreur 500
-            return ResponseEntity.ok(List.of());
+            // Retourner l'erreur HTTP appropriée au lieu de masquer
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Collections.emptyList());
         }
     }
     

@@ -1,103 +1,184 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Plus, 
-  X, 
-  Save, 
-  Calendar,
-  Users,
-  Clock,
-  MapPin,
-  Type,
-  FileText
-} from 'lucide-react';
+import { X, Save, User, Phone, Users, Calendar, Search } from 'lucide-react';
 import { bookingService } from '../services/api';
+import { Booking, CreateBookingRequest, Event } from '../types/events';
+import '../styles/modern-theme-system.css';
+import '../styles/booking-form.css';
 
 interface BookingFormProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  eventId: number;
-  eventTitle: string;
+  event?: Event | null;
+  restaurantId: number;
+  events?: Event[];
 }
 
-const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, onSuccess, eventId, eventTitle }) => {
-  const [formData, setFormData] = useState({
+const BookingForm: React.FC<BookingFormProps> = ({
+  isOpen,
+  onClose,
+  onSuccess,
+  event,
+  restaurantId,
+  events = []
+}) => {
+  const [formData, setFormData] = useState<CreateBookingRequest>({
+    eventId: event?.id || 0,
     customerName: '',
     customerPhone: '',
-    pax: 1,
-    eventId: eventId
+    pax: 1
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(event || null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-    setError('');
-  };
+  useEffect(() => {
+    if (event) {
+      setFormData({
+        eventId: event.id,
+        customerName: '',
+        customerPhone: '',
+        pax: 1
+      });
+      setSelectedEvent(event);
+    } else {
+      setFormData({
+        eventId: 0,
+        customerName: '',
+        customerPhone: '',
+        pax: 1
+      });
+      setSelectedEvent(null);
+    }
+  }, [event]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError(null);
 
     try {
-      const bookingData = {
-        ...formData,
-        pax: parseInt(formData.pax.toString())
-      };
-
-      await bookingService.createBooking(bookingData);
+      await bookingService.createBooking(formData);
       onSuccess();
       onClose();
-      setFormData({
-        customerName: '',
-        customerPhone: '',
-        pax: 1,
-        eventId: eventId
-      });
-    } catch (error: any) {
-      setError(error.response?.data?.message || 'Erreur lors de la réservation');
+    } catch (error) {
+      console.error('Erreur lors de la création de la réservation:', error);
+      setError('Erreur lors de la création de la réservation');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'pax' ? parseInt(value) : value
+    }));
+
+    if (name === 'eventId') {
+      const eventId = parseInt(value);
+      const selectedEventData = events.find(e => e.id === eventId);
+      setSelectedEvent(selectedEventData || null);
+    }
+  };
+
+  const formatDateTime = (dateTime: string) => {
+    return new Date(dateTime).toLocaleString('fr-FR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <motion.div 
-        className="modal-content"
+    <div className="modal-overlay">
+      <motion.div
+        className="modal-content booking-form-modal"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
         transition={{ duration: 0.3 }}
-        onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
           <h2 className="modal-title">
-            <Calendar className="w-6 h-6" />
-            Réserver : {eventTitle}
+            {event ? 'Réserver cet événement' : 'Nouvelle réservation'}
           </h2>
-          <button className="modal-close" onClick={onClose}>
-            <X className="w-6 h-6" />
+          <button 
+            className="btn btn-ghost btn-sm"
+            onClick={onClose}
+          >
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {error && (
-          <div className="alert alert-error">
-            {error}
-          </div>
-        )}
+        <form onSubmit={handleSubmit} className="booking-form">
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit} className="modal-form">
+          {!event && (
+            <div className="form-group">
+              <label htmlFor="eventId" className="form-label">
+                <Calendar className="w-4 h-4" />
+                Événement *
+              </label>
+              <select
+                id="eventId"
+                name="eventId"
+                value={formData.eventId}
+                onChange={handleChange}
+                className="form-select"
+                required
+              >
+                <option value={0}>Sélectionner un événement</option>
+                {events
+                  .filter(e => e.status === 'ACTIVE')
+                  .map(event => (
+                    <option key={event.id} value={event.id}>
+                      {event.title} - {formatDateTime(event.dateStart)}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          )}
+
+          {selectedEvent && (
+            <div className="event-info-card">
+              <h3 className="event-info-title">{selectedEvent.title}</h3>
+              <div className="event-info-details">
+                <div className="info-item">
+                  <Calendar className="w-4 h-4" />
+                  <span>{formatDateTime(selectedEvent.dateStart)}</span>
+                </div>
+                {selectedEvent.capacity && (
+                  <div className="info-item">
+                    <Users className="w-4 h-4" />
+                    <span>
+                      Places disponibles: {selectedEvent.availableSpots || 0} / {selectedEvent.capacity}
+                    </span>
+                  </div>
+                )}
+                {selectedEvent.type && (
+                  <div className="info-item">
+                    <span>Type: {selectedEvent.type}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="form-group">
             <label htmlFor="customerName" className="form-label">
-              <Type className="w-4 h-4" />
-              Nom complet
+              <User className="w-4 h-4" />
+              Nom du client *
             </label>
             <input
               type="text"
@@ -106,14 +187,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, onSuccess, e
               value={formData.customerName}
               onChange={handleChange}
               className="form-input"
-              placeholder="Votre nom complet"
+              placeholder="Ex: Jean Dupont"
               required
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="customerPhone" className="form-label">
-              <Clock className="w-4 h-4" />
+              <Phone className="w-4 h-4" />
               Téléphone
             </label>
             <input
@@ -123,14 +204,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, onSuccess, e
               value={formData.customerPhone}
               onChange={handleChange}
               className="form-input"
-              placeholder="+33 1 23 45 67 89"
+              placeholder="Ex: 01 23 45 67 89"
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="pax" className="form-label">
               <Users className="w-4 h-4" />
-              Nombre de personnes
+              Nombre de personnes *
             </label>
             <input
               type="number"
@@ -140,28 +221,36 @@ const BookingForm: React.FC<BookingFormProps> = ({ isOpen, onClose, onSuccess, e
               onChange={handleChange}
               className="form-input"
               min="1"
-              max="20"
+              max={selectedEvent?.capacity || undefined}
               required
             />
+            {selectedEvent?.capacity && (
+              <small className="form-help">
+                Maximum {selectedEvent.capacity} personnes pour cet événement
+              </small>
+            )}
           </div>
 
-          <div className="modal-actions">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+          <div className="form-actions">
+            <button 
+              type="button"
+              className="btn btn-secondary"
+              onClick={onClose}
+              disabled={loading}
+            >
               Annuler
             </button>
             <button 
-              type="submit" 
-              className={`btn btn-primary ${loading ? 'loading' : ''}`}
-              disabled={loading}
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading || !formData.eventId}
             >
               {loading ? (
-                <div className="loading-spinner"></div>
+                <div className="loading-spinner-small"></div>
               ) : (
-                <>
-                  <Save className="w-4 h-4" />
-                  Confirmer la réservation
-                </>
+                <Save className="w-4 h-4" />
               )}
+              Réserver
             </button>
           </div>
         </form>

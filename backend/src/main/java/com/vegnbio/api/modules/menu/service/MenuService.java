@@ -52,13 +52,17 @@ public class MenuService {
     public List<MenuDto> getMenusByRestaurant(Long restaurantId) {
         try {
             Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                    .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+                    .orElseThrow(() -> new RuntimeException("Restaurant not found with ID: " + restaurantId));
             
             List<Menu> menus = menuRepository.findByRestaurant(restaurant);
+            System.out.println("Found " + menus.size() + " menus for restaurant " + restaurantId);
+            
             return menus.stream()
                     .map(this::mapToDto)
                     .toList();
         } catch (Exception e) {
+            System.err.println("Error fetching menus for restaurant " + restaurantId + ": " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Error fetching menus for restaurant " + restaurantId + ": " + e.getMessage(), e);
         }
     }

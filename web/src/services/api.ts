@@ -131,12 +131,34 @@ export const feedbackService = {
   updateReportStatus: (reportId: number, statusData: any) => api.patch(`/reports/${reportId}/status`, statusData),
 };
 
+// Service pour les événements
+export const eventService = {
+  getAll: () => api.get('/events'),
+  getById: (id: number) => api.get(`/events/${id}`),
+  create: (eventData: any) => api.post('/events', eventData),
+  update: (id: number, eventData: any) => api.put(`/events/${id}`, eventData),
+  delete: (id: number) => api.delete(`/events/${id}`),
+  cancel: (id: number) => api.patch(`/events/${id}/cancel`),
+  getByRestaurant: (restaurantId: number, from?: string, to?: string) => {
+    const params = new URLSearchParams();
+    params.append('restaurantId', restaurantId.toString());
+    if (from) params.append('from', from);
+    if (to) params.append('to', to);
+    return api.get(`/events?${params.toString()}`);
+  },
+  getActiveEvents: (from?: string) => {
+    const params = from ? `?from=${from}` : '';
+    return api.get(`/events${params}`);
+  },
+};
+
 // Service pour les réservations d'événements
 export const bookingService = {
   getBookingsByEvent: (eventId: number) => api.get(`/bookings/event/${eventId}`),
+  getBookingsByRestaurant: (restaurantId: number) => api.get(`/bookings/restaurant/${restaurantId}`),
   createBooking: (bookingData: any) => api.post('/bookings', bookingData),
   getBooking: (bookingId: number) => api.get(`/bookings/${bookingId}`),
-  updateBooking: (bookingId: number, bookingData: any) => api.put(`/bookings/${bookingId}`, bookingData),
+  updateBookingStatus: (bookingId: number, statusData: any) => api.patch(`/bookings/${bookingId}/status`, statusData),
   deleteBooking: (bookingId: number) => api.delete(`/bookings/${bookingId}`),
   getBookingsByCustomer: (customerEmail: string) => api.get(`/bookings/customer/${customerEmail}`),
 };

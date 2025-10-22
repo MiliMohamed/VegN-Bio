@@ -13,6 +13,8 @@ import ModernRestaurants from './components/ModernRestaurants';
 import ModernMenus from './components/ModernMenus';
 import ModernRooms from './components/ModernRooms';
 import ModernEvents from './components/ModernEvents';
+import EventsManager from './components/EventsManager';
+import BookingsManager from './components/BookingsManager';
 import ModernMarketplace from './components/ModernMarketplace';
 import ModernReviews from './components/ModernReviews';
 import VeterinaryChatbot from './components/VeterinaryChatbot';
@@ -58,6 +60,8 @@ function App() {
                         <Route path="/menus" element={<ModernMenus />} />
                         <Route path="/rooms" element={<ModernRooms />} />
                         <Route path="/events" element={<ModernEvents />} />
+                        <Route path="/events-manager" element={<EventsManager />} />
+                        <Route path="/bookings-manager" element={<BookingsManager />} />
                         <Route path="/marketplace" element={<ModernMarketplace />} />
                         <Route path="/reviews" element={<ModernReviews />} />
                         <Route path="/chatbot" element={<VeterinaryChatbot />} />
