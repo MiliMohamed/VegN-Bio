@@ -1,7 +1,7 @@
 /* Chatbot Learning Dashboard Styles */
 .learning-dashboard {
   padding: 2rem;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -13,13 +13,13 @@
 .page-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #1a202c;
   margin-bottom: 1rem;
 }
 
 .page-subtitle {
   font-size: 1.1rem;
-  color: #718096;
+  color: #4a5568;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -51,7 +51,7 @@
   border: none;
   background: none;
   font-size: 1rem;
-  color: #2d3748;
+  color: #1a202c;
   cursor: pointer;
 }
 
@@ -114,14 +114,14 @@
 .stat-value {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #1a202c;
   line-height: 1;
   margin-bottom: 0.25rem;
 }
 
 .stat-label {
   font-size: 1rem;
-  color: #718096;
+  color: #4a5568;
   margin-bottom: 0.5rem;
 }
 
@@ -161,7 +161,7 @@
 .card-header h3 {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #2d3748;
+  color: #1a202c;
   margin: 0;
 }
 
@@ -193,7 +193,7 @@
 .rank {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #a0aec0;
+  color: #718096;
   width: 1.5rem;
 }
 
@@ -220,7 +220,7 @@
 .chart-value {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #2d3748;
+  color: #1a202c;
   min-width: 2rem;
   text-align: right;
 }
@@ -237,7 +237,7 @@
 .performance-indicators h3 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #2d3748;
+  color: #1a202c;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -280,14 +280,14 @@
 
 .indicator-label {
   font-size: 0.9rem;
-  color: #718096;
+  color: #4a5568;
   margin-bottom: 0.25rem;
 }
 
 .indicator-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #1a202c;
   margin-bottom: 0.25rem;
 }
 
@@ -324,7 +324,7 @@
 .improvement-recommendations h3 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #2d3748;
+  color: #1a202c;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -370,7 +370,7 @@
 .recommendation-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: #1a202c;
   margin-bottom: 0.25rem;
 }
 
@@ -387,7 +387,7 @@
   align-items: center;
   justify-content: center;
   padding: 4rem;
-  color: #718096;
+  color: #4a5568;
 }
 
 .loading-spinner {
@@ -424,7 +424,7 @@
 .no-data {
   text-align: center;
   padding: 4rem;
-  color: #718096;
+  color: #4a5568;
 }
 
 .no-data svg {

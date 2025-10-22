@@ -3,16 +3,16 @@
 /* ===== CSS VARIABLES ===== */
 :root {
   /* Colors */
-  --primary-color: #2d5a27;
-  --primary-light: #4a7c59;
-  --primary-dark: #1a3d17;
+  --primary-color: #1a3d17;
+  --primary-light: #2d5a27;
+  --primary-dark: #0f2410;
   --secondary-color: #f4a261;
   --accent-color: #e76f51;
   --success-color: #2a9d8f;
   --warning-color: #f77f00;
   --danger-color: #d62828;
   --light-color: #f8f9fa;
-  --dark-color: #264653;
+  --dark-color: #1a202c;
   
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);

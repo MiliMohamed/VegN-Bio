@@ -18,7 +18,7 @@
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
-  color: #0369a1;
+  color: #1e40af;
 }
 
 .info-header h4 {
@@ -35,7 +35,7 @@
 
 .info-list li {
   padding: 0.5rem 0;
-  color: #0c4a6e;
+  color: #1e3a8a;
   font-size: 0.875rem;
   line-height: 1.5;
   border-bottom: 1px solid #bae6fd;
@@ -46,7 +46,7 @@
 }
 
 .info-list li strong {
-  color: #075985;
+  color: #1d4ed8;
 }
 
 /* Thème sombre pour la section allergènes */
