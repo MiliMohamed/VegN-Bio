@@ -18,7 +18,7 @@ import { TableRowActions } from './ActionButton';
 import { useNotificationHelpers } from './NotificationProvider';
 import ModernModal from './ModernModal';
 
-interface Column {
+export interface Column {
   key: string;
   label: string;
   sortable?: boolean;
@@ -26,7 +26,7 @@ interface Column {
   width?: string;
 }
 
-interface ModernTableProps {
+export interface ModernTableProps {
   data: any[];
   columns: Column[];
   onEdit?: (row: any) => void;

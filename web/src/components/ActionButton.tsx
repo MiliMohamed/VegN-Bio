@@ -13,7 +13,7 @@ import {
 import { useNotificationHelpers } from './NotificationProvider';
 import ModernModal from './ModernModal';
 
-interface ActionButtonProps {
+export interface ActionButtonProps {
   type: 'create' | 'edit' | 'delete' | 'view' | 'more';
   onClick?: () => void;
   disabled?: boolean;

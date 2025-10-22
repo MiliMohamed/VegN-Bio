@@ -2,7 +2,7 @@
 
 // Core Components
 export { default as ModernModal } from './ModernModal';
-export { FormModal, InfoModal } from './ModernModal';
+export { FormModal, InfoModal, ConfirmModal } from './ModernModal';
 
 export { default as ActionButton } from './ActionButton';
 export { 
@@ -41,7 +41,7 @@ export { default as ModernProfile } from './ModernProfile';
 export { default as ModernSettings } from './ModernSettings';
 
 // Utility Components
-export { default as NotificationProvider } from './NotificationProvider';
+export { NotificationProvider, useNotifications, useNotificationHelpers } from './NotificationProvider';
 export { default as ProtectedRoute } from './ProtectedRoute';
 
 // Context Providers

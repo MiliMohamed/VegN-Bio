@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, Edit, Trash2, Eye, Settings } from 'lucide-react';
 import { useNotificationHelpers } from './NotificationProvider';
-import ModernModal from './ModernModal';
+import { ConfirmModal } from './ModernModal';
 
 interface FloatingActionButtonProps {
   onCreate?: () => void;
@@ -136,33 +136,16 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
       </div>
 
       {/* Modal de confirmation pour la suppression */}
-      <ModernModal
+      <ConfirmModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
+        onConfirm={handleDeleteConfirm}
         title="Confirmer la suppression"
-        size="sm"
+        message="Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible."
+        confirmText="Supprimer"
+        cancelText="Annuler"
         type="error"
-      >
-        <div className="confirm-modal-content">
-          <p className="confirm-message">
-            Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.
-          </p>
-          <div className="modal-footer">
-            <button
-              className="btn btn-secondary"
-              onClick={() => setShowConfirmModal(false)}
-            >
-              Annuler
-            </button>
-            <button
-              className="btn btn-danger"
-              onClick={handleDeleteConfirm}
-            >
-              Supprimer
-            </button>
-          </div>
-        </div>
-      </ModernModal>
+      />
     </>
   );
 };
