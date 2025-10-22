@@ -10,7 +10,8 @@ import {
   Star,
   MessageCircle,
   UserCheck,
-  Leaf
+  Leaf,
+  Heart
 } from 'lucide-react';
 
 const ModernSidebar: React.FC = () => {
