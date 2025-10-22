@@ -117,6 +117,7 @@ export const feedbackService = {
   getReview: (reviewId: number) => api.get(`/reviews/${reviewId}`),
   createReview: (reviewData: any) => api.post('/reviews', reviewData),
   updateReviewStatus: (reviewId: number, statusData: any) => api.patch(`/reviews/${reviewId}/status`, statusData),
+  deleteReview: (reviewId: number) => api.delete(`/reviews/${reviewId}`),
   getRestaurantReviewStats: (restaurantId: number) => api.get(`/reviews/restaurant/${restaurantId}/stats`),
   
   // Reports
