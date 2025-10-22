@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { AuthContext } from './AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import { 
   MapPin, 
   Phone, 
@@ -32,7 +32,7 @@ interface Restaurant {
 }
 
 const ModernRestaurants: React.FC = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');

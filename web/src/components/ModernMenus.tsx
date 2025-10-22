@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { AuthContext } from './AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import { 
   Utensils, 
   Plus, 
@@ -54,7 +54,7 @@ interface Menu {
 }
 
 const ModernMenus: React.FC = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const { addToCart } = useCart();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const [menus, setMenus] = React.useState<Menu[]>([]);

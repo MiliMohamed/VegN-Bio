@@ -1,5 +1,5 @@
 // Données mock pour le chatbot vétérinaire
-import { AnimalBreed, Symptom } from '../types/veterinary';
+import { AnimalBreed, Symptom, DiagnosisResponse } from '../types/veterinary';
 
 export const mockBreeds: AnimalBreed[] = [
   {
